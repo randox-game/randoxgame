@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="az">
+<html lang="tr">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -7,6 +7,7 @@
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
+<script src="https://accounts.google.com/gsi/client" async defer></script>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&family=Playfair+Display:ital,wght@0,400;0,600;1,400&display=swap" rel="stylesheet">
 <script>
 tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],serif:['Playfair Display','serif']},colors:{brand:{50:'#f0fdf4',100:'#dcfce7',200:'#bbf7d0',300:'#86efac',400:'#4ade80',500:'#22c55e',600:'#16a34a',700:'#15803d',800:'#166534',900:'#14532d'},dark:{50:'#f8fafc',100:'#f1f5f9',200:'#e2e8f0',300:'#cbd5e1',400:'#94a3b8',500:'#64748b',600:'#475569',700:'#334155',800:'#1e293b',900:'#0f172a',950:'#020617'}}}}}
@@ -14,12 +15,9 @@ tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],serif:['
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:hidden}
-::-webkit-scrollbar{width:6px}
-::-webkit-scrollbar-track{background:#0f172a}
-::-webkit-scrollbar-thumb{background:#22c55e;border-radius:3px}
+::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0f172a}::-webkit-scrollbar-thumb{background:#22c55e;border-radius:3px}
 @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes slideUp{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
-@keyframes slideDown{0%{opacity:0;transform:translateY(-20px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes slideLeft{0%{opacity:0;transform:translateX(40px)}100%{opacity:1;transform:translateX(0)}}
 @keyframes scaleIn{0%{opacity:0;transform:scale(0.9)}100%{opacity:1;transform:scale(1)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
@@ -28,43 +26,28 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 @keyframes borderGlow{0%,100%{border-color:rgba(34,197,94,0.3)}50%{border-color:rgba(34,197,94,0.8)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
-.animate-fade{animation:fadeIn .6s ease-out both}
-.animate-up{animation:slideUp .8s ease-out both}
-.animate-left{animation:slideLeft .8s ease-out both}
-.animate-scale{animation:scaleIn .6s ease-out both}
-.animate-float{animation:float 3s ease-in-out infinite}
-.animate-border{animation:borderGlow 2s ease-in-out infinite}
+.animate-fade{animation:fadeIn .6s ease-out both}.animate-up{animation:slideUp .8s ease-out both}
+.animate-left{animation:slideLeft .8s ease-out both}.animate-scale{animation:scaleIn .6s ease-out both}
+.animate-float{animation:float 3s ease-in-out infinite}.animate-border{animation:borderGlow 2s ease-in-out infinite}
 .animate-shake{animation:shake .5s ease-in-out}
 .delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}
 .glass{background:rgba(15,23,42,.7);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08)}
 .glass-light{background:rgba(30,41,59,.5);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06)}
 .glass-green{background:rgba(34,197,94,.08);backdrop-filter:blur(12px);border:1px solid rgba(34,197,94,.2)}
-.game-card{transition:all .4s cubic-bezier(.16,1,.3,1)}
-.game-card:hover{transform:translateY(-6px)}
-.game-card:active{transform:translateY(-2px) scale(.98)}
-.game-card:hover .game-img{transform:scale(1.06)}
-.game-card:hover .game-overlay{opacity:1}
-.game-card:hover .game-border{border-color:rgba(34,197,94,.5)}
-.game-img{transition:transform .6s cubic-bezier(.16,1,.3,1)}
-.game-overlay{transition:opacity .35s ease}
-.cat-btn{transition:all .3s ease}
-.cat-btn:hover,.cat-btn.active{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.4)}
-.score-option{transition:all .3s ease;cursor:pointer}
-.score-option:hover{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.05)}
+.game-card{transition:all .4s cubic-bezier(.16,1,.3,1)}.game-card:hover{transform:translateY(-6px)}.game-card:active{transform:translateY(-2px) scale(.98)}
+.game-card:hover .game-img{transform:scale(1.06)}.game-card:hover .game-overlay{opacity:1}.game-card:hover .game-border{border-color:rgba(34,197,94,.5)}
+.game-img{transition:transform .6s cubic-bezier(.16,1,.3,1)}.game-overlay{transition:opacity .35s ease}
+.cat-btn{transition:all .3s ease}.cat-btn:hover,.cat-btn.active{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.4)}
+.score-option{transition:all .3s ease;cursor:pointer}.score-option:hover{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.05)}
 .score-option.selected{border-color:#22c55e;background:rgba(34,197,94,.1);box-shadow:0 0 20px rgba(34,197,94,.15)}
 .hero-bg{background:linear-gradient(135deg,#020617 0%,#0f172a 30%,#14532d 70%,#020617 100%);position:relative;overflow:hidden}
 .hero-bg::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 50%,rgba(34,197,94,.08) 0%,transparent 50%),radial-gradient(circle at 70% 80%,rgba(34,197,94,.05) 0%,transparent 40%);animation:float 8s ease-in-out infinite}
 .shimmer-text{background:linear-gradient(90deg,#22c55e,#4ade80,#86efac,#4ade80,#22c55e);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s linear infinite}
-.marquee-track{display:flex;animation:marquee 30s linear infinite}
-.marquee-track:hover{animation-play-state:paused}
-.modal-overlay{transition:opacity .3s ease}
-.modal-content{transition:all .4s cubic-bezier(.16,1,.3,1)}
+.marquee-track{display:flex;animation:marquee 30s linear infinite}.marquee-track:hover{animation-play-state:paused}
+.modal-overlay{transition:opacity .3s ease}.modal-content{transition:all .4s cubic-bezier(.16,1,.3,1)}
 .toast{animation:slideUp .4s ease-out,fadeIn .3s ease-out}
-.nav-link{position:relative}
-.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:#22c55e;transition:width .3s ease}
-.nav-link:hover::after{width:100%}
-.stat-card{transition:all .4s ease}
-.stat-card:hover{transform:translateY(-4px);border-color:rgba(34,197,94,.3)}
+.nav-link{position:relative}.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:#22c55e;transition:width .3s ease}.nav-link:hover::after{width:100%}
+.stat-card{transition:all .4s ease}.stat-card:hover{transform:translateY(-4px);border-color:rgba(34,197,94,.3)}
 .tag{font-size:10px;letter-spacing:.1em}
 .search-box:focus-within{border-color:rgba(34,197,94,.5);box-shadow:0 0 0 3px rgba(34,197,94,.1)}
 .cart-badge{animation:scaleIn .3s ease-out}
@@ -72,27 +55,22 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .brand-logo{width:40px;height:40px;border-radius:12px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 15px rgba(34,197,94,.25);transition:box-shadow .3s ease}
 .brand-logo img{width:100%;height:100%;object-fit:cover;display:block}
 .group:hover .brand-logo{box-shadow:0 4px 25px rgba(34,197,94,.45)}
-.brand-logo-sm{width:40px;height:40px;border-radius:12px;overflow:hidden;flex-shrink:0}
-.brand-logo-sm img{width:100%;height:100%;object-fit:cover;display:block}
-.auth-tab{transition:all .3s ease;position:relative}
-.auth-tab.active{color:#22c55e}
+.brand-logo-sm{width:40px;height:40px;border-radius:12px;overflow:hidden;flex-shrink:0}.brand-logo-sm img{width:100%;height:100%;object-fit:cover;display:block}
+.auth-tab{transition:all .3s ease;position:relative}.auth-tab.active{color:#22c55e}
 .auth-tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:#22c55e;border-radius:1px}
 .input-field{background:rgba(30,41,59,.6);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px;color:#f8fafc;font-size:14px;outline:none;transition:all .3s ease;width:100%}
-.input-field:focus{border-color:rgba(34,197,94,.5);box-shadow:0 0 0 3px rgba(34,197,94,.1)}
-.input-field::placeholder{color:#64748b}
+.input-field:focus{border-color:rgba(34,197,94,.5);box-shadow:0 0 0 3px rgba(34,197,94,.1)}.input-field::placeholder{color:#64748b}
 .btn-primary{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;font-weight:600;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%}
-.btn-primary:hover{box-shadow:0 8px 25px rgba(34,197,94,.3);transform:translateY(-1px)}
-.btn-primary:active{transform:translateY(0) scale(.98)}
+.btn-primary:hover{box-shadow:0 8px 25px rgba(34,197,94,.3);transform:translateY(-1px)}.btn-primary:active{transform:translateY(0) scale(.98)}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .btn-google{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#f8fafc;font-weight:500;padding:12px 24px;border-radius:12px;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
 .btn-google:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
-.avatar-lg{width:80px;height:80px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:700;flex-shrink:0}
-.avatar-sm{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0;cursor:pointer;transition:all .3s ease}
+.avatar-lg{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;flex-shrink:0;position:relative;overflow:hidden}
+.avatar-sm{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0;cursor:pointer;transition:all .3s ease;overflow:hidden}
 .avatar-sm:hover{transform:scale(1.1);box-shadow:0 0 15px rgba(34,197,94,.3)}
-.profile-stat{transition:all .3s ease}
-.profile-stat:hover{transform:translateY(-2px);border-color:rgba(34,197,94,.3)}
-.password-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#64748b;transition:color .2s}
-.password-toggle:hover{color:#94a3b8}
+.avatar-sm img,.avatar-lg img{width:100%;height:100%;object-fit:cover}
+.profile-stat{transition:all .3s ease}.profile-stat:hover{transform:translateY(-2px);border-color:rgba(34,197,94,.3)}
+.password-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#64748b;transition:color .2s}.password-toggle:hover{color:#94a3b8}
 .dropdown-menu{transform-origin:top right;transition:all .2s cubic-bezier(.16,1,.3,1)}
 .dropdown-menu.hidden{opacity:0;transform:scale(.95) translateY(-4px);pointer-events:none}
 .dropdown-menu:not(.hidden){opacity:1;transform:scale(1) translateY(0);pointer-events:all}
@@ -101,11 +79,30 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .code-input.filled{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.06)}
 .code-input.error{border-color:rgba(239,68,68,.6);background:rgba(239,68,68,.06);animation:shake .5s ease-in-out}
 .spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
+.pp-upload-zone{border:2px dashed rgba(255,255,255,.1);border-radius:16px;padding:24px;text-align:center;cursor:pointer;transition:all .3s ease}
+.pp-upload-zone:hover{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.03)}
+.setting-card{transition:all .3s ease}.setting-card:hover{border-color:rgba(34,197,94,.2)}
 </style>
 </head>
 <body class="bg-grid">
 
 <div id="toastContainer" class="fixed top-24 right-6 z-[200] flex flex-col gap-3"></div>
+
+<!-- ÇIKIŞ ONAY MODALI -->
+<div id="logoutModal" class="fixed inset-0 z-[170] hidden">
+  <div class="modal-overlay absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeLogoutModal()"></div>
+  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-dark-900 rounded-2xl border border-white/5 p-8 text-center">
+    <div class="w-16 h-16 mx-auto rounded-full bg-red-500/10 flex items-center justify-center mb-5">
+      <iconify-icon icon="mdi:logout" class="text-red-400 text-3xl"></iconify-icon>
+    </div>
+    <h3 class="text-xl font-bold mb-2">Emin misiniz?</h3>
+    <p class="text-dark-400 text-sm mb-8">Çıkış yaparsanız hesabınızdan çıkacaksınız.</p>
+    <div class="flex gap-3">
+      <button onclick="closeLogoutModal()" class="flex-1 py-3 rounded-xl border border-white/10 text-sm font-medium hover:bg-white/5 transition-all">İptal Et</button>
+      <button onclick="confirmLogout()" class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-400 text-white text-sm font-semibold transition-all">Çık</button>
+    </div>
+  </div>
+</div>
 
 <nav id="navbar" class="fixed top-0 left-0 right-0 z-[100] transition-all duration-500">
   <div class="max-w-7xl mx-auto px-6 h-20 flex items-center justify-between">
@@ -115,35 +112,33 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
       <span class="tag uppercase text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded-full border border-brand-500/20">Gaming</span>
     </a>
     <div class="hidden md:flex items-center gap-8">
-      <a href="#" onclick="showSection('home')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Ana Səhifə</a>
+      <a href="#" onclick="showSection('home')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Ana Sayfa</a>
       <a href="#" onclick="showSection('games')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Oyunlar</a>
-      <a href="#" onclick="showSection('apps')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Tətbiqlər</a>
-      <a href="#" onclick="showSection('topup')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Puan Yüklə</a>
+      <a href="#" onclick="showSection('apps')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Uygulamalar</a>
+      <a href="#" onclick="showSection('topup')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Puan Yükle</a>
     </div>
     <div class="flex items-center gap-3">
       <div class="search-box hidden md:flex items-center gap-2 glass rounded-xl px-4 py-2.5 border border-transparent transition-all w-56 focus-within:w-72">
         <iconify-icon icon="mdi:magnify" class="text-dark-400 text-lg"></iconify-icon>
-        <input type="text" id="searchInput" placeholder="Oyun axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
+        <input type="text" id="searchInput" placeholder="Oyun ara..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
       </div>
       <button onclick="toggleCart()" class="relative p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group">
         <iconify-icon icon="mdi:cart-outline" class="text-xl text-dark-300 group-hover:text-brand-400 transition-colors"></iconify-icon>
         <span id="cartCount" class="cart-badge absolute -top-1.5 -right-1.5 w-5 h-5 bg-brand-500 rounded-full text-[10px] font-bold flex items-center justify-center text-white hidden">0</span>
       </button>
       <div id="userArea" class="relative"></div>
-      <button onclick="toggleMobileMenu()" class="md:hidden p-2 glass rounded-xl">
-        <iconify-icon icon="mdi:menu" class="text-xl"></iconify-icon>
-      </button>
+      <button onclick="toggleMobileMenu()" class="md:hidden p-2 glass rounded-xl"><iconify-icon icon="mdi:menu" class="text-xl"></iconify-icon></button>
     </div>
   </div>
 </nav>
 
 <div id="mobileMenu" class="fixed inset-0 z-[99] bg-dark-950/95 backdrop-blur-xl hidden flex-col items-center justify-center gap-6">
-  <a href="#" onclick="showSection('home');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Ana Səhifə</a>
+  <a href="#" onclick="showSection('home');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Ana Sayfa</a>
   <a href="#" onclick="showSection('games');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Oyunlar</a>
-  <a href="#" onclick="showSection('apps');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Tətbiqlər</a>
-  <a href="#" onclick="showSection('topup');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Puan Yüklə</a>
+  <a href="#" onclick="showSection('apps');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Uygulamalar</a>
+  <a href="#" onclick="showSection('topup');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Puan Yükle</a>
   <div id="mobileAuthBtns" class="mt-4"></div>
-  <button onclick="toggleMobileMenu()" class="mt-4 glass rounded-xl px-6 py-3 text-sm">Bağla</button>
+  <button onclick="toggleMobileMenu()" class="mt-4 glass rounded-xl px-6 py-3 text-sm">Kapat</button>
 </div>
 
 <!-- AUTH MODAL -->
@@ -153,133 +148,97 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     <div class="p-8">
       <div class="text-center mb-6" id="authHeader">
         <div class="brand-logo mx-auto mb-4" style="width:48px;height:48px"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div>
-        <h2 id="authTitle" class="text-2xl font-bold">Hesabına Giriş Et</h2>
-        <p id="authSubtitle" class="text-sm text-dark-400 mt-1">Davam etmək üçün daxil ol</p>
+        <h2 id="authTitle" class="text-2xl font-bold">Hesabınıza Giriş Yapın</h2>
+        <p id="authSubtitle" class="text-sm text-dark-400 mt-1">Devam etmek için giriş yapın</p>
       </div>
-      <!-- TABS -->
       <div id="authTabs" class="flex gap-6 border-b border-white/10 mb-6">
         <button onclick="switchAuthTab('login')" id="tabLogin" class="auth-tab active pb-3 text-sm font-medium">Giriş</button>
-        <button onclick="switchAuthTab('register')" id="tabRegister" class="auth-tab pb-3 text-sm font-medium text-dark-400">Qeydiyyat</button>
+        <button onclick="switchAuthTab('register')" id="tabRegister" class="auth-tab pb-3 text-sm font-medium text-dark-400">Kayıt Ol</button>
       </div>
-      <!-- LOGIN FORM -->
+      <!-- GİRİŞ FORMU -->
       <div id="loginForm">
         <div class="space-y-4">
-          <div>
-            <label class="text-xs text-dark-400 mb-1.5 block">E-poçt</label>
-            <input type="email" id="loginEmail" class="input-field" placeholder="email@example.com">
-          </div>
-          <div>
-            <label class="text-xs text-dark-400 mb-1.5 block">Şifrə</label>
-            <div class="relative">
-              <input type="password" id="loginPassword" class="input-field pr-10" placeholder="••••••••">
-              <span class="password-toggle" onclick="togglePwd('loginPassword',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span>
-            </div>
-          </div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">E-posta</label><input type="email" id="loginEmail" class="input-field" placeholder="email@example.com"></div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">Şifre</label><div class="relative"><input type="password" id="loginPassword" class="input-field pr-10" placeholder="••••••••"><span class="password-toggle" onclick="togglePwd('loginPassword',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span></div></div>
           <div class="flex items-center justify-between">
-            <label class="flex items-center gap-2 cursor-pointer">
-              <input type="checkbox" id="rememberMe" class="w-4 h-4 rounded border-white/20 bg-dark-800 text-brand-500 focus:ring-brand-500 focus:ring-offset-0">
-              <span class="text-xs text-dark-400">Yadda saxla</span>
-            </label>
-            <a href="#" class="text-xs text-brand-400 hover:text-brand-300 transition-colors">Şifrəni unutdum?</a>
+            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="rememberMe" class="w-4 h-4 rounded border-white/20 bg-dark-800 text-brand-500 focus:ring-brand-500 focus:ring-offset-0"><span class="text-xs text-dark-400">Beni hatırla</span></label>
+            <a href="#" onclick="showForgotPassword();return false" class="text-xs text-brand-400 hover:text-brand-300 transition-colors">Şifremi unuttum?</a>
           </div>
           <div id="loginError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"></div>
-          <button onclick="handleLogin()" id="loginBtn" class="btn-primary">Giriş Et</button>
-          <div class="relative my-4">
-            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div>
-            <div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">və ya</span></div>
-          </div>
+          <button onclick="handleLogin()" id="loginBtn" class="btn-primary">Giriş Yap</button>
+          <div class="relative my-4"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div><div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">veya</span></div></div>
           <button onclick="handleGoogleLogin()" class="btn-google">
             <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Google ilə davam et
+            Google ile devam et
           </button>
         </div>
       </div>
-      <!-- REGISTER FORM -->
+      <!-- KAYIT FORMU -->
       <div id="registerForm" class="hidden">
         <div class="space-y-4">
-          <div>
-            <label class="text-xs text-dark-400 mb-1.5 block">İstifadəçi adı</label>
-            <input type="text" id="regUsername" class="input-field" placeholder="username">
-          </div>
-          <div>
-            <label class="text-xs text-dark-400 mb-1.5 block">E-poçt</label>
-            <input type="email" id="regEmail" class="input-field" placeholder="email@example.com">
-          </div>
-          <div>
-            <label class="text-xs text-dark-400 mb-1.5 block">Şifrə</label>
-            <div class="relative">
-              <input type="password" id="regPassword" class="input-field pr-10" placeholder="Minimum 6 simvol">
-              <span class="password-toggle" onclick="togglePwd('regPassword',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span>
-            </div>
-          </div>
-          <div>
-            <label class="text-xs text-dark-400 mb-1.5 block">Şifrə təkrarı</label>
-            <div class="relative">
-              <input type="password" id="regPassword2" class="input-field pr-10" placeholder="Şifrəni təkrarlayın">
-              <span class="password-toggle" onclick="togglePwd('regPassword2',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span>
-            </div>
-          </div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">Kullanıcı adı</label><input type="text" id="regUsername" class="input-field" placeholder="kullaniciadi"></div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">E-posta</label><input type="email" id="regEmail" class="input-field" placeholder="email@example.com"></div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">Şifre</label><div class="relative"><input type="password" id="regPassword" class="input-field pr-10" placeholder="Minimum 6 karakter"><span class="password-toggle" onclick="togglePwd('regPassword',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span></div></div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">Şifre tekrarı</label><div class="relative"><input type="password" id="regPassword2" class="input-field pr-10" placeholder="Şifreyi tekrarlayın"><span class="password-toggle" onclick="togglePwd('regPassword2',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span></div></div>
           <div id="regError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"></div>
-          <button onclick="handleRegister()" id="regBtn" class="btn-primary">Hesab Yarat</button>
-          <div class="relative my-4">
-            <div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div>
-            <div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">və ya</span></div>
-          </div>
+          <button onclick="handleRegister()" id="regBtn" class="btn-primary">Hesap Oluştur</button>
+          <div class="relative my-4"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div><div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">veya</span></div></div>
           <button onclick="handleGoogleLogin()" class="btn-google">
             <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Google ilə qeydiyyat
+            Google ile kayıt ol
           </button>
         </div>
       </div>
-      <!-- VERIFICATION FORM -->
+      <!-- ŞİFREMİ UNUTTUM -->
+      <div id="forgotForm" class="hidden">
+        <div class="space-y-4">
+          <div class="text-center mb-2">
+            <div class="w-14 h-14 mx-auto rounded-full bg-orange-500/10 flex items-center justify-center mb-3"><iconify-icon icon="mdi:lock-reset" class="text-orange-400 text-2xl"></iconify-icon></div>
+            <h3 class="text-lg font-bold">Şifremi Unuttum</h3>
+            <p class="text-sm text-dark-400 mt-1">Lütfen Gmail adresinizi yazınız</p>
+          </div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">E-posta</label><input type="email" id="forgotEmail" class="input-field" placeholder="email@example.com"></div>
+          <div id="forgotError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"></div>
+          <button onclick="handleForgotPassword()" id="forgotBtn" class="btn-primary">Kod Gönder</button>
+          <button onclick="backToAuthFromForgot()" class="w-full text-sm text-dark-500 hover:text-dark-300 transition-colors py-2">← Geri dön</button>
+        </div>
+      </div>
+      <!-- DOĞRULAMA FORMU -->
       <div id="verifyForm" class="hidden">
         <div class="text-center mb-6">
-          <div class="w-16 h-16 mx-auto rounded-full bg-brand-500/10 flex items-center justify-center mb-4">
-            <iconify-icon icon="mdi:shield-lock-outline" class="text-brand-400 text-3xl"></iconify-icon>
-          </div>
+          <div class="w-16 h-16 mx-auto rounded-full bg-brand-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:shield-lock-outline" class="text-brand-400 text-3xl"></iconify-icon></div>
           <h3 class="text-lg font-bold">Doğrulama Kodu</h3>
-          <p class="text-sm text-dark-400 mt-1.5" id="verifyEmailText">Kod göndərildi: —</p>
+          <p class="text-sm text-dark-400 mt-1.5" id="verifyEmailText">Kod gönderildi: —</p>
         </div>
         <div class="flex gap-2.5 justify-center mb-6" id="codeInputs"></div>
         <div id="verifyError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 mb-4 text-center"></div>
         <div id="verifySuccess" class="hidden text-brand-400 text-xs bg-brand-500/10 border border-brand-500/20 rounded-lg px-3 py-2 mb-4 text-center"></div>
         <button onclick="verifyCode()" id="verifyBtn" class="btn-primary mb-3">Doğrula</button>
-        <button onclick="resendCode()" id="resendBtn" class="w-full text-sm text-dark-400 hover:text-brand-400 transition-colors py-2 disabled:opacity-30 disabled:cursor-not-allowed" disabled>
-          Kodu yenidən göndər (<span id="resendTimer">2:00</span>)
-        </button>
-        <button onclick="backToAuth()" class="w-full text-sm text-dark-500 hover:text-dark-300 transition-colors py-2 mt-1">
-          ← Geri qayıt
-        </button>
+        <button onclick="resendCode()" id="resendBtn" class="w-full text-sm text-dark-400 hover:text-brand-400 transition-colors py-2 disabled:opacity-30 disabled:cursor-not-allowed" disabled>Kodu yeniden gönder (<span id="resendTimer">2:00</span>)</button>
+        <button onclick="backToAuth()" class="w-full text-sm text-dark-500 hover:text-dark-300 transition-colors py-2 mt-1">← Geri dön</button>
       </div>
     </div>
   </div>
 </div>
 
-<div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105]">
-  <div id="dropdownContent"></div>
-</div>
+<div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105]"><div id="dropdownContent"></div></div>
 
 <div id="cartOverlay" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden modal-overlay" onclick="toggleCart()"></div>
 <div id="cartSidebar" class="fixed top-0 right-0 bottom-0 z-[120] w-full max-w-md bg-dark-900 border-l border-white/5 transform translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col">
   <div class="p-6 border-b border-white/5 flex items-center justify-between">
-    <h3 class="text-lg font-bold flex items-center gap-2"><iconify-icon icon="mdi:cart" class="text-brand-400"></iconify-icon> Səbətiniz</h3>
+    <h3 class="text-lg font-bold flex items-center gap-2"><iconify-icon icon="mdi:cart" class="text-brand-400"></iconify-icon> Sepetiniz</h3>
     <button onclick="toggleCart()" class="p-2 hover:bg-white/5 rounded-lg transition-colors"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button>
   </div>
   <div id="cartItems" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
   <div id="cartFooter" class="p-6 border-t border-white/5 hidden">
-    <div class="flex justify-between items-center mb-4">
-      <span class="text-dark-400">Cəmi:</span>
-      <span id="cartTotal" class="text-2xl font-bold text-brand-400">0 ₼</span>
-    </div>
-    <button onclick="checkout()" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40">Sifarişi Tamamla</button>
+    <div class="flex justify-between items-center mb-4"><span class="text-dark-400">Toplam:</span><span id="cartTotal" class="text-2xl font-bold text-brand-400">0 ₼</span></div>
+    <button onclick="checkout()" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40">Siparişi Tamamla</button>
   </div>
 </div>
 
 <div id="gameModal" class="fixed inset-0 z-[150] hidden">
   <div class="modal-overlay absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeGameModal()"></div>
-  <div class="modal-content absolute inset-4 md:inset-8 lg:inset-y-8 lg:left-[10%] lg:right-[10%] bg-dark-900 rounded-3xl border border-white/5 overflow-hidden flex flex-col">
-    <div id="modalBody" class="flex-1 overflow-y-auto"></div>
-  </div>
+  <div class="modal-content absolute inset-4 md:inset-8 lg:inset-y-8 lg:left-[10%] lg:right-[10%] bg-dark-900 rounded-3xl border border-white/5 overflow-hidden flex flex-col"><div id="modalBody" class="flex-1 overflow-y-auto"></div></div>
 </div>
 
 <main>
@@ -289,18 +248,18 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     <div class="max-w-7xl mx-auto px-6 pt-32 pb-20 grid lg:grid-cols-2 gap-12 items-center relative z-10">
       <div>
         <div class="animate-up"><span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1.5 rounded-full border border-brand-500/20 inline-flex items-center gap-1.5"><iconify-icon icon="mdi:star-four-points" class="text-xs"></iconify-icon> Yeni Oyunlar Burada</span></div>
-        <h1 class="mt-6 text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight animate-up delay-1">Ən Yaxşı<br><span class="shimmer-text">Oyunlar</span><br>Platformu</h1>
-        <p class="mt-6 text-lg text-dark-400 leading-relaxed max-w-lg animate-up delay-2">Sevdiyin oyunun puanını seç, dərhal al. Yüzlərlə oyun və tətbiq, ən sərfəli qiymətlərlə Randox'da.</p>
+        <h1 class="mt-6 text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight animate-up delay-1">En İyi<br><span class="shimmer-text">Oyunlar</span><br>Platformu</h1>
+        <p class="mt-6 text-lg text-dark-400 leading-relaxed max-w-lg animate-up delay-2">Sevdiğin oyunun puanını seç, hemen al. Yüzlerce oyun ve uygulama, en uygun fiyatlarla Randox'ta.</p>
         <div class="mt-10 flex flex-wrap gap-4 animate-up delay-3">
-          <button onclick="showSection('games')" class="bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold px-8 py-4 rounded-xl transition-all shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 flex items-center gap-2">Oyunları Kəşf Et <iconify-icon icon="mdi:arrow-right" class="text-lg"></iconify-icon></button>
-          <button onclick="showSection('topup')" class="glass hover:border-brand-500/30 font-semibold px-8 py-4 rounded-xl transition-all flex items-center gap-2"><iconify-icon icon="mdi:wallet-plus" class="text-brand-400"></iconify-icon> Puan Yüklə</button>
+          <button onclick="showSection('games')" class="bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold px-8 py-4 rounded-xl transition-all shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 flex items-center gap-2">Oyunları Keşfet <iconify-icon icon="mdi:arrow-right" class="text-lg"></iconify-icon></button>
+          <button onclick="showSection('topup')" class="glass hover:border-brand-500/30 font-semibold px-8 py-4 rounded-xl transition-all flex items-center gap-2"><iconify-icon icon="mdi:wallet-plus" class="text-brand-400"></iconify-icon> Puan Yükle</button>
         </div>
         <div class="mt-12 flex gap-8 animate-up delay-4">
           <div><span class="text-3xl font-bold text-brand-400">500+</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Oyun</p></div>
           <div class="w-px bg-white/10"></div>
-          <div><span class="text-3xl font-bold text-brand-400">50K+</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İstifadəçi</p></div>
+          <div><span class="text-3xl font-bold text-brand-400">50K+</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Kullanıcı</p></div>
           <div class="w-px bg-white/10"></div>
-          <div><span class="text-3xl font-bold text-brand-400">24/7</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Dəstək</p></div>
+          <div><span class="text-3xl font-bold text-brand-400">24/7</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Destek</p></div>
         </div>
       </div>
       <div class="relative animate-left delay-3 hidden lg:block">
@@ -314,15 +273,11 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
                 <div><h4 class="font-semibold text-sm">PUBG Mobile</h4><div class="flex items-center gap-1 mt-0.5"><iconify-icon icon="mdi:star" class="text-yellow-400 text-xs"></iconify-icon><span class="text-xs text-dark-400">4.7 • Battle Royale</span></div></div>
                 <span class="ml-auto text-brand-400 font-bold">1.00 ₼</span>
               </div>
-              <div class="flex gap-2">
-                <span class="text-[10px] bg-white/5 px-2 py-1 rounded-md">60 UC</span>
-                <span class="text-[10px] bg-white/5 px-2 py-1 rounded-md">325 UC</span>
-                <span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">Ən Populyar</span>
-              </div>
+              <div class="flex gap-2"><span class="text-[10px] bg-white/5 px-2 py-1 rounded-md">60 UC</span><span class="text-[10px] bg-white/5 px-2 py-1 rounded-md">325 UC</span><span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">POPÜLER</span></div>
             </div>
           </div>
         </div>
-        <div class="absolute -top-4 -right-4 glass-green rounded-2xl p-4 animate-float"><iconify-icon icon="mdi:lightning-bolt" class="text-brand-400 text-2xl"></iconify-icon><p class="text-xs font-semibold mt-1">Ani Çatdırılma</p></div>
+        <div class="absolute -top-4 -right-4 glass-green rounded-2xl p-4 animate-float"><iconify-icon icon="mdi:lightning-bolt" class="text-brand-400 text-2xl"></iconify-icon><p class="text-xs font-semibold mt-1">Anında Teslimat</p></div>
       </div>
     </div>
   </div>
@@ -352,90 +307,90 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
   </div>
   <div class="max-w-7xl mx-auto px-6 py-24">
     <div class="flex items-end justify-between mb-12">
-      <div><span class="tag uppercase text-brand-400 tracking-widest">Xüsusi Seçim</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Populyar Oyunlar</h2><p class="mt-2 text-dark-400">Ən çox satılan və oynanan oyunlar</p></div>
-      <button onclick="showSection('games')" class="hidden md:flex items-center gap-2 text-brand-400 hover:text-brand-300 text-sm font-medium transition-colors">Hamısına Bax <iconify-icon icon="mdi:arrow-right"></iconify-icon></button>
+      <div><span class="tag uppercase text-brand-400 tracking-widest">Özel Seçim</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Popüler Oyunlar</h2><p class="mt-2 text-dark-400">En çok satılan ve oynanan oyunlar</p></div>
+      <button onclick="showSection('games')" class="hidden md:flex items-center gap-2 text-brand-400 hover:text-brand-300 text-sm font-medium transition-colors">Tümünü Gör <iconify-icon icon="mdi:arrow-right"></iconify-icon></button>
     </div>
     <div id="featuredGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
   </div>
   <div class="border-y border-white/5 bg-dark-900/30">
     <div class="max-w-7xl mx-auto px-6 py-24">
-      <div class="text-center mb-14"><span class="tag uppercase text-brand-400 tracking-widest">Kateqoriyalar</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Sevdiyin Janrı Tap</h2></div>
+      <div class="text-center mb-14"><span class="tag uppercase text-brand-400 tracking-widest">Kategoriler</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Sevdiğin Türü Bul</h2></div>
       <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
         <div onclick="showSection('games');filterCategory('fps')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-red-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:crosshairs-gps" class="text-red-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">FPS</h3><p class="text-xs text-dark-500 mt-1">42 oyun</p></div>
         <div onclick="showSection('games');filterCategory('moba')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-blue-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:sword-cross" class="text-blue-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">MOBA</h3><p class="text-xs text-dark-500 mt-1">28 oyun</p></div>
         <div onclick="showSection('games');filterCategory('battle-royale')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-orange-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:account-group" class="text-orange-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Battle Royale</h3><p class="text-xs text-dark-500 mt-1">35 oyun</p></div>
         <div onclick="showSection('games');filterCategory('rpg')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:shield-sword" class="text-purple-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">RPG</h3><p class="text-xs text-dark-500 mt-1">53 oyun</p></div>
         <div onclick="showSection('games');filterCategory('racing')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:car-sports" class="text-cyan-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Yarış</h3><p class="text-xs text-dark-500 mt-1">19 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('strategy')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-yellow-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:chess-knight" class="text-yellow-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Strategiya</h3><p class="text-xs text-dark-500 mt-1">31 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('sports')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-green-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:soccer" class="text-green-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">İdman</h3><p class="text-xs text-dark-500 mt-1">22 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('horror')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-gray-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:ghost" class="text-gray-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Qorxu</h3><p class="text-xs text-dark-500 mt-1">17 oyun</p></div>
+        <div onclick="showSection('games');filterCategory('strategy')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-yellow-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:chess-knight" class="text-yellow-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Strateji</h3><p class="text-xs text-dark-500 mt-1">31 oyun</p></div>
+        <div onclick="showSection('games');filterCategory('sports')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-green-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:soccer" class="text-green-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Spor</h3><p class="text-xs text-dark-500 mt-1">22 oyun</p></div>
+        <div onclick="showSection('games');filterCategory('horror')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-gray-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:ghost" class="text-gray-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Korku</h3><p class="text-xs text-dark-500 mt-1">17 oyun</p></div>
       </div>
     </div>
   </div>
   <div class="max-w-7xl mx-auto px-6 py-24">
-    <div class="text-center mb-14"><span class="tag uppercase text-brand-400 tracking-widest">Niyə Randox?</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Fərqləndirici Xüsusiyyətlər</h2></div>
+    <div class="text-center mb-14"><span class="tag uppercase text-brand-400 tracking-widest">Neden Randox?</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Öne Çıkan Özellikler</h2></div>
     <div class="grid md:grid-cols-3 gap-8">
-      <div class="glass rounded-2xl p-8 border border-white/5 hover:border-brand-500/20 transition-all duration-500 hover:-translate-y-1"><div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:lightning-bolt" class="text-brand-400 text-2xl"></iconify-icon></div><h3 class="text-lg font-bold mb-3">Ani Çatdırılma</h3><p class="text-dark-400 text-sm leading-relaxed">Ödənişi etdiyin an puanlar hesabına yüklənir.</p></div>
-      <div class="glass rounded-2xl p-8 border border-white/5 hover:border-brand-500/20 transition-all duration-500 hover:-translate-y-1"><div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:shield-check" class="text-brand-400 text-2xl"></iconify-icon></div><h3 class="text-lg font-bold mb-3">100% Təhlükəsiz</h3><p class="text-dark-400 text-sm leading-relaxed">Bütün əməliyyatlar SSL şifrələmə ilə qorunur.</p></div>
-      <div class="glass rounded-2xl p-8 border border-white/5 hover:border-brand-500/20 transition-all duration-500 hover:-translate-y-1"><div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:headset" class="text-brand-400 text-2xl"></iconify-icon></div><h3 class="text-lg font-bold mb-3">7/24 Dəstək</h3><p class="text-dark-400 text-sm leading-relaxed">Dəstək komandamız həmişə yanındadır.</p></div>
+      <div class="glass rounded-2xl p-8 border border-white/5 hover:border-brand-500/20 transition-all duration-500 hover:-translate-y-1"><div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:lightning-bolt" class="text-brand-400 text-2xl"></iconify-icon></div><h3 class="text-lg font-bold mb-3">Anında Teslimat</h3><p class="text-dark-400 text-sm leading-relaxed">Ödeme yaptığınız an puanlar hesabınıza yüklenir.</p></div>
+      <div class="glass rounded-2xl p-8 border border-white/5 hover:border-brand-500/20 transition-all duration-500 hover:-translate-y-1"><div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:shield-check" class="text-brand-400 text-2xl"></iconify-icon></div><h3 class="text-lg font-bold mb-3">%100 Güvenli</h3><p class="text-dark-400 text-sm leading-relaxed">Tüm işlemler SSL şifreleme ile korunur.</p></div>
+      <div class="glass rounded-2xl p-8 border border-white/5 hover:border-brand-500/20 transition-all duration-500 hover:-translate-y-1"><div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:headset" class="text-brand-400 text-2xl"></iconify-icon></div><h3 class="text-lg font-bold mb-3">7/24 Destek</h3><p class="text-dark-400 text-sm leading-relaxed">Destek ekibimiz her zaman yanınızda.</p></div>
     </div>
   </div>
 </section>
 
 <section id="section-games" class="hidden pt-24 pb-20 min-h-screen">
   <div class="max-w-7xl mx-auto px-6">
-    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">Oyun Kataloqu</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Bütün Oyunlar</h2><p class="mt-2 text-dark-400">Oyununu tap, puanını seç, al!</p></div>
+    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">Oyun Kataloğu</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Tüm Oyunlar</h2><p class="mt-2 text-dark-400">Oyununu bul, puanını seç, al!</p></div>
     <div class="flex flex-wrap gap-2 mb-8" id="categoryFilters">
-      <button onclick="filterCategory('all')" class="cat-btn active tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium" data-cat="all">Hamısı</button>
+      <button onclick="filterCategory('all')" class="cat-btn active tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium" data-cat="all">Tümü</button>
       <button onclick="filterCategory('fps')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="fps">FPS</button>
       <button onclick="filterCategory('moba')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="moba">MOBA</button>
       <button onclick="filterCategory('battle-royale')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="battle-royale">Battle Royale</button>
       <button onclick="filterCategory('rpg')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="rpg">RPG</button>
       <button onclick="filterCategory('racing')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="racing">Yarış</button>
-      <button onclick="filterCategory('strategy')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="strategy">Strategiya</button>
-      <button onclick="filterCategory('sports')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="sports">İdman</button>
-      <button onclick="filterCategory('horror')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="horror">Qorxu</button>
+      <button onclick="filterCategory('strategy')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="strategy">Strateji</button>
+      <button onclick="filterCategory('sports')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="sports">Spor</button>
+      <button onclick="filterCategory('horror')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="horror">Korku</button>
     </div>
     <div id="gamesGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
-    <div id="noResults" class="hidden text-center py-20"><iconify-icon icon="mdi:magnify-close" class="text-5xl text-dark-600 mb-4"></iconify-icon><p class="text-dark-400 text-lg">Nəticə tapılmadı</p></div>
+    <div id="noResults" class="hidden text-center py-20"><iconify-icon icon="mdi:magnify-close" class="text-5xl text-dark-600 mb-4"></iconify-icon><p class="text-dark-400 text-lg">Sonuç bulunamadı</p></div>
   </div>
 </section>
 
 <section id="section-apps" class="hidden pt-24 pb-20 min-h-screen">
   <div class="max-w-7xl mx-auto px-6">
-    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">Tətbiq Mağazası</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Populyar Tətbiqlər</h2><p class="mt-2 text-dark-400">Tətbiqlərin ödənişli xüsusiyyətlərini sərfəli al</p></div>
+    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">Uygulama Mağazası</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Popüler Uygulamalar</h2><p class="mt-2 text-dark-400">Uygulamaların ücretli özelliklerini uygun fiyata al</p></div>
     <div id="appsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
   </div>
 </section>
 
 <section id="section-topup" class="hidden pt-24 pb-20 min-h-screen">
   <div class="max-w-3xl mx-auto px-6">
-    <div class="text-center mb-12"><span class="tag uppercase text-brand-400 tracking-widest">Balans</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Puan Yüklə</h2><p class="mt-2 text-dark-400">Hesabına puan yüklə, sərbəst alış-veriş et</p></div>
+    <div class="text-center mb-12"><span class="tag uppercase text-brand-400 tracking-widest">Bakiye</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Puan Yükle</h2><p class="mt-2 text-dark-400">Hesabına puan yükle, özgürce alışveriş yap</p></div>
     <div class="glass rounded-3xl p-8 border border-white/5">
-      <div class="text-center mb-8"><p class="text-dark-400 text-sm mb-1">Cari Balans</p><p class="text-5xl font-bold text-brand-400" id="currentBalance">0.00 ₼</p></div>
+      <div class="text-center mb-8"><p class="text-dark-400 text-sm mb-1">Mevcut Bakiye</p><p class="text-5xl font-bold text-brand-400" id="currentBalance">0.00 ₼</p></div>
       <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8" id="topUpGrid">
         <div onclick="selectTopUp(this,5)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5"><iconify-icon icon="mdi:coin" class="text-yellow-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">5 ₼</p><p class="text-xs text-dark-500 mt-1">500 Puan</p></div>
         <div onclick="selectTopUp(this,10)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5"><iconify-icon icon="mdi:coin" class="text-yellow-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">10 ₼</p><p class="text-xs text-dark-500 mt-1">1000 Puan</p></div>
-        <div onclick="selectTopUp(this,25)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5 relative overflow-hidden"><div class="absolute top-0 right-0 bg-brand-500 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">POPULYAR</div><iconify-icon icon="mdi:coins" class="text-yellow-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">25 ₼</p><p class="text-xs text-dark-500 mt-1">2500 Puan</p></div>
+        <div onclick="selectTopUp(this,25)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5 relative overflow-hidden"><div class="absolute top-0 right-0 bg-brand-500 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">POPÜLER</div><iconify-icon icon="mdi:coins" class="text-yellow-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">25 ₼</p><p class="text-xs text-dark-500 mt-1">2500 Puan</p></div>
         <div onclick="selectTopUp(this,50)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5"><iconify-icon icon="mdi:cash-multiple" class="text-yellow-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">50 ₼</p><p class="text-xs text-dark-500 mt-1">5000 Puan</p></div>
-        <div onclick="selectTopUp(this,100)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5 relative overflow-hidden"><div class="absolute top-0 right-0 bg-orange-500 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">BONUS +10%</div><iconify-icon icon="mdi:diamond-stone" class="text-cyan-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">100 ₼</p><p class="text-xs text-dark-500 mt-1">11000 Puan</p></div>
-        <div onclick="selectTopUp(this,200)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5 relative overflow-hidden"><div class="absolute top-0 right-0 bg-purple-500 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">BONUS +15%</div><iconify-icon icon="mdi:crown" class="text-purple-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">200 ₼</p><p class="text-xs text-dark-500 mt-1">23000 Puan</p></div>
+        <div onclick="selectTopUp(this,100)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5 relative overflow-hidden"><div class="absolute top-0 right-0 bg-orange-500 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">BONUS +%10</div><iconify-icon icon="mdi:diamond-stone" class="text-cyan-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">100 ₼</p><p class="text-xs text-dark-500 mt-1">11000 Puan</p></div>
+        <div onclick="selectTopUp(this,200)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5 relative overflow-hidden"><div class="absolute top-0 right-0 bg-purple-500 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">BONUS +%15</div><iconify-icon icon="mdi:crown" class="text-purple-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">200 ₼</p><p class="text-xs text-dark-500 mt-1">23000 Puan</p></div>
       </div>
       <div class="mb-6">
-        <label class="text-sm text-dark-400 mb-2 block">Ödəniş Üsulu</label>
+        <label class="text-sm text-dark-400 mb-2 block">Ödeme Yöntemi</label>
         <div class="grid grid-cols-3 gap-3" id="paymentGrid">
           <div onclick="selectPayment(this)" class="score-option selected glass-light rounded-xl p-3 text-center border border-white/5 text-xs font-medium"><iconify-icon icon="mdi:credit-card" class="text-lg mb-1 text-brand-400 block"></iconify-icon>Kart</div>
           <div onclick="selectPayment(this)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 text-xs font-medium text-dark-400"><iconify-icon icon="mdi:cellphone" class="text-lg mb-1 block"></iconify-icon>Telefon</div>
           <div onclick="selectPayment(this)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 text-xs font-medium text-dark-400"><iconify-icon icon="mdi:bitcoin" class="text-lg mb-1 block"></iconify-icon>Kripto</div>
         </div>
       </div>
-      <button onclick="processTopUp()" id="topUpBtn" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-4 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-40 disabled:cursor-not-allowed" disabled>Puan Yüklə</button>
+      <button onclick="processTopUp()" id="topUpBtn" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-4 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-40 disabled:cursor-not-allowed" disabled>Puan Yükle</button>
     </div>
   </div>
 </section>
 
 <section id="section-profile" class="hidden pt-24 pb-20 min-h-screen">
-  <div class="max-w-4xl mx-auto px-6" id="profileContent"></div>
+  <div class="max-w-3xl mx-auto px-6" id="profileContent"></div>
 </section>
 
 </main>
@@ -445,7 +400,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     <div class="grid md:grid-cols-4 gap-12">
       <div>
         <div class="flex items-center gap-3 mb-5"><div class="brand-logo-sm"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div><span class="text-xl font-bold">Randox</span></div>
-        <p class="text-dark-400 text-sm leading-relaxed">Azərbaycanın ən böyük oyun puanı platforması.</p>
+        <p class="text-dark-400 text-sm leading-relaxed">En büyük oyun puanı platforması.</p>
         <div class="flex gap-3 mt-5">
           <a href="#" class="w-9 h-9 glass rounded-lg flex items-center justify-center hover:border-brand-500/30 transition-all"><iconify-icon icon="mdi:instagram" class="text-dark-400 hover:text-brand-400"></iconify-icon></a>
           <a href="#" class="w-9 h-9 glass rounded-lg flex items-center justify-center hover:border-brand-500/30 transition-all"><iconify-icon icon="mdi:facebook" class="text-dark-400 hover:text-brand-400"></iconify-icon></a>
@@ -453,20 +408,94 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
           <a href="#" class="w-9 h-9 glass rounded-lg flex items-center justify-center hover:border-brand-500/30 transition-all"><iconify-icon icon="mdi:telegram" class="text-dark-400 hover:text-brand-400"></iconify-icon></a>
         </div>
       </div>
-      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Platforma</h4><ul class="space-y-3"><li><a href="#" onclick="showSection('games')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Oyunlar</a></li><li><a href="#" onclick="showSection('apps')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Tətbiqlər</a></li><li><a href="#" onclick="showSection('topup')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Puan Yüklə</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Endirimlər</a></li></ul></div>
-      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Dəstək</h4><ul class="space-y-3"><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">FAQ</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Əlaqə</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Geri Qaytarma</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Canlı Dəstək</a></li></ul></div>
-      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Newsletter</h4><p class="text-sm text-dark-400 mb-4">Yeni oyunlar və endirimlərdən xəbərdar ol</p><div class="flex gap-2"><input type="email" placeholder="E-poçt" class="flex-1 bg-dark-800 border border-white/5 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-500/50 transition-colors"><button class="bg-brand-500 hover:bg-brand-400 text-white px-4 py-2.5 rounded-xl transition-colors"><iconify-icon icon="mdi:send" class="text-lg"></iconify-icon></button></div></div>
+      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Platforma</h4><ul class="space-y-3"><li><a href="#" onclick="showSection('games')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Oyunlar</a></li><li><a href="#" onclick="showSection('apps')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Uygulamalar</a></li><li><a href="#" onclick="showSection('topup')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Puan Yükle</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İndirimler</a></li></ul></div>
+      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Destek</h4><ul class="space-y-3"><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">SSS</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İletişim</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İade</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Canlı Destek</a></li></ul></div>
+      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Bülten</h4><p class="text-sm text-dark-400 mb-4">Yeni oyunlar ve indirimlerden haberdar ol</p><div class="flex gap-2"><input type="email" placeholder="E-posta" class="flex-1 bg-dark-800 border border-white/5 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-500/50 transition-colors"><button class="bg-brand-500 hover:bg-brand-400 text-white px-4 py-2.5 rounded-xl transition-colors"><iconify-icon icon="mdi:send" class="text-lg"></iconify-icon></button></div></div>
     </div>
     <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-xs text-dark-500">© 2025 Randox. Bütün hüquqlar qorunur.</p>
-      <div class="flex gap-6"><a href="#" class="text-xs text-dark-500 hover:text-dark-300 transition-colors">Gizlilik Siyasəti</a><a href="#" class="text-xs text-dark-500 hover:text-dark-300 transition-colors">İstifadə Şərtləri</a></div>
+      <p class="text-xs text-dark-500">© 2025 Randox. Tüm hakları saklıdır.</p>
+      <div class="flex gap-6"><a href="#" class="text-xs text-dark-500 hover:text-dark-300 transition-colors">Gizlilik Politikası</a><a href="#" class="text-xs text-dark-500 hover:text-dark-300 transition-colors">Kullanım Koşulları</a></div>
     </div>
   </div>
 </footer>
 
 <script>
-/* ===== EMAILJS INIT ===== */
+/* ===== EMAILJS ===== */
 emailjs.init('ZaLCBng5Gicqv539R');
+
+/* ===== GOOGLE SIGN-IN ===== */
+/* 
+   NOT: Google girişi çalışması için:
+   1. https://console.cloud.google.com/ gir
+   2. Yeni proje oluştur → APIs & Services → OAuth consent screen ayarla
+   3. Credentials → Create OAuth client ID → Web application
+   4. Authorized JavaScript origins: https://senin-kullanici-adin.github.io ekle
+   5. Aşağıdaki CLIENT_ID'yi kendi client ID'n ile değiştir
+*/
+const GOOGLE_CLIENT_ID = '523650358471-6m440tl0o89eq6balm1pe4uermmbiv88.apps.googleusercontent.com.apps.googleusercontent.com';
+let googleInitialized = false;
+
+function initGoogleSignIn() {
+  if (googleInitialized || typeof google === 'undefined' || !google.accounts) return;
+  if (GOOGLE_CLIENT_ID.startsWith('BURAYA')) return; // placeholder varsa başlatma
+  google.accounts.id.initialize({
+    client_id: GOOGLE_CLIENT_ID,
+    callback: handleGoogleResponse,
+    auto_select: false,
+    cancel_on_tap_outside: true,
+  });
+  googleInitialized = true;
+}
+
+function handleGoogleLogin() {
+  if (!googleInitialized) {
+    if (typeof google !== 'undefined' && google.accounts) {
+      initGoogleSignIn();
+      if (!googleInitialized) {
+        showToast('Google girişi henüz yapılandırılmamış. Client ID gerekli.', 'error');
+        return;
+      }
+    } else {
+      showToast('Google girişi yüklenemedi. Sayfayı yenileyin.', 'error');
+      return;
+    }
+  }
+  google.accounts.id.prompt((notification) => {
+    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
+      showToast('Google girişi iptal edildi.', 'info');
+    }
+  });
+}
+
+function handleGoogleResponse(response) {
+  try {
+    const payload = JSON.parse(atob(response.credential.split('.')[1]));
+    const email = payload.email;
+    const name = payload.name || email.split('@')[0];
+    const picture = payload.picture || '';
+    
+    let user = users.find(u => u.email === email);
+    if (!user) {
+      user = { username: name, email: email, password: 'google_' + Date.now(), balance: 0, avatar: picture, createdAt: new Date().toISOString() };
+      users.push(user);
+      localStorage.setItem('randox_users', JSON.stringify(users));
+    } else if (picture && !user.avatar) {
+      user.avatar = picture;
+      localStorage.setItem('randox_users', JSON.stringify(users));
+    }
+    
+    currentUser = { ...user };
+    localStorage.setItem('randox_user', JSON.stringify(currentUser));
+    closeAuthModal();
+    updateUserArea();
+    showToast('Hoş geldin, ' + currentUser.username + '!', 'success');
+  } catch (e) {
+    showToast('Google girişi başarısız oldu.', 'error');
+  }
+}
+
+// Google SDK yüklendiğinde başlat
+window.addEventListener('load', () => { setTimeout(initGoogleSignIn, 500); });
 
 /* ===== STATE ===== */
 let currentUser = JSON.parse(localStorage.getItem('randox_user')) || null;
@@ -480,16 +509,23 @@ let cartOpen = false;
 let dropdownOpen = false;
 let currentFilter = 'all';
 let searchQuery = '';
+let vCode='',vEmail='',vAction='',vTempData={},resendCd=0,resendIv=null;
 
-/* ===== DOGRULAMA STATE ===== */
-let vCode = '';
-let vEmail = '';
-let vAction = '';
-let vTempData = {};
-let resendCd = 0;
-let resendIv = null;
+/* ===== AVATAR YARDIMCI ===== */
+function getAvatarHTML(user, size, cls) {
+  if (!user) return '';
+  if (user.avatar) return `<img src="${user.avatar}" alt="">`;
+  const c = (user.username || 'K').charAt(0).toUpperCase();
+  const col = `hsl(${(user.username || 'K').charCodeAt(0) * 37 % 360},60%,45%)`;
+  return c;
+}
 
-/* ===== IMAGES ===== */
+function getAvatarColor(user) {
+  if (!user) return '#22c55e';
+  return `hsl(${(user.username || 'K').charCodeAt(0) * 37 % 360},60%,45%)`;
+}
+
+/* ===== IMG ===== */
 const IMG={
   pubg:"https://z-cdn-media.chatglm.cn/files/a6111907-9687-4215-93b6-d440fa4d20d2.jpg?auth_key=1882175679-42e4d8f3bf15441f9334db1f4d5bce75-0-a8809e366cfa07eadf304b059c3113b7",
   genshin:"https://z-cdn-media.chatglm.cn/files/22360c39-d4ba-40e5-b74d-2a5a7dd20601.jpg?auth_key=1882175679-d446480650bf471c8b27e36ec83c1d28-0-192250e878113eabae567ff743733996",
@@ -509,432 +545,281 @@ const IMG={
   cr:"https://picsum.photos/seed/clashroyale2025/400/500"
 };
 
-/* ===== GAME DATA ===== */
+/* ===== VERİ ===== */
 const GAMES=[
-  {id:'pubg',name:'PUBG Mobile',cat:'battle-royale',img:IMG.pubg,rating:4.7,desc:'Dünyanın ən populyar battle royale oyunu. 100 oyunçu, bir ada, son nəfəsə qədər mübarizə.',scores:[{n:'60 UC',a:60,p:1},{n:'325 UC',a:325,p:5},{n:'660 UC',a:660,p:10},{n:'1800 UC',a:1800,p:25},{n:'3850 UC',a:3850,p:50},{n:'8100 UC',a:8100,p:100}]},
-  {id:'genshin',name:'Genshin Impact',cat:'rpg',img:IMG.genshin,rating:4.8,desc:'Teyvat dünyasını kəşf et. Elementlərin gücünü istifadə edərək macəraya qoşul.',scores:[{n:'60 Genesis',a:60,p:1},{n:'300+30 Genesis',a:330,p:5},{n:'980+110 Genesis',a:1090,p:15},{n:'1980+260 Genesis',a:2240,p:30},{n:'3280+600 Genesis',a:3880,p:50},{n:'6480+1600 Genesis',a:8080,p:100}]},
-  {id:'fortnite',name:'Fortnite',cat:'battle-royale',img:IMG.fortnite,rating:4.5,desc:'Build, shoot, survive. Epic Games-in ikonik battle royale oyunu.',scores:[{n:'1000 V-Bucks',a:1000,p:8},{n:'2800 V-Bucks',a:2800,p:20},{n:'5000 V-Bucks',a:5000,p:35},{n:'13500 V-Bucks',a:13500,p:90}]},
-  {id:'efootball',name:'eFootball 2025',cat:'sports',img:IMG.efootball,rating:4.2,desc:'Realistik futbol simulyasiyası. Dream Team-unu qur, dünyanın ən yaxşısı ol.',scores:[{n:'105 eFootball Coins',a:105,p:1},{n:'560 eFootball Coins',a:560,p:5},{n:'1150 eFootball Coins',a:1150,p:10},{n:'2400 eFootball Coins',a:2400,p:20},{n:'5700 eFootball Coins',a:5700,p:45}]},
-  {id:'coc',name:'Clash of Clans',cat:'strategy',img:IMG.coc,rating:4.6,desc:'Kəndini qur, ordunu hazırla, digər oyunçulara hücum et.',scores:[{n:'80 Gems',a:80,p:1},{n:'500 Gems',a:500,p:5},{n:'1200 Gems',a:1200,p:12},{n:'2500 Gems',a:2500,p:25},{n:'6500 Gems',a:6500,p:60},{n:'14000 Gems',a:14000,p:120}]},
-  {id:'asphalt',name:'Asphalt 9: Legends',cat:'racing',img:IMG.asphalt,rating:4.4,desc:'Ən sürətli arabalar, ən möhtəşəm yollar. Arcade racing-in kralı.',scores:[{n:'3000 Tokens',a:3000,p:3},{n:'8000 Tokens',a:8000,p:7},{n:'18000 Tokens',a:18000,p:15},{n:'40000 Tokens',a:40000,p:30}]},
-  {id:'freefire',name:'Free Fire',cat:'battle-royale',img:IMG.freefire,rating:4.3,desc:'10 dəqiqəlik sürətli battle royale. Xarakter bacarıqları ilə fərqlən.',scores:[{n:'100 Diamonds',a:100,p:1},{n:'310 Diamonds',a:310,p:3},{n:'520 Diamonds',a:520,p:5},{n:'1060 Diamonds',a:1060,p:10},{n:'2180 Diamonds',a:2180,p:20},{n:'5600 Diamonds',a:5600,p:50}]},
-  {id:'apex',name:'Apex Legends Mobile',cat:'fps',img:IMG.apex,rating:4.6,desc:'Respawn-in məşhur FPS battle royale oyununun mobil versiyası.',scores:[{n:'1000 Coins',a:1000,p:3},{n:'2500 Coins',a:2500,p:7},{n:'5000 Coins',a:5000,p:13},{n:'10500 Coins',a:10500,p:25}]},
-  {id:'codm',name:'Call of Duty: Mobile',cat:'fps',img:IMG.codm,rating:4.7,desc:'İkonik CoD təcrübəsi mobilde. Multiplayer, Battle Royale, Zombies.',scores:[{n:'60 CP',a:60,p:1},{n:'325 CP',a:325,p:5},{n:'660 CP',a:660,p:10},{n:'1800 CP',a:1800,p:25},{n:'3850 CP',a:3850,p:50},{n:'8100 CP',a:8100,p:100}]},
-  {id:'mlbb',name:'Mobile Legends',cat:'moba',img:IMG.mlbb,rating:4.5,desc:'5v5 MOBA macərası. 100+ qəhrəman, sürətli oyun, strateji döyüş.',scores:[{n:'86 Diamonds',a:86,p:1},{n:'172 Diamonds',a:172,p:2},{n:'257 Diamonds',a:257,p:3},{n:'514 Diamonds',a:514,p:6},{n:'1296 Diamonds',a:1296,p:15},{n:'2196 Diamonds',a:2196,p:25}]},
-  {id:'cr',name:'Clash Royale',cat:'strategy',img:IMG.cr,rating:4.4,desc:'Kartları bacarıqla istifadə et, rəqibin qülləsini dağıt.',scores:[{n:'80 Gems',a:80,p:1},{n:'500 Gems',a:500,p:5},{n:'1200 Gems',a:1200,p:12},{n:'2500 Gems',a:2500,p:25},{n:'6500 Gems',a:6500,p:60}]}
+  {id:'pubg',name:'PUBG Mobile',cat:'battle-royale',img:IMG.pubg,rating:4.7,desc:'Dünyanın en popüler battle royale oyunu.',scores:[{n:'60 UC',a:60,p:1},{n:'325 UC',a:325,p:5},{n:'660 UC',a:660,p:10},{n:'1800 UC',a:1800,p:25},{n:'3850 UC',a:3850,p:50},{n:'8100 UC',a:8100,p:100}]},
+  {id:'genshin',name:'Genshin Impact',cat:'rpg',img:IMG.genshin,rating:4.8,desc:'Teyvat dünyasını keşfet.',scores:[{n:'60 Genesis',a:60,p:1},{n:'300+30 Genesis',a:330,p:5},{n:'980+110 Genesis',a:1090,p:15},{n:'1980+260 Genesis',a:2240,p:30},{n:'3280+600 Genesis',a:3880,p:50},{n:'6480+1600 Genesis',a:8080,p:100}]},
+  {id:'fortnite',name:'Fortnite',cat:'battle-royale',img:IMG.fortnite,rating:4.5,desc:'Build, shoot, survive.',scores:[{n:'1000 V-Bucks',a:1000,p:8},{n:'2800 V-Bucks',a:2800,p:20},{n:'5000 V-Bucks',a:5000,p:35},{n:'13500 V-Bucks',a:13500,p:90}]},
+  {id:'efootball',name:'eFootball 2025',cat:'sports',img:IMG.efootball,rating:4.2,desc:'Realistik futbol simülasyonu.',scores:[{n:'105 eFootball Coins',a:105,p:1},{n:'560 eFootball Coins',a:560,p:5},{n:'1150 eFootball Coins',a:1150,p:10},{n:'2400 eFootball Coins',a:2400,p:20},{n:'5700 eFootball Coins',a:5700,p:45}]},
+  {id:'coc',name:'Clash of Clans',cat:'strategy',img:IMG.coc,rating:4.6,desc:'Köyünü kur, ordunu hazırla.',scores:[{n:'80 Gems',a:80,p:1},{n:'500 Gems',a:500,p:5},{n:'1200 Gems',a:1200,p:12},{n:'2500 Gems',a:2500,p:25},{n:'6500 Gems',a:6500,p:60},{n:'14000 Gems',a:14000,p:120}]},
+  {id:'asphalt',name:'Asphalt 9: Legends',cat:'racing',img:IMG.asphalt,rating:4.4,desc:'En hızlı arabalar, en muhteşem yollar.',scores:[{n:'3000 Tokens',a:3000,p:3},{n:'8000 Tokens',a:8000,p:7},{n:'18000 Tokens',a:18000,p:15},{n:'40000 Tokens',a:40000,p:30}]},
+  {id:'freefire',name:'Free Fire',cat:'battle-royale',img:IMG.freefire,rating:4.3,desc:'10 dakikalık hızlı battle royale.',scores:[{n:'100 Diamonds',a:100,p:1},{n:'310 Diamonds',a:310,p:3},{n:'520 Diamonds',a:520,p:5},{n:'1060 Diamonds',a:1060,p:10},{n:'2180 Diamonds',a:2180,p:20},{n:'5600 Diamonds',a:5600,p:50}]},
+  {id:'apex',name:'Apex Legends Mobile',cat:'fps',img:IMG.apex,rating:4.6,desc:'FPS battle royale mobilde.',scores:[{n:'1000 Coins',a:1000,p:3},{n:'2500 Coins',a:2500,p:7},{n:'5000 Coins',a:5000,p:13},{n:'10500 Coins',a:10500,p:25}]},
+  {id:'codm',name:'Call of Duty: Mobile',cat:'fps',img:IMG.codm,rating:4.7,desc:'İkonik CoD deneyimi mobilde.',scores:[{n:'60 CP',a:60,p:1},{n:'325 CP',a:325,p:5},{n:'660 CP',a:660,p:10},{n:'1800 CP',a:1800,p:25},{n:'3850 CP',a:3850,p:50},{n:'8100 CP',a:8100,p:100}]},
+  {id:'mlbb',name:'Mobile Legends',cat:'moba',img:IMG.mlbb,rating:4.5,desc:'5v5 MOBA macerası.',scores:[{n:'86 Diamonds',a:86,p:1},{n:'172 Diamonds',a:172,p:2},{n:'257 Diamonds',a:257,p:3},{n:'514 Diamonds',a:514,p:6},{n:'1296 Diamonds',a:1296,p:15},{n:'2196 Diamonds',a:2196,p:25}]},
+  {id:'cr',name:'Clash Royale',cat:'strategy',img:IMG.cr,rating:4.4,desc:'Kartları beceriyle kullan.',scores:[{n:'80 Gems',a:80,p:1},{n:'500 Gems',a:500,p:5},{n:'1200 Gems',a:1200,p:12},{n:'2500 Gems',a:2500,p:25},{n:'6500 Gems',a:6500,p:60}]}
 ];
-
 const APPS=[
-  {id:'netflix',name:'Netflix Premium',cat:'app',img:IMG.netflix,rating:4.8,desc:'Dünyanın ən böyük streaming platforması. Filmlər, seriallar, dokumentallar.',scores:[{n:'1 Aylıq Premium',a:1,p:12},{n:'3 Aylıq Premium',a:3,p:33},{n:'6 Aylıq Premium',a:6,p:60},{n:'12 Aylıq Premium',a:12,p:108}]},
-  {id:'tiktok',name:'TikTok Coins',cat:'app',img:IMG.tiktok,rating:4.3,desc:'Sevdiyin yaradıcılara dəstək ol. TikTok Coins al.',scores:[{n:'65 Coins',a:65,p:1},{n:'330 Coins',a:330,p:5},{n:'660 Coins',a:660,p:10},{n:'1321 Coins',a:1321,p:20},{n:'3305 Coins',a:3305,p:45},{n:'6643 Coins',a:6643,p:85}]},
-  {id:'discord',name:'Discord Nitro',cat:'app',img:IMG.discord,rating:4.6,desc:'Discord Nitro ilə daha çox emoci, yüksək yükləmə, Booster.',scores:[{n:'1 Aylıq Nitro',a:1,p:8},{n:'3 Aylıq Nitro',a:3,p:22},{n:'12 Aylıq Nitro',a:12,p:75}]},
-  {id:'ytpremium',name:'YouTube Premium',cat:'app',img:IMG.ytpremium,rating:4.7,desc:'Reklamsız video, arxa plan oxuma, YouTube Music Premium.',scores:[{n:'1 Aylıq Premium',a:1,p:10},{n:'3 Aylıq Premium',a:3,p:27},{n:'6 Aylıq Premium',a:6,p:50},{n:'12 Aylıq Premium',a:12,p:90}]},
-  {id:'spotify',name:'Spotify Premium',cat:'app',img:IMG.spotify,rating:4.7,desc:'Reklamsız musiqi, offline dinləmə, limitsiz skip.',scores:[{n:'1 Aylıq Premium',a:1,p:6},{n:'3 Aylıq Premium',a:3,p:16},{n:'6 Aylıq Premium',a:6,p:30},{n:'12 Aylıq Premium',a:12,p:55}]}
+  {id:'netflix',name:'Netflix Premium',cat:'app',img:IMG.netflix,rating:4.8,desc:'Dünyanın en büyük streaming platforması.',scores:[{n:'1 Aylık Premium',a:1,p:12},{n:'3 Aylık Premium',a:3,p:33},{n:'6 Aylık Premium',a:6,p:60},{n:'12 Aylık Premium',a:12,p:108}]},
+  {id:'tiktok',name:'TikTok Coins',cat:'app',img:IMG.tiktok,rating:4.3,desc:'Sevdiğin yaratıcılara destek ol.',scores:[{n:'65 Coins',a:65,p:1},{n:'330 Coins',a:330,p:5},{n:'660 Coins',a:660,p:10},{n:'1321 Coins',a:1321,p:20},{n:'3305 Coins',a:3305,p:45},{n:'6643 Coins',a:6643,p:85}]},
+  {id:'discord',name:'Discord Nitro',cat:'app',img:IMG.discord,rating:4.6,desc:'Discord Nitro ile daha fazla özellik.',scores:[{n:'1 Aylık Nitro',a:1,p:8},{n:'3 Aylık Nitro',a:3,p:22},{n:'12 Aylık Nitro',a:12,p:75}]},
+  {id:'ytpremium',name:'YouTube Premium',cat:'app',img:IMG.ytpremium,rating:4.7,desc:'Reklamsız video, arka plan çalma.',scores:[{n:'1 Aylık Premium',a:1,p:10},{n:'3 Aylık Premium',a:3,p:27},{n:'6 Aylık Premium',a:6,p:50},{n:'12 Aylık Premium',a:12,p:90}]},
+  {id:'spotify',name:'Spotify Premium',cat:'app',img:IMG.spotify,rating:4.7,desc:'Reklamsız müzik, offline dinleme.',scores:[{n:'1 Aylık Premium',a:1,p:6},{n:'3 Aylık Premium',a:3,p:16},{n:'6 Aylık Premium',a:6,p:30},{n:'12 Aylık Premium',a:12,p:55}]}
 ];
 
-/* ===== NAVIGATION ===== */
+/* ===== NAVİGASYON ===== */
 function showSection(s){
   document.querySelectorAll('main > section').forEach(el=>el.classList.add('hidden'));
-  const sec=document.getElementById('section-'+s);
-  if(sec){sec.classList.remove('hidden');sec.classList.add('animate-fade')}
-  currentSection=s;
-  window.scrollTo({top:0,behavior:'smooth'});
+  const sec=document.getElementById('section-'+s);if(sec){sec.classList.remove('hidden');sec.classList.add('animate-fade')}
+  currentSection=s;window.scrollTo({top:0,behavior:'smooth'});
   if(s==='profile'&&!currentUser){openAuthModal();showSection('home');return}
   if(s==='profile')renderProfile();
   if(s==='topup')document.getElementById('currentBalance').textContent=(currentUser?.balance||0).toFixed(2)+' ₼';
 }
+function toggleMobileMenu(){const m=document.getElementById('mobileMenu');mobileMenuOpen=!mobileMenuOpen;m.classList.toggle('hidden',!mobileMenuOpen);m.classList.toggle('flex',mobileMenuOpen)}
+function handleSearch(q){searchQuery=q.toLowerCase();if(currentSection==='games')renderGames();else if(q.length>0){showSection('games');renderGames()}}
+function filterCategory(c){currentFilter=c;document.querySelectorAll('#categoryFilters .cat-btn').forEach(b=>{b.classList.toggle('active',b.dataset.cat===c);b.classList.toggle('text-dark-400',b.dataset.cat!==c)});renderGames()}
 
-function toggleMobileMenu(){
-  const m=document.getElementById('mobileMenu');
-  mobileMenuOpen=!mobileMenuOpen;
-  m.classList.toggle('hidden',!mobileMenuOpen);
-  m.classList.toggle('flex',mobileMenuOpen);
-}
-
-function handleSearch(q){
-  searchQuery=q.toLowerCase();
-  if(currentSection==='games')renderGames();
-  else if(q.length>0){showSection('games');renderGames()}
-}
-
-function filterCategory(c){
-  currentFilter=c;
-  document.querySelectorAll('#categoryFilters .cat-btn').forEach(b=>{
-    b.classList.toggle('active',b.dataset.cat===c);
-    b.classList.toggle('text-dark-400',b.dataset.cat!==c);
-  });
-  renderGames();
-}
-
-/* ===== RENDERING ===== */
-function gameCard(g){
-  const minP=Math.min(...g.scores.map(s=>s.p));
-  return `<div class="game-card cursor-pointer" onclick="openGameModal('${g.id}')">
-    <div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all">
-      <div class="relative h-44 overflow-hidden"><img src="${g.img}" class="game-img w-full h-full object-cover" alt="${g.name}"><div class="game-overlay absolute inset-0 bg-gradient-to-t from-dark-950/90 via-dark-950/20 to-transparent opacity-0 flex items-end p-4"><span class="text-xs font-medium text-brand-400 bg-brand-500/20 px-3 py-1 rounded-full border border-brand-500/30">Detallara Bax</span></div></div>
-      <div class="p-4"><h3 class="font-semibold text-sm truncate">${g.name}</h3><div class="flex items-center justify-between mt-2"><div class="flex items-center gap-1"><iconify-icon icon="mdi:star" class="text-yellow-400 text-xs"></iconify-icon><span class="text-xs text-dark-400">${g.rating}</span></div><span class="text-brand-400 font-bold text-sm">${minP.toFixed(2)} ₼</span></div></div>
-    </div></div>`;
-}
-
-function renderFeaturedGames(){
-  document.getElementById('featuredGrid').innerHTML=GAMES.slice(0,8).map(gameCard).join('');
-}
-
-function renderGames(){
-  let list=[...GAMES];
-  if(currentFilter!=='all')list=list.filter(g=>g.cat===currentFilter);
-  if(searchQuery)list=list.filter(g=>g.name.toLowerCase().includes(searchQuery));
-  document.getElementById('noResults').classList.toggle('hidden',list.length>0);
-  document.getElementById('gamesGrid').innerHTML=list.map(gameCard).join('');
-}
-
-function renderApps(){
-  document.getElementById('appsGrid').innerHTML=APPS.map(gameCard).join('');
-}
+/* ===== KART ===== */
+function gameCard(g){const minP=Math.min(...g.scores.map(s=>s.p));return `<div class="game-card cursor-pointer" onclick="openGameModal('${g.id}')"><div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all"><div class="relative h-44 overflow-hidden"><img src="${g.img}" class="game-img w-full h-full object-cover" alt="${g.name}"><div class="game-overlay absolute inset-0 bg-gradient-to-t from-dark-950/90 via-dark-950/20 to-transparent opacity-0 flex items-end p-4"><span class="text-xs font-medium text-brand-400 bg-brand-500/20 px-3 py-1 rounded-full border border-brand-500/30">Detaylara Bak</span></div></div><div class="p-4"><h3 class="font-semibold text-sm truncate">${g.name}</h3><div class="flex items-center justify-between mt-2"><div class="flex items-center gap-1"><iconify-icon icon="mdi:star" class="text-yellow-400 text-xs"></iconify-icon><span class="text-xs text-dark-400">${g.rating}</span></div><span class="text-brand-400 font-bold text-sm">${minP.toFixed(2)} ₼</span></div></div></div></div>`}
+function renderFeaturedGames(){document.getElementById('featuredGrid').innerHTML=GAMES.slice(0,8).map(gameCard).join('')}
+function renderGames(){let list=[...GAMES];if(currentFilter!=='all')list=list.filter(g=>g.cat===currentFilter);if(searchQuery)list=list.filter(g=>g.name.toLowerCase().includes(searchQuery));document.getElementById('noResults').classList.toggle('hidden',list.length>0);document.getElementById('gamesGrid').innerHTML=list.map(gameCard).join('')}
+function renderApps(){document.getElementById('appsGrid').innerHTML=APPS.map(gameCard).join('')}
 
 function openGameModal(id){
   const g=[...GAMES,...APPS].find(x=>x.id===id);if(!g)return;
   const stars='★'.repeat(Math.floor(g.rating))+'☆'.repeat(5-Math.floor(g.rating));
-  document.getElementById('modalBody').innerHTML=`
-    <div class="relative h-64 md:h-80 overflow-hidden"><img src="${g.img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/40 to-transparent"></div>
-    <button onclick="closeGameModal()" class="absolute top-4 right-4 w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button>
-    <div class="absolute bottom-6 left-6 right-6"><h2 class="text-3xl font-bold">${g.name}</h2><div class="flex items-center gap-3 mt-2"><span class="text-yellow-400 text-sm tracking-wider">${stars}</span><span class="text-dark-400 text-sm">${g.rating}</span><span class="tag uppercase text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded-full border border-brand-500/20">${g.cat}</span></div></div></div>
-    <div class="p-6 md:p-8"><p class="text-dark-400 leading-relaxed mb-8">${g.desc}</p>
-    <h3 class="font-bold text-lg mb-4">Puan Seçin</h3>
-    <div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">${g.scores.map((s,i)=>`<div onclick="selectScore(this,'${g.id}',${i})" class="score-option glass-light rounded-xl p-4 text-center border border-white/5"><p class="font-semibold text-sm">${s.n}</p><p class="text-brand-400 font-bold mt-1">${s.p.toFixed(2)} ₼</p></div>`).join('')}</div>
-    <button onclick="addSelectedToCart('${g.id}')" id="modalAddBtn" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-4 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-40 disabled:cursor-not-allowed" disabled>Səbətə Əlavə Et</button></div>`;
-  document.getElementById('gameModal').classList.remove('hidden');
-  document.body.style.overflow='hidden';
+  document.getElementById('modalBody').innerHTML=`<div class="relative h-64 md:h-80 overflow-hidden"><img src="${g.img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/40 to-transparent"></div><button onclick="closeGameModal()" class="absolute top-4 right-4 w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button><div class="absolute bottom-6 left-6 right-6"><h2 class="text-3xl font-bold">${g.name}</h2><div class="flex items-center gap-3 mt-2"><span class="text-yellow-400 text-sm tracking-wider">${stars}</span><span class="text-dark-400 text-sm">${g.rating}</span><span class="tag uppercase text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded-full border border-brand-500/20">${g.cat}</span></div></div></div><div class="p-6 md:p-8"><p class="text-dark-400 leading-relaxed mb-8">${g.desc}</p><h3 class="font-bold text-lg mb-4">Puan Seçin</h3><div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">${g.scores.map((s,i)=>`<div onclick="selectScore(this,'${g.id}',${i})" class="score-option glass-light rounded-xl p-4 text-center border border-white/5"><p class="font-semibold text-sm">${s.n}</p><p class="text-brand-400 font-bold mt-1">${s.p.toFixed(2)} ₼</p></div>`).join('')}</div><button onclick="addSelectedToCart('${g.id}')" id="modalAddBtn" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-4 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-40 disabled:cursor-not-allowed" disabled>Sepete Ekle</button></div>`;
+  document.getElementById('gameModal').classList.remove('hidden');document.body.style.overflow='hidden';
 }
-
 let modalSelected={gameId:null,scoreIdx:null};
-function selectScore(el,gid,idx){
-  el.parentElement.querySelectorAll('.score-option').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');
-  modalSelected={gameId:gid,scoreIdx:idx};
-  document.getElementById('modalAddBtn').disabled=false;
-}
+function selectScore(el,gid,idx){el.parentElement.querySelectorAll('.score-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');modalSelected={gameId:gid,scoreIdx:idx};document.getElementById('modalAddBtn').disabled=false}
+function addSelectedToCart(gid){if(!modalSelected.gameId)return;const g=[...GAMES,...APPS].find(x=>x.id===gid);const s=g.scores[modalSelected.scoreIdx];cart.push({gameId:gid,gameName:g.name,gameImg:g.img,scoreName:s.n,price:s.p});localStorage.setItem('randox_cart',JSON.stringify(cart));updateCartUI();closeGameModal();showToast(s.n+' sepete eklendi','success')}
+function closeGameModal(){document.getElementById('gameModal').classList.add('hidden');document.body.style.overflow='';modalSelected={gameId:null,scoreIdx:null}}
 
-function addSelectedToCart(gid){
-  if(!modalSelected.gameId)return;
-  const g=[...GAMES,...APPS].find(x=>x.id===gid);
-  const s=g.scores[modalSelected.scoreIdx];
-  cart.push({gameId:gid,gameName:g.name,gameImg:g.img,scoreName:s.n,price:s.p});
-  localStorage.setItem('randox_cart',JSON.stringify(cart));
-  updateCartUI();
-  closeGameModal();
-  showToast(`${s.n} səbətə əlavə edildi`,'success');
-}
-
-function closeGameModal(){
-  document.getElementById('gameModal').classList.add('hidden');
-  document.body.style.overflow='';
-  modalSelected={gameId:null,scoreIdx:null};
-}
-
-/* ===== AUTH: DOGRULAMA KODU ===== */
+/* ===== DOĞRULAMA ===== */
 function genCode(){return Math.floor(100000+Math.random()*900000).toString()}
-
-function createCodeInputs(){
-  const c=document.getElementById('codeInputs');c.innerHTML='';
-  for(let i=0;i<6;i++){
-    const inp=document.createElement('input');inp.type='text';inp.maxLength=1;inp.className='code-input';inp.dataset.idx=i;inp.inputMode='numeric';inp.autocomplete='one-time-code';
-    inp.addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v;if(v&&i<5)document.querySelectorAll('.code-input')[i+1].focus();e.target.classList.toggle('filled',!!v);checkCodeFull()});
-    inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!e.target.value&&i>0){const p=document.querySelectorAll('.code-input')[i-1];p.focus();p.value='';p.classList.remove('filled')}});
-    inp.addEventListener('paste',e=>{e.preventDefault();const txt=e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6);const inps=document.querySelectorAll('.code-input');txt.split('').forEach((ch,j)=>{if(inps[j]){inps[j].value=ch;inps[j].classList.add('filled')}});if(txt.length>0)inps[Math.min(txt.length,5)].focus();checkCodeFull()});
-    inp.addEventListener('focus',()=>inp.select());
-    c.appendChild(inp);
-  }
-}
-
+function createCodeInputs(){const c=document.getElementById('codeInputs');c.innerHTML='';for(let i=0;i<6;i++){const inp=document.createElement('input');inp.type='text';inp.maxLength=1;inp.className='code-input';inp.inputMode='numeric';inp.autocomplete='one-time-code';inp.addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v;if(v&&i<5)document.querySelectorAll('.code-input')[i+1].focus();e.target.classList.toggle('filled',!!v);checkCodeFull()});inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!e.target.value&&i>0){const p=document.querySelectorAll('.code-input')[i-1];p.focus();p.value='';p.classList.remove('filled')}});inp.addEventListener('paste',e=>{e.preventDefault();const txt=e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6);const inps=document.querySelectorAll('.code-input');txt.split('').forEach((ch,j)=>{if(inps[j]){inps[j].value=ch;inps[j].classList.add('filled')}});if(txt.length>0)inps[Math.min(txt.length,5)].focus();checkCodeFull()});inp.addEventListener('focus',()=>inp.select());c.appendChild(inp)}}
 function checkCodeFull(){if(getEnteredCode().length===6)setTimeout(verifyCode,200)}
 function getEnteredCode(){return Array.from(document.querySelectorAll('.code-input')).map(i=>i.value).join('')}
 
 async function sendVCode(email,action,tempData){
   vCode=genCode();vEmail=email;vAction=action;vTempData=tempData||{};
-  const btn=document.getElementById(vAction==='login'?'loginBtn':'regBtn');
-  const origHTML=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Göndərilir...';
-  try{
-    await emailjs.send('service_wts3xud','template_oc1lsin',{to_email:email,from_name:'Randox',verification_code:vCode,message:vCode});
-    showVerifyStep();startResendCd();showToast('Doğrulama kodu göndərildi','success');
-  }catch(err){
-    showToast('Kod göndərilə bilmədi. Yenidən cəhd edin.','error');
-  }
+  const btnId=action==='forgot'?'forgotBtn':(action==='login'?'loginBtn':'regBtn');
+  const btn=document.getElementById(btnId);const origHTML=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Gönderiliyor...';
+  try{await emailjs.send('service_wts3xud','template_oc1lsin',{to_email:email,from_name:'Randox',verification_code:vCode,message:vCode});showVerifyStep();startResendCd();showToast('Doğrulama kodu gönderildi','success')}
+  catch(err){showToast('Kod gönderilemedi. Yeniden deneyin.','error');console.error(err)}
   btn.disabled=false;btn.innerHTML=origHTML;
 }
 
 function showVerifyStep(){
-  document.getElementById('authTabs').classList.add('hidden');
-  document.getElementById('loginForm').classList.add('hidden');
-  document.getElementById('registerForm').classList.add('hidden');
+  ['loginForm','registerForm','forgotForm','authTabs'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   document.getElementById('verifyForm').classList.remove('hidden');
   document.getElementById('authTitle').textContent='Doğrulama Kodu';
-  document.getElementById('authSubtitle').textContent='E-poçtuna göndərilən kodu daxil et';
-  document.getElementById('verifyEmailText').textContent='Kod göndərildi: '+vEmail;
-  document.getElementById('verifyError').classList.add('hidden');
-  document.getElementById('verifySuccess').classList.add('hidden');
-  document.getElementById('verifyBtn').disabled=false;
-  document.getElementById('verifyBtn').textContent='Doğrula';
-  createCodeInputs();
-  setTimeout(()=>{const first=document.querySelector('.code-input');if(first)first.focus()},100);
+  document.getElementById('authSubtitle').textContent='E-postaınıza gönderilen kodu girin';
+  document.getElementById('verifyEmailText').textContent='Kod gönderildi: '+vEmail;
+  document.getElementById('verifyError').classList.add('hidden');document.getElementById('verifySuccess').classList.add('hidden');
+  document.getElementById('verifyBtn').disabled=false;document.getElementById('verifyBtn').textContent='Doğrula';
+  createCodeInputs();setTimeout(()=>{const f=document.querySelector('.code-input');if(f)f.focus()},100);
 }
 
 function verifyCode(){
-  const entered=getEnteredCode();
-  if(entered.length!==6)return;
-  const btn=document.getElementById('verifyBtn');
-  btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Yoxlanılır...';
+  const entered=getEnteredCode();if(entered.length!==6)return;
+  const btn=document.getElementById('verifyBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Kontrol ediliyor...';
   setTimeout(()=>{
     if(entered===vCode){
-      document.getElementById('verifySuccess').textContent='Doğrulama uğurlu!';
-      document.getElementById('verifySuccess').classList.remove('hidden');
-      document.getElementById('verifyError').classList.add('hidden');
-      btn.innerHTML='<iconify-icon icon="mdi:check" class="mr-1"></iconify-icon> Uğurlu';
+      document.getElementById('verifySuccess').textContent='Doğrulama başarılı!';document.getElementById('verifySuccess').classList.remove('hidden');document.getElementById('verifyError').classList.add('hidden');btn.innerHTML='<iconify-icon icon="mdi:check" class="mr-1"></iconify-icon> Başarılı';
       setTimeout(()=>completeAuth(),600);
     }else{
-      document.getElementById('verifyError').textContent='Kod yanlışdır. Yenidən cəhd edin.';
-      document.getElementById('verifyError').classList.remove('hidden');
-      document.querySelectorAll('.code-input').forEach(i=>{i.classList.add('error');setTimeout(()=>i.classList.remove('error'),600)});
-      btn.disabled=false;btn.textContent='Doğrula';
-      document.querySelectorAll('.code-input').forEach(i=>{i.value='';i.classList.remove('filled')});
-      document.querySelector('.code-input').focus();
+      document.getElementById('verifyError').textContent='Kod yanlış. Yeniden deneyin.';document.getElementById('verifyError').classList.remove('hidden');
+      document.querySelectorAll('.code-input').forEach(i=>{i.classList.add('error');setTimeout(()=>i.classList.remove('error'),600)});btn.disabled=false;btn.textContent='Doğrula';
+      document.querySelectorAll('.code-input').forEach(i=>{i.value='';i.classList.remove('filled')});document.querySelector('.code-input').focus();
     }
   },800);
 }
 
 function completeAuth(){
   if(vAction==='register'){
-    users.push({username:vTempData.username,email:vTempData.email,password:vTempData.password,balance:0,createdAt:new Date().toISOString()});
+    users.push({username:vTempData.username,email:vTempData.email,password:vTempData.password,balance:0,avatar:'',createdAt:new Date().toISOString()});
     localStorage.setItem('randox_users',JSON.stringify(users));
-    currentUser={username:vTempData.username,email:vTempData.email,balance:0,createdAt:new Date().toISOString()};
+    currentUser={username:vTempData.username,email:vTempData.email,balance:0,avatar:'',createdAt:new Date().toISOString()};
   }else{
-    currentUser={username:vTempData.username,email:vTempData.email,balance:vTempData.balance||0,createdAt:vTempData.createdAt||new Date().toISOString()};
+    currentUser={username:vTempData.username,email:vTempData.email,balance:vTempData.balance||0,avatar:vTempData.avatar||'',createdAt:vTempData.createdAt||new Date().toISOString()};
   }
-  localStorage.setItem('randox_user',JSON.stringify(currentUser));
-  closeAuthModal();updateUserArea();showToast('Xoş gəldin, '+currentUser.username+'!','success');
-  clearResendCd();
+  localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();showToast('Hoş geldin, '+currentUser.username+'!','success');clearResendCd();
 }
 
-function resendCode(){
-  if(resendCd>0)return;
-  sendVCode(vEmail,vAction,vTempData);
-}
-
-function startResendCd(){
-  clearResendCd();resendCd=120;
-  const btn=document.getElementById('resendBtn');btn.disabled=true;
-  const timer=document.getElementById('resendTimer');
-  resendIv=setInterval(()=>{
-    resendCd--;const m=Math.floor(resendCd/60);const s=resendCd%60;timer.textContent=m+':'+(s<10?'0':'')+s;
-    if(resendCd<=0){clearResendCd();btn.disabled=false;btn.innerHTML='Kodu yenidən göndər'}
-  },1000);
-  btn.innerHTML='Kodu yenidən göndər (<span id="resendTimer">2:00</span>)';
-}
-
+function resendCode(){if(resendCd>0)return;sendVCode(vEmail,vAction,vTempData)}
+function startResendCd(){clearResendCd();resendCd=120;const btn=document.getElementById('resendBtn');btn.disabled=true;const timer=document.getElementById('resendTimer');resendIv=setInterval(()=>{resendCd--;const m=Math.floor(resendCd/60);const s=resendCd%60;timer.textContent=m+':'+(s<10?'0':'')+s;if(resendCd<=0){clearResendCd();btn.disabled=false;btn.innerHTML='Kodu yeniden gönder'}},1000);btn.innerHTML='Kodu yeniden gönder (<span id="resendTimer">2:00</span>)'}
 function clearResendCd(){if(resendIv){clearInterval(resendIv);resendIv=null}resendCd=0}
+function backToAuth(){clearResendCd();document.getElementById('verifyForm').classList.add('hidden');document.getElementById('authTabs').classList.remove('hidden');if(vAction==='login')switchAuthTab('login');else if(vAction==='register')switchAuthTab('register');else switchAuthTab('login')}
 
-function backToAuth(){
-  clearResendCd();
-  document.getElementById('verifyForm').classList.add('hidden');
-  document.getElementById('authTabs').classList.remove('hidden');
-  if(vAction==='login'){document.getElementById('loginForm').classList.remove('hidden');switchAuthTab('login')}
-  else{document.getElementById('registerForm').classList.remove('hidden');switchAuthTab('register')}
-}
-
-/* ===== AUTH: GIRIS / QEYDIYYAT ===== */
-function switchAuthTab(tab){
-  document.getElementById('authTabs').classList.remove('hidden');
-  document.getElementById('verifyForm').classList.add('hidden');
-  clearResendCd();
-  document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');
-  document.getElementById('registerForm').classList.toggle('hidden',tab!=='register');
-  document.getElementById('tabLogin').classList.toggle('active',tab==='login');
-  document.getElementById('tabRegister').classList.toggle('active',tab==='register');
-  document.getElementById('tabLogin').classList.toggle('text-dark-400',tab!=='login');
-  document.getElementById('tabRegister').classList.toggle('text-dark-400',tab!=='register');
-  document.getElementById('authTitle').textContent=tab==='login'?'Hesabına Giriş Et':'Yeni Hesab Yarat';
-  document.getElementById('authSubtitle').textContent=tab==='login'?'Davam etmək üçün daxil ol':'Qeydiyyatdan keç, oynamağa başla';
+/* ===== ŞİFREMİ UNUTTUM ===== */
+function showForgotPassword(){
+  document.getElementById('loginForm').classList.add('hidden');document.getElementById('registerForm').classList.add('hidden');document.getElementById('authTabs').classList.add('hidden');document.getElementById('verifyForm').classList.add('hidden');
+  document.getElementById('forgotForm').classList.remove('hidden');
+  document.getElementById('authTitle').textContent='Şifremi Unuttum';
+  document.getElementById('authSubtitle').textContent='Lütfen Gmail adresinizi yazınız';
   hideErrors();
 }
+function backToAuthFromForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('authTabs').classList.remove('hidden');switchAuthTab('login')}
 
-function hideErrors(){
-  ['loginError','regError','verifyError','verifySuccess'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+function handleForgotPassword(){
+  hideErrors();
+  const email=document.getElementById('forgotEmail').value.trim();
+  if(!email){showErr('forgotError','Lütfen e-posta adresinizi girin');return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('forgotError','Geçerli bir e-posta girin');return}
+  const user=users.find(u=>u.email===email);
+  if(!user){showErr('forgotError','Bu e-posta ile kayıtlı hesap bulunamadı');return}
+  sendVCode(email,'forgot',{username:user.username,email:user.email,balance:user.balance,avatar:user.avatar||'',createdAt:user.createdAt});
 }
 
+/* ===== AUTH: GİRİŞ / KAYIT ===== */
+function switchAuthTab(tab){
+  document.getElementById('authTabs').classList.remove('hidden');document.getElementById('verifyForm').classList.add('hidden');document.getElementById('forgotForm').classList.add('hidden');clearResendCd();hideErrors();
+  document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');document.getElementById('registerForm').classList.toggle('hidden',tab!=='register');
+  document.getElementById('tabLogin').classList.toggle('active',tab==='login');document.getElementById('tabRegister').classList.toggle('active',tab==='register');
+  document.getElementById('tabLogin').classList.toggle('text-dark-400',tab!=='login');document.getElementById('tabRegister').classList.toggle('text-dark-400',tab!=='register');
+  document.getElementById('authTitle').textContent=tab==='login'?'Hesabınıza Giriş Yapın':'Yeni Hesap Oluşturun';
+  document.getElementById('authSubtitle').textContent=tab==='login'?'Devam etmek için giriş yapın':'Kayıt ol, oynamaya başla';
+}
+function hideErrors(){['loginError','regError','forgotError','verifyError','verifySuccess'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
 function showErr(id,msg){const el=document.getElementById(id);el.textContent=msg;el.classList.remove('hidden')}
-
-function openAuthModal(){
-  document.getElementById('authModal').classList.remove('hidden');
-  document.body.style.overflow='hidden';
-  switchAuthTab('login');hideErrors();
-  setTimeout(()=>{const f=document.getElementById('loginEmail');if(f)f.focus()},200);
-}
-
-function closeAuthModal(){
-  document.getElementById('authModal').classList.add('hidden');
-  document.body.style.overflow='';clearResendCd();hideErrors();
-}
+function openAuthModal(){document.getElementById('authModal').classList.remove('hidden');document.body.style.overflow='hidden';switchAuthTab('login');hideErrors();setTimeout(()=>{const f=document.getElementById('loginEmail');if(f)f.focus()},200)}
+function closeAuthModal(){document.getElementById('authModal').classList.add('hidden');document.body.style.overflow='';clearResendCd();hideErrors()}
 
 function handleLogin(){
-  hideErrors();
-  const email=document.getElementById('loginEmail').value.trim();
-  const pwd=document.getElementById('loginPassword').value;
-  if(!email||!pwd){showErr('loginError','Bütün sahələri doldurun');return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('loginError','Düzgün e-poçt daxil edin');return}
-  const user=users.find(u=>u.email===email);
-  if(!user){showErr('loginError','Bu e-poçt ilə hesab tapılmadı');return}
-  if(user.password!==pwd){showErr('loginError','Şifrə yanlışdır');return}
-  sendVCode(email,'login',{username:user.username,email:user.email,balance:user.balance,createdAt:user.createdAt});
+  hideErrors();const email=document.getElementById('loginEmail').value.trim();const pwd=document.getElementById('loginPassword').value;
+  if(!email||!pwd){showErr('loginError','Tüm alanları doldurun');return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('loginError','Geçerli bir e-posta girin');return}
+  const user=users.find(u=>u.email===email);if(!user){showErr('loginError','Bu e-posta ile hesap bulunamadı');return}
+  if(user.password!==pwd){showErr('loginError','Şifre yanlış');return}
+  sendVCode(email,'login',{username:user.username,email:user.email,balance:user.balance,avatar:user.avatar||'',createdAt:user.createdAt});
 }
 
 function handleRegister(){
-  hideErrors();
-  const uname=document.getElementById('regUsername').value.trim();
-  const email=document.getElementById('regEmail').value.trim();
-  const pwd=document.getElementById('regPassword').value;
-  const pwd2=document.getElementById('regPassword2').value;
-  if(!uname||!email||!pwd||!pwd2){showErr('regError','Bütün sahələri doldurun');return}
-  if(uname.length<3){showErr('regError','İstifadəçi adı minimum 3 simvol olmalıdır');return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('regError','Düzgün e-poçt daxil edin');return}
-  if(pwd.length<6){showErr('regError','Şifrə minimum 6 simvol olmalıdır');return}
-  if(pwd!==pwd2){showErr('regError','Şifrələr uyğun gəlmir');return}
-  if(users.find(u=>u.email===email)){showErr('regError','Bu e-poçt artıq qeydiyyatdadır');return}
+  hideErrors();const uname=document.getElementById('regUsername').value.trim();const email=document.getElementById('regEmail').value.trim();const pwd=document.getElementById('regPassword').value;const pwd2=document.getElementById('regPassword2').value;
+  if(!uname||!email||!pwd||!pwd2){showErr('regError','Tüm alanları doldurun');return}
+  if(uname.length<3){showErr('regError','Kullanıcı adı minimum 3 karakter olmalıdır');return}
+  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('regError','Geçerli bir e-posta girin');return}
+  if(pwd.length<6){showErr('regError','Şifre minimum 6 karakter olmalıdır');return}
+  if(pwd!==pwd2){showErr('regError','Şifreler uyuşmuyor');return}
+  if(users.find(u=>u.email===email)){showErr('regError','Bu e-posta zaten kayıtlı');return}
   sendVCode(email,'register',{username:uname,email,password:pwd});
 }
 
-function handleGoogleLogin(){showToast('Google girişi tezliklə əlavə olunacaq','info')}
+function togglePwd(id,el){const inp=document.getElementById(id);const isP=inp.type==='password';inp.type=isP?'text':'password';el.innerHTML=`<iconify-icon icon="mdi:eye-${isP?'outline':'off-outline'}" class="text-lg"></iconify-icon>`}
 
-function togglePwd(id,el){
-  const inp=document.getElementById(id);
-  const isP=inp.type==='password';inp.type=isP?'text':'password';
-  el.innerHTML=`<iconify-icon icon="mdi:eye-${isP?'outline':'off-outline'}" class="text-lg"></iconify-icon>`;
-}
+/* ===== ÇIKIŞ ONAY ===== */
+function openLogoutModal(){document.getElementById('logoutModal').classList.remove('hidden')}
+function closeLogoutModal(){document.getElementById('logoutModal').classList.add('hidden')}
+function confirmLogout(){closeLogoutModal();currentUser=null;localStorage.removeItem('randox_user');updateUserArea();showToast('Hesaptan çıkış yapıldı','info');if(currentSection==='profile')showSection('home')}
 
-/* ===== USER AREA ===== */
+/* ===== KULLANICI ALANI ===== */
 function updateUserArea(){
-  const area=document.getElementById('userArea');
-  const mobile=document.getElementById('mobileAuthBtns');
+  const area=document.getElementById('userArea');const mobile=document.getElementById('mobileAuthBtns');
   if(currentUser){
-    const c=currentUser.username.charAt(0).toUpperCase();
-    const col=`hsl(${(currentUser.username.charCodeAt(0)*37)%360},60%,45%)`;
-    area.innerHTML=`<div class="avatar-sm text-white" style="background:${col}" onclick="toggleUserDropdown()">${c}</div>`;
-    mobile.innerHTML=`<button onclick="showSection('profile');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium">Profilim</button><button onclick="logout();toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm text-red-400">Çıxış</button>`;
+    const avatarInner=currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase();
+    const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
+    area.innerHTML=`<div class="avatar-sm text-white" style="${bgStyle}" onclick="toggleUserDropdown()">${avatarInner}</div>`;
+    mobile.innerHTML=`<button onclick="showSection('profile');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium">Profilim</button><button onclick="openLogoutModal();toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm text-red-400">Çıkış</button>`;
   }else{
-    area.innerHTML=`<button onclick="openAuthModal()" class="glass hover:border-brand-500/30 px-4 py-2 rounded-xl text-sm font-medium transition-all">Daxil Ol</button>`;
-    mobile.innerHTML=`<button onclick="openAuthModal();toggleMobileMenu()" class="bg-brand-500 hover:bg-brand-400 text-white rounded-xl px-8 py-3 text-sm font-semibold transition-all">Daxil Ol</button>`;
+    area.innerHTML=`<button onclick="openAuthModal()" class="glass hover:border-brand-500/30 px-4 py-2 rounded-xl text-sm font-medium transition-all">Giriş Yap</button>`;
+    mobile.innerHTML=`<button onclick="openAuthModal();toggleMobileMenu()" class="bg-brand-500 hover:bg-brand-400 text-white rounded-xl px-8 py-3 text-sm font-semibold transition-all">Giriş Yap</button>`;
   }
-  document.getElementById('dropdownContent').innerHTML=currentUser?`
-    <div class="p-4 border-b border-white/5 flex items-center gap-3">
-      <div class="avatar-sm text-white" style="background:${`hsl(${(currentUser.username.charCodeAt(0)*37)%360},60%,45%)`}">${currentUser.username.charAt(0).toUpperCase()}</div>
-      <div><p class="font-semibold text-sm">${currentUser.username}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div>
-    </div>
-    <div class="p-2">
-      <a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a>
-      <a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Balans: ${(currentUser.balance||0).toFixed(2)} ₼</a>
-      <button onclick="logout();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıxış</button>
-    </div>`:'';
+  const avatarInner2=currentUser?(currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase()):'';
+  const bgStyle2=currentUser&&!currentUser.avatar?`background:${getAvatarColor(currentUser)}`:'';
+  document.getElementById('dropdownContent').innerHTML=currentUser?`<div class="p-4 border-b border-white/5 flex items-center gap-3"><div class="avatar-sm text-white" style="${bgStyle2}">${avatarInner2}</div><div><p class="font-semibold text-sm">${currentUser.username}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div></div><div class="p-2"><a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a><a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Bakiye: ${(currentUser.balance||0).toFixed(2)} ₼</a><button onclick="openLogoutModal();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıkış</button></div>`:'';
 }
+function toggleUserDropdown(){dropdownOpen=!dropdownOpen;document.getElementById('userDropdown').classList.toggle('hidden',!dropdownOpen)}
+document.addEventListener('click',e=>{if(dropdownOpen&&!e.target.closest('#userArea')&&!e.target.closest('#userDropdown')){dropdownOpen=false;document.getElementById('userDropdown').classList.add('hidden')}});
 
-function toggleUserDropdown(){
-  dropdownOpen=!dropdownOpen;
-  document.getElementById('userDropdown').classList.toggle('hidden',!dropdownOpen);
-}
-
-function logout(){
-  currentUser=null;localStorage.removeItem('randox_user');
-  updateUserArea();showToast('Hesabdan çıxış edildi','info');
-  if(currentSection==='profile')showSection('home');
-}
-
-document.addEventListener('click',e=>{
-  if(dropdownOpen&&!e.target.closest('#userArea')&&!e.target.closest('#userDropdown')){dropdownOpen=false;document.getElementById('userDropdown').classList.add('hidden')}
-});
-
-/* ===== CART ===== */
-function toggleCart(){
-  cartOpen=!cartOpen;
-  document.getElementById('cartOverlay').classList.toggle('hidden',!cartOpen);
-  document.getElementById('cartSidebar').style.transform=cartOpen?'translateX(0)':'translateX(100%)';
-  document.body.style.overflow=cartOpen?'hidden':'';
-  if(cartOpen)updateCartUI();
-}
-
-function updateCartUI(){
-  const countEl=document.getElementById('cartCount');
-  const itemsEl=document.getElementById('cartItems');
-  const footerEl=document.getElementById('cartFooter');
-  const totalEl=document.getElementById('cartTotal');
-  countEl.classList.toggle('hidden',cart.length===0);
-  countEl.textContent=cart.length;
-  if(cart.length===0){itemsEl.innerHTML='<div class="text-center py-16"><iconify-icon icon="mdi:cart-off" class="text-5xl text-dark-600 mb-4"></iconify-icon><p class="text-dark-400">Səbətiniz boşdur</p></div>';footerEl.classList.add('hidden');return}
-  footerEl.classList.remove('hidden');
-  const total=cart.reduce((s,i)=>s+i.price,0);totalEl.textContent=total.toFixed(2)+' ₼';
-  itemsEl.innerHTML=cart.map((item,i)=>`<div class="glass-light rounded-xl p-4 flex items-center gap-4 border border-white/5">
-    <div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0"><img src="${item.gameImg}" class="w-full h-full object-cover"></div>
-    <div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">${item.gameName}</p><p class="text-xs text-dark-400">${item.scoreName}</p></div>
-    <div class="text-right flex-shrink-0"><p class="text-brand-400 font-bold text-sm">${item.price.toFixed(2)} ₼</p><button onclick="removeFromCart(${i})" class="text-xs text-red-400 hover:text-red-300 mt-1">Sil</button></div></div>`).join('');
-}
-
-function removeFromCart(i){cart.splice(i,1);localStorage.setItem('randox_cart',JSON.stringify(cart));updateCartUI();showToast('Məhsul səbətdən silindi','info')}
-
-function checkout(){
-  if(!currentUser){closeCart();openAuthModal();return}
-  const total=cart.reduce((s,i)=>s+i.price,0);
-  if((currentUser.balance||0)<total){showToast('Balansınız kifayət deyil. Zəhmət olmasa puan yükləyin.','error');return}
-  currentUser.balance-=total;localStorage.setItem('randox_user',JSON.stringify(currentUser));
-  const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;localStorage.setItem('randox_users',JSON.stringify(users));
-  cart=[];localStorage.setItem('randox_cart',JSON.stringify(cart));
-  updateCartUI();updateUserArea();closeCart();showToast('Sifariş uğurla tamamlandı!','success');
-}
-
+/* ===== SEPET ===== */
+function toggleCart(){cartOpen=!cartOpen;document.getElementById('cartOverlay').classList.toggle('hidden',!cartOpen);document.getElementById('cartSidebar').style.transform=cartOpen?'translateX(0)':'translateX(100%)';document.body.style.overflow=cartOpen?'hidden':'';if(cartOpen)updateCartUI()}
+function updateCartUI(){const countEl=document.getElementById('cartCount');const itemsEl=document.getElementById('cartItems');const footerEl=document.getElementById('cartFooter');const totalEl=document.getElementById('cartTotal');countEl.classList.toggle('hidden',cart.length===0);countEl.textContent=cart.length;if(cart.length===0){itemsEl.innerHTML='<div class="text-center py-16"><iconify-icon icon="mdi:cart-off" class="text-5xl text-dark-600 mb-4"></iconify-icon><p class="text-dark-400">Sepetiniz boş</p></div>';footerEl.classList.add('hidden');return}footerEl.classList.remove('hidden');const total=cart.reduce((s,i)=>s+i.price,0);totalEl.textContent=total.toFixed(2)+' ₼';itemsEl.innerHTML=cart.map((item,i)=>`<div class="glass-light rounded-xl p-4 flex items-center gap-4 border border-white/5"><div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0"><img src="${item.gameImg}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">${item.gameName}</p><p class="text-xs text-dark-400">${item.scoreName}</p></div><div class="text-right flex-shrink-0"><p class="text-brand-400 font-bold text-sm">${item.price.toFixed(2)} ₼</p><button onclick="removeFromCart(${i})" class="text-xs text-red-400 hover:text-red-300 mt-1">Sil</button></div></div>`).join('')}
+function removeFromCart(i){cart.splice(i,1);localStorage.setItem('randox_cart',JSON.stringify(cart));updateCartUI();showToast('Ürün sepetten silindi','info')}
+function checkout(){if(!currentUser){closeCart();openAuthModal();return}const total=cart.reduce((s,i)=>s+i.price,0);if((currentUser.balance||0)<total){showToast('Bakiyeniz yetersiz. Lütfen puan yükleyin.','error');return}currentUser.balance-=total;localStorage.setItem('randox_user',JSON.stringify(currentUser));const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;localStorage.setItem('randox_users',JSON.stringify(users));const orders=JSON.parse(localStorage.getItem('randox_orders_'+currentUser.email)||'[]');cart.forEach(it=>orders.push({name:it.gameName,score:it.scoreName,total:it.price,img:it.gameImg,date:new Date().toISOString()}));localStorage.setItem('randox_orders_'+currentUser.email,JSON.stringify(orders));cart=[];localStorage.setItem('randox_cart',JSON.stringify(cart));updateCartUI();updateUserArea();closeCart();showToast('Sipariş başarıyla tamamlandı!','success')}
 function closeCart(){cartOpen=false;document.getElementById('cartOverlay').classList.add('hidden');document.getElementById('cartSidebar').style.transform='translateX(100%)';document.body.style.overflow=''}
 
-/* ===== TOP UP ===== */
-function selectTopUp(el,amt){
-  document.querySelectorAll('#topUpGrid .score-option').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');selectedTopUpAmount=amt;
-  document.getElementById('topUpBtn').disabled=false;
-}
+/* ===== PUAN YÜKLE ===== */
+function selectTopUp(el,amt){document.querySelectorAll('#topUpGrid .score-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');selectedTopUpAmount=amt;document.getElementById('topUpBtn').disabled=false}
+function selectPayment(el){document.querySelectorAll('#paymentGrid .score-option').forEach(o=>{o.classList.remove('selected');o.classList.add('text-dark-400')});el.classList.add('selected');el.classList.remove('text-dark-400')}
+function processTopUp(){if(!currentUser){openAuthModal();return}if(!selectedTopUpAmount)return;currentUser.balance=(currentUser.balance||0)+selectedTopUpAmount;localStorage.setItem('randox_user',JSON.stringify(currentUser));const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;localStorage.setItem('randox_users',JSON.stringify(users));document.getElementById('currentBalance').textContent=currentUser.balance.toFixed(2)+' ₼';document.querySelectorAll('#topUpGrid .score-option').forEach(o=>o.classList.remove('selected'));document.getElementById('topUpBtn').disabled=true;selectedTopUpAmount=0;updateUserArea();showToast(selectedTopUpAmount+' ₼ bakiyenize yüklendi','success')}
 
-function selectPayment(el){
-  document.querySelectorAll('#paymentGrid .score-option').forEach(o=>o.classList.remove('selected'));
-  el.classList.add('selected');el.classList.remove('text-dark-400');
-  document.querySelectorAll('#paymentGrid .score-option:not(.selected)').forEach(o=>o.classList.add('text-dark-400'));
-}
-
-function processTopUp(){
-  if(!currentUser){openAuthModal();return}
-  if(!selectedTopUpAmount)return;
-  currentUser.balance=(currentUser.balance||0)+selectedTopUpAmount;
-  localStorage.setItem('randox_user',JSON.stringify(currentUser));
-  const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;localStorage.setItem('randox_users',JSON.stringify(users));
-  document.getElementById('currentBalance').textContent=currentUser.balance.toFixed(2)+' ₼';
-  document.querySelectorAll('#topUpGrid .score-option').forEach(o=>o.classList.remove('selected'));
-  document.getElementById('topUpBtn').disabled=true;selectedTopUpAmount=0;
-  updateUserArea();showToast(selectedTopUpAmount+' ₼ balansınıza yükləndi','success');
-}
-
-/* ===== PROFILE ===== */
+/* ===== PROFİL ===== */
 function renderProfile(){
   if(!currentUser)return;
-  const c=currentUser.username.charAt(0).toUpperCase();
-  const col=`hsl(${(currentUser.username.charCodeAt(0)*37)%360},60%,45%)`;
+  const avatarInner=currentUser.avatar?`<img src="${currentUser.avatar}" alt="" class="w-full h-full object-cover">`:(currentUser.username||'K').charAt(0).toUpperCase();
+  const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
   const orders=JSON.parse(localStorage.getItem('randox_orders_'+currentUser.email)||'[]');
   document.getElementById('profileContent').innerHTML=`
     <div class="text-center mb-10 animate-up">
-      <div class="avatar-lg text-white mx-auto mb-4" style="background:${col}">${c}</div>
+      <div class="avatar-lg text-white mx-auto mb-4 cursor-pointer relative group" style="${bgStyle}" onclick="document.getElementById('ppInput').click()">
+        ${avatarInner}
+        <div class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><iconify-icon icon="mdi:camera" class="text-white text-2xl"></iconify-icon></div>
+      </div>
+      <input type="file" id="ppInput" accept="image/*" class="hidden" onchange="uploadPP(this)">
       <h2 class="text-2xl font-bold">${currentUser.username}</h2>
       <p class="text-dark-400 text-sm mt-1">${currentUser.email}</p>
     </div>
     <div class="grid grid-cols-3 gap-4 mb-10 animate-up delay-1">
-      <div class="profile-stat glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold text-brand-400">${(currentUser.balance||0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Balans</p></div>
-      <div class="profile-stat glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${orders.length}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Sifariş</p></div>
-      <div class="profile-stat glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${orders.reduce((s,o)=>s+o.total,0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Xərc</p></div>
+      <div class="profile-stat glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold text-brand-400">${(currentUser.balance||0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Bakiye</p></div>
+      <div class="profile-stat glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${orders.length}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Sipariş</p></div>
+      <div class="profile-stat glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${orders.reduce((s,o)=>s+o.total,0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Harcama</p></div>
     </div>
-    <div class="glass rounded-2xl border border-white/5 overflow-hidden animate-up delay-2">
-      <div class="p-5 border-b border-white/5"><h3 class="font-bold">Son Sifarişlər</h3></div>
-      <div class="p-5">${orders.length===0?'<p class="text-dark-500 text-center py-8">Hələ sifariş yoxdur</p>':orders.slice(-5).reverse().map(o=>`<div class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${o.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${o.name}</p><p class="text-xs text-dark-500">${o.score}</p></div><div class="text-right"><p class="text-sm font-semibold text-brand-400">${o.total.toFixed(2)} ₼</p><p class="text-xs text-dark-500">${new Date(o.date).toLocaleDateString('az')}</p></div></div>`).join('')}</div>
+    <div class="glass rounded-2xl border border-white/5 overflow-hidden mb-6 animate-up delay-2">
+      <div class="p-5 border-b border-white/5"><h3 class="font-bold">Son Siparişler</h3></div>
+      <div class="p-5">${orders.length===0?'<p class="text-dark-500 text-center py-8">Henüz sipariş yok</p>':orders.slice(-5).reverse().map(o=>`<div class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${o.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${o.name}</p><p class="text-xs text-dark-500">${o.score}</p></div><div class="text-right"><p class="text-sm font-semibold text-brand-400">${o.total.toFixed(2)} ₼</p><p class="text-xs text-dark-500">${new Date(o.date).toLocaleDateString('tr')}</p></div></div>`).join('')}</div>
+    </div>
+    <div class="space-y-4 animate-up delay-3">
+      <div class="glass rounded-2xl border border-white/5 p-6 setting-card">
+        <h3 class="font-bold mb-4 flex items-center gap-2"><iconify-icon icon="mdi:cog" class="text-brand-400"></iconify-icon> Kullanıcı Ayarları</h3>
+        <div class="space-y-5">
+          <div>
+            <label class="text-xs text-dark-400 mb-1.5 block">Profil Fotoğrafı</label>
+            <div class="pp-upload-zone" onclick="document.getElementById('ppInput2').click()">
+              <iconify-icon icon="mdi:cloud-upload" class="text-dark-400 text-3xl mb-2"></iconify-icon>
+              <p class="text-sm text-dark-400">Fotoğraf yüklemek için tıklayın</p>
+              <p class="text-xs text-dark-500 mt-1">JPG, PNG - Maks. 2MB</p>
+            </div>
+            <input type="file" id="ppInput2" accept="image/*" class="hidden" onchange="uploadPP(this)">
+          </div>
+          <div>
+            <label class="text-xs text-dark-400 mb-1.5 block">Kullanıcı Adı</label>
+            <div class="flex gap-3">
+              <input type="text" id="changeNameInput" class="input-field flex-1" value="${currentUser.username}" placeholder="Yeni kullanıcı adı">
+              <button onclick="changeUsername()" class="btn-primary" style="width:auto;padding:12px 20px">Kaydet</button>
+            </div>
+          </div>
+        </div>
+      </div>
+      <button onclick="openLogoutModal()" class="w-full glass rounded-2xl border border-red-500/20 p-4 flex items-center justify-center gap-3 text-red-400 hover:bg-red-500/5 transition-all">
+        <iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon>
+        <span class="font-medium text-sm">Hesaptan Çık</span>
+      </button>
     </div>`;
+}
+
+function uploadPP(input){
+  if(!input.files||!input.files[0])return;
+  const file=input.files[0];
+  if(file.size>2*1024*1024){showToast('Dosya boyutu 2MB\'dan küçük olmalıdır','error');return}
+  if(!file.type.startsWith('image/')){showToast('Sadece resim dosyası yükleyin','error');return}
+  const reader=new FileReader();
+  reader.onload=function(e){
+    currentUser.avatar=e.target.result;
+    localStorage.setItem('randox_user',JSON.stringify(currentUser));
+    const u=users.find(x=>x.email===currentUser.email);if(u)u.avatar=currentUser.avatar;localStorage.setItem('randox_users',JSON.stringify(users));
+    updateUserArea();renderProfile();showToast('Profil fotoğrafı güncellendi','success');
+  };reader.readAsDataURL(file);
+}
+
+function changeUsername(){
+  const newName=document.getElementById('changeNameInput').value.trim();
+  if(!newName||newName.length<3){showToast('Kullanıcı adı minimum 3 karakter olmalıdır','error');return}
+  currentUser.username=newName;localStorage.setItem('randox_user',JSON.stringify(currentUser));
+  const u=users.find(x=>x.email===currentUser.email);if(u)u.username=newName;localStorage.setItem('randox_users',JSON.stringify(users));
+  updateUserArea();renderProfile();showToast('Kullanıcı adı güncellendi','success');
 }
 
 /* ===== TOAST ===== */
@@ -943,19 +828,13 @@ function showToast(msg,type='info'){
   const colors={success:'border-brand-500/30 bg-brand-500/10',error:'border-red-500/30 bg-red-500/10',info:'border-blue-500/30 bg-blue-500/10'};
   const icons={success:'mdi:check-circle',error:'mdi:alert-circle',info:'mdi:information'};
   const icolors={success:'text-brand-400',error:'text-red-400',info:'text-blue-400'};
-  const t=document.createElement('div');
-  t.className=`toast glass ${colors[type]} rounded-xl px-4 py-3 flex items-center gap-3 border max-w-sm`;
+  const t=document.createElement('div');t.className=`toast glass ${colors[type]} rounded-xl px-4 py-3 flex items-center gap-3 border max-w-sm`;
   t.innerHTML=`<iconify-icon icon="${icons[type]}" class="${icolors[type]} text-xl flex-shrink-0"></iconify-icon><span class="text-sm">${msg}</span>`;
-  c.appendChild(t);
-  setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100px)';t.style.transition='all .3s ease';setTimeout(()=>t.remove(),300)},3500);
+  c.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100px)';t.style.transition='all .3s ease';setTimeout(()=>t.remove(),300)},3500);
 }
 
 /* ===== NAVBAR SCROLL ===== */
-window.addEventListener('scroll',()=>{
-  const n=document.getElementById('navbar');
-  if(window.scrollY>50){n.classList.add('glass');n.style.borderBottom='1px solid rgba(255,255,255,0.05)'}
-  else{n.classList.remove('glass');n.style.borderBottom='none'}
-});
+window.addEventListener('scroll',()=>{const n=document.getElementById('navbar');if(window.scrollY>50){n.classList.add('glass');n.style.borderBottom='1px solid rgba(255,255,255,0.05)'}else{n.classList.remove('glass');n.style.borderBottom='none'}});
 
 /* ===== INIT ===== */
 renderFeaturedGames();renderGames();renderApps();updateUserArea();updateCartUI();
