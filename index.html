@@ -162,9 +162,16 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     <div class="flex items-center gap-3">
       <div class="search-box hidden md:flex items-center gap-2 glass rounded-xl px-4 py-2.5 border border-transparent transition-all w-56 focus-within:w-72 focus-within:border-brand-500/30">
         <iconify-icon icon="mdi:magnify" class="text-dark-400 text-lg"></iconify-icon>
-        <input type="text" id="searchInput" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
+        <!-- AUTOFILL BUG FİXİ: type=search və autocomplete=off -->
+        <input type="search" id="searchInput" name="randox_search" autocomplete="off" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
       </div>
-      <div id="userArea" class="relative"></div>
+      
+      <!-- DROPDOWN BUG FİXİ: userArea və userDropdown eyni relative div içində yerləşdirildi -->
+      <div class="relative flex items-center gap-2">
+          <div id="userArea"></div>
+          <div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105] shadow-2xl"><div id="dropdownContent"></div></div>
+      </div>
+
       <button onclick="toggleMobileMenu()" class="md:hidden p-2 glass rounded-xl"><iconify-icon icon="mdi:menu" class="text-xl"></iconify-icon></button>
     </div>
   </div>
@@ -235,8 +242,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     </div>
   </div>
 </div>
-
-<div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105] shadow-2xl"><div id="dropdownContent"></div></div>
 
 <!-- TAM EKRAN PREMIUM İLAN DETAL MODALI -->
 <div id="listingModal" class="fixed inset-0 z-[150] hidden">
@@ -395,7 +400,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
           <div onclick="setCustomAmount(10)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">10 ₼</p></div>
           <div onclick="setCustomAmount(25)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">25 ₼</p></div>
           <div onclick="setCustomAmount(50)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">50 ₼</p></div>
-          <div onclick="setCustomAmount(100)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">100 ₼</p></div>
+          <div onclick="setCustomAmount(100)" class="score-option glass-light rounded-xl p-3 text-center border-white/5 cursor-pointer"><p class="font-bold text-sm">100 ₼</p></div>
           <div onclick="setCustomAmount(200)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">200 ₼</p></div>
         </div>
       </div>
@@ -443,7 +448,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 /* ===== AYARLAR ===== */
 emailjs.init('ZaLCBng5Gicqv539R');
 const GOOGLE_CLIENT_ID = '523650358471-6m440tl0o89eq6balm1pe4uermmbiv88.apps.googleusercontent.com';
-const ADMIN_EMAILS = ['http://recysf11gmail.com/']; // BURAYA ÖZ GMAILini ƏLAVƏ ET. Birdən çox əlavə etmək olar.
+const ADMIN_EMAILS = ['recysf11@gmail.com', 'recyusif41@gmail.com']; // Sənin Gmail ünvanların əlavə edildi
 const COMMISSION_RATE = 0.20; 
 
 /* ===== STATE ===== */
@@ -784,16 +789,17 @@ function updateUserArea(){
   if(currentUser){
     const avatarInner=currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase();
     const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
-    area.innerHTML=`<button onclick="openSupport()" class="p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group"><iconify-icon icon="mdi:headset" class="text-xl text-dark-300 group-hover:text-brand-400"></iconify-icon></button><div class="avatar-sm text-white ml-2" style="${bgStyle}" onclick="toggleUserDropdown()">${avatarInner}</div>`;
-    mobile.innerHTML=`<button onclick="showSection('profile');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium">Profilim</button><button onclick="openLogoutModal();toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm text-red-400">Çıxış</button>`;
+    // TAC (Crown) EMOJİSİ VƏ GİZLİ ADMİN KEÇİDİ
+    const adminCrown = ADMIN_EMAILS.includes(currentUser.email) ? `<button onclick="showSection('admin')" class="text-xl hover:scale-110 transition-transform" title="Admin Paneli">👑</button>` : '';
+    area.innerHTML=`<button onclick="openSupport()" class="p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group"><iconify-icon icon="mdi:headset" class="text-xl text-dark-300 group-hover:text-brand-400"></iconify-icon></button><div class="avatar-sm text-white ml-2" style="${bgStyle}" onclick="toggleUserDropdown()">${avatarInner}</div>${adminCrown}`;
+    mobile.innerHTML=`<button onclick="showSection('profile');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium">Profilim</button>${ADMIN_EMAILS.includes(currentUser.email)?`<button onclick="showSection('admin');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium text-yellow-400">👑 Admin</button>`:''}<button onclick="openLogoutModal();toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm text-red-400">Çıxış</button>`;
   }else{
     area.innerHTML=`<button onclick="openAuthModal()" class="glass hover:border-brand-500/30 px-4 py-2 rounded-xl text-sm font-medium transition-all">Daxil ol</button>`;
     mobile.innerHTML=`<button onclick="openAuthModal();toggleMobileMenu()" class="bg-brand-500 hover:bg-brand-400 text-white rounded-xl px-8 py-3 text-sm font-semibold transition-all">Daxil ol</button>`;
   }
   const avatarInner2=currentUser?(currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase()):'';
   const bgStyle2=currentUser&&!currentUser.avatar?`background:${getAvatarColor(currentUser)}`:'';
-  let adminLink = (currentUser && ADMIN_EMAILS.includes(currentUser.email)) ? `<a href="#" onclick="showSection('admin');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:shield-account" class="text-lg"></iconify-icon>Admin Paneli</a>` : '';
-  document.getElementById('dropdownContent').innerHTML=currentUser?`<div class="p-4 border-b border-white/5 flex items-center gap-3"><div class="avatar-sm text-white" style="${bgStyle2}">${avatarInner2}</div><div><p class="font-semibold text-sm">${currentUser.username}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div></div><div class="p-2"><a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a><a href="#" onclick="showSection('messages');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:chat" class="text-lg"></iconify-icon>Mesajlar</a><a href="#" onclick="openSupport();toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:headset" class="text-lg"></iconify-icon>Canlı Dəstək</a><a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Balans: ${(currentUser.balance||0).toFixed(2)} ₼</a>${adminLink}<button onclick="openLogoutModal();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıxış</button></div>`:'';
+  document.getElementById('dropdownContent').innerHTML=currentUser?`<div class="p-4 border-b border-white/5 flex items-center gap-3"><div class="avatar-sm text-white" style="${bgStyle2}">${avatarInner2}</div><div><p class="font-semibold text-sm">${currentUser.username} ${ADMIN_EMAILS.includes(currentUser.email)?'👑':''}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div></div><div class="p-2"><a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a><a href="#" onclick="showSection('messages');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:chat" class="text-lg"></iconify-icon>Mesajlar</a><a href="#" onclick="openSupport();toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:headset" class="text-lg"></iconify-icon>Canlı Dəstək</a><a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Balans: ${(currentUser.balance||0).toFixed(2)} ₼</a><button onclick="openLogoutModal();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıxış</button></div>`:'';
 }
 function toggleUserDropdown(){dropdownOpen=!dropdownOpen;document.getElementById('userDropdown').classList.toggle('hidden',!dropdownOpen)}
 document.addEventListener('click',e=>{if(dropdownOpen&&!e.target.closest('#userArea')&&!e.target.closest('#userDropdown')){dropdownOpen=false;document.getElementById('userDropdown').classList.add('hidden')}});
@@ -897,7 +903,7 @@ function adminModifyBalance(email){
   let u=users.find(x=>x.email===email);if(!u)return;
   let val=parseFloat(document.getElementById('bal_'+email).value);
   if(isNaN(val))return;
-  u.balance=val; // GOD MODE: birbaşa balansı təyin edir
+  u.balance=val; 
   localStorage.setItem('randox_users',JSON.stringify(users));
   if(currentUser.email===email){currentUser.balance=val;localStorage.setItem('randox_user',JSON.stringify(currentUser));updateUserArea();}
   renderAdminUsers();showToast(`${u.username} balansı ${val} AZN oldu.`,'success');
@@ -937,7 +943,7 @@ function adminOpenSupport(email){
   let w=document.getElementById('adminSupportWindow');
   w.innerHTML=c.messages.map(m=>{
     if(m.sender==='system')return `<div class="chat-bubble sys">${m.text}</div>`;
-    const isMe=m.sender===email; // alıcı isə mən değilim
+    const isMe=m.sender===email; 
     return `<div class="flex ${!isMe?'justify-end':'justify-start'}"><div class="chat-bubble ${!isMe?'me':'them'}">${m.text}</div></div>`;
   }).join('');
   w.scrollTop=w.scrollHeight;
