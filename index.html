@@ -166,8 +166,9 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
         <input type="text" id="searchInput" name="randox_search_random" autocomplete="off" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
       </div>
       
+      <!-- DÜZƏLİŞ: Flex sıralama düzəldildi -->
       <div class="relative flex items-center gap-2">
-          <div id="userArea"></div>
+          <div id="userArea" class="flex items-center gap-2"></div>
           <div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105] shadow-2xl"><div id="dropdownContent"></div></div>
       </div>
 
@@ -252,6 +253,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 
 <main>
 
+<!-- DÜZƏLİŞ: ANA SƏHİFƏDƏ REAL İLANLAR -->
 <section id="section-home">
   <div class="hero-bg min-h-screen flex items-center relative">
     <div class="max-w-7xl mx-auto px-6 pt-32 pb-20 grid lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -270,9 +272,18 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
         </div>
       </div>
       <div class="relative animate-left delay-3 hidden lg:block">
-        <div id="heroListings" class="grid grid-cols-2 gap-4"></div>
+        <img src="https://z-cdn-media.chatglm.cn/files/a6111907-9687-4215-93b6-d440fa4d20d2.jpg?auth_key=1882175679-42e4d8f3bf15441f9334db1f4d5bce75-0-a8809e366cfa07eadf304b059c3113b7" class="w-full h-[600px] object-cover rounded-3xl shadow-2xl shadow-brand-500/10 border border-white/10 animate-float" alt="Market">
       </div>
     </div>
+  </div>
+
+  <!-- REAL İLANLAR BÖLMƏSİ -->
+  <div class="max-w-7xl mx-auto px-6 py-24">
+    <div class="flex items-end justify-between mb-12">
+      <div><span class="tag uppercase text-brand-400 tracking-widest">Bazar</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Son İlanlar</h2><p class="mt-2 text-dark-400">Digər istifadəçilərin paylaşılan məhsulları.</p></div>
+      <button onclick="showSection('listings')" class="hidden md:flex items-center gap-2 text-brand-400 hover:text-brand-300 text-sm font-medium transition-colors">Hamısına Bax <iconify-icon icon="mdi:arrow-right"></iconify-icon></button>
+    </div>
+    <div id="homeListingsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
   </div>
 </section>
 
@@ -455,7 +466,7 @@ window.addEventListener('load', () => {
     const searchInput = document.getElementById('searchInput');
     if(searchInput) searchInput.value = '';
     setTimeout(initGoogleSignIn, 500);
-    renderHeroListings();
+    renderHomeListings();
     updateHomeStats();
 });
 
@@ -513,7 +524,6 @@ function handleImgUpload(input){
             if(w>800){h=h*(800/w);w=800;}
             canvas.width=w;canvas.height=h;
             ctx.drawImage(img,0,0,w,h);
-            // Mərkəzdə Solğun RANDOX Su Nişanı
             ctx.font="bold 60px Inter, sans-serif";
             ctx.fillStyle="rgba(255, 255, 255, 0.15)";
             ctx.textAlign="center";
@@ -550,7 +560,7 @@ function submitListing(){
   const newListing={id:'l_'+Date.now(), title, cat, price, desc, img, sellerEmail:currentUser.email, sellerName:currentUser.username, sellerAvatar:currentUser.avatar||'', deliveryMethod:selectedDeliveryMethod, stockLinks, manualStock, features:featuresList.filter(f=>f.key&&f.value), soldCount:0, createdAt:new Date().toISOString()};
   listings.unshift(newListing);localStorage.setItem('randox_listings',JSON.stringify(listings));showToast('İlan uğurla yayımlandı!','success');
   document.getElementById('createTitle').value='';document.getElementById('createPrice').value='';document.getElementById('createDesc').value='';document.getElementById('createImg').value='';document.getElementById('createImgName').textContent='';featuresList=[];renderFeatures();selectedDeliveryMethod=null;selectDelivery('none');
-  updateHomeStats(); renderHeroListings(); showSection('listings');
+  updateHomeStats(); renderHomeListings(); showSection('listings');
 }
 
 function listingCard(l){
@@ -558,11 +568,11 @@ function listingCard(l){
   return `<div class="game-card cursor-pointer" onclick="openListingModal('${l.id}')"><div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all h-full flex flex-col"><div class="relative h-44 overflow-hidden"><img src="${l.img}" class="game-img w-full h-full object-cover" alt="${l.title}"><div class="absolute top-2 left-2 tag uppercase text-dark-900 bg-white/90 px-2 py-0.5 rounded-md">${l.cat}</div></div><div class="p-4 flex flex-col flex-1"><h3 class="font-semibold text-sm truncate">${l.title}</h3><p class="text-xs text-dark-500 mt-1 line-clamp-2 flex-1">${l.desc}</p><div class="flex items-center justify-between mt-3"><span class="text-brand-400 font-bold text-base">${l.price.toFixed(2)} ₼</span>${stock>0?`<span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">Stok: ${stock}</span>`:`<span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded-md">Bitdi</span>`}</div></div></div></div>`;
 }
 
-function renderHeroListings(){
-    const el = document.getElementById('heroListings');
+function renderHomeListings(){
+    const el = document.getElementById('homeListingsGrid');
     if(!el) return;
-    let active = listings.filter(l => l.deliveryMethod==='link' ? l.stockLinks.length > 0 : l.manualStock > 0).slice(0, 4);
-    if(active.length === 0) { el.innerHTML = `<div class="glass rounded-2xl p-4 text-center text-dark-400 text-sm col-span-2">Hələ aktiv ilan yoxdur. İlk paylaşan siz olun!</div>`; return; }
+    let active = listings.filter(l => l.deliveryMethod==='link' ? l.stockLinks.length > 0 : l.manualStock > 0).slice(0, 8);
+    if(active.length === 0) { el.innerHTML = `<div class="col-span-full glass rounded-2xl p-8 text-center text-dark-400">Hələ aktiv ilan yoxdur. İlk paylaşan siz olun!</div>`; return; }
     el.innerHTML = active.map(listingCard).join('');
 }
 
@@ -600,7 +610,7 @@ function deleteListing(id) {
     showToast('İlan silindi.', 'info');
     closeListingModal();
     if(currentSection === 'profile') renderProfile();
-    updateHomeStats(); renderHeroListings();
+    updateHomeStats(); renderHomeListings();
 }
 
 /* ===== ESCROW & SATIN ALMA ===== */
@@ -968,9 +978,17 @@ function switchAdminTab(tab){
 }
 
 function renderAdminUsers(){
+  // DÜZƏLİŞ: users massivini məcburi yeniləyirik ki, admin sadə userləri də görsün
+  users = JSON.parse(localStorage.getItem('randox_users') || '[]');
   let q=(document.getElementById('adminUserSearch')?.value||'').toLowerCase();
   let list=users.filter(u=>u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q));
-  document.getElementById('adminUsersList').innerHTML=list.map(u=>{
+  const listEl = document.getElementById('adminUsersList');
+  if(!listEl) return;
+  if(list.length === 0) {
+      listEl.innerHTML = '<p class="text-center text-dark-400 py-8">Heç bir istifadəçi tapılmadı.</p>';
+      return;
+  }
+  listEl.innerHTML=list.map(u=>{
     const safeEmail = u.email.replace(/[^a-zA-Z0-9]/g, '');
     return `<div class="glass-light p-4 rounded-xl border border-white/5 mb-3"><div class="flex items-center justify-between mb-3"><div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor(u)}">${u.username.charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${u.username} ${u.banned?'<span class="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded ml-2">BAN</span>':''}</p><p class="text-xs text-dark-400">${u.email}</p><p class="text-xs text-brand-400">Balans: ${u.balance.toFixed(2)} ₼</p></div></div><div class="flex gap-2"><input type="number" placeholder="Yeni Balans" id="bal_${safeEmail}" class="input-field w-32 text-xs"><button onclick="adminModifyBalance('${u.email}')" class="btn-primary text-xs" style="width:auto;padding:8px 10px">SET</button></div></div><div class="flex gap-2 flex-wrap border-t border-white/5 pt-3"><button onclick="toggleBan('${u.email}')" class="text-xs px-3 py-1.5 rounded-lg ${u.banned?'bg-green-500 text-white':'bg-red-500 text-white'}">${u.banned?'Banı Aç':'Banla'}</button><button onclick="toggleRestriction('${u.email}','message')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.message?'bg-red-500 text-white':'bg-dark-800'}">Mesaj Qadağan</button><button onclick="toggleRestriction('${u.email}','listing')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.listing?'bg-red-500 text-white':'bg-dark-800'}">Elan Qadağan</button><button onclick="toggleRestriction('${u.email}','purchase')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.purchase?'bg-red-500 text-white':'bg-dark-800'}">Alış Qadağan</button></div></div>`;
   }).join('');
