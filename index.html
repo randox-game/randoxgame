@@ -28,6 +28,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
 @keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
 @keyframes gridScroll{0%{background-position:0 0}100%{background-position:60px 60px}}
+@keyframes glowPulse{0%,100%{box-shadow:0 0 5px 1px rgba(239,68,68,0.8)}50%{box-shadow:0 0 15px 3px rgba(239,68,68,1)}}
 
 /* LAYOUTS */
 .animate-fade{animation:fadeIn .6s ease-out both}.animate-up{animation:slideUp .8s ease-out both}
@@ -85,6 +86,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .chat-wrapper:hover .report-btn{display:flex}
 .admin-tab{padding:10px 20px;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;transition:all .3s;background:rgba(15,23,42,.5);border:1px solid rgba(255,255,255,.05)}
 .admin-tab.active{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.4)}
+.notif-badge{animation: glowPulse 2s infinite}
 </style>
 </head>
 <body class="bg-grid">
@@ -93,10 +95,22 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 <div id="banScreen" class="fixed inset-0 z-[9999] hidden flex-col items-center justify-center bg-dark-950 text-center p-6">
   <div class="brand-logo mb-6" style="width:80px;height:80px"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div>
   <h1 class="text-4xl md:text-5xl font-bold text-red-500 mb-2 tracking-tight">Hesab Bloklanıb</h1>
-  <p class="text-dark-400 max-w-md">Sizin hesabınız Randox təhlükəsizlik sistemi tərəfindən qəti olaraq bloklanmışdır. Əlavə məlumat üçün canlı dəstəklə əlaqə saxlayın.</p>
+  <p class="text-dark-400 max-w-md">Sizin hesabınız Randox təhlükəsizlik sistemi tərəfindən qəti olaraq bloklanmışdır.</p>
 </div>
 
 <div id="toastContainer" class="fixed top-24 right-6 z-[200] flex flex-col gap-3"></div>
+
+<!-- NOTIFICATION MODAL -->
+<div id="notifModal" class="fixed inset-0 z-[165] hidden">
+  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeNotifs()"></div>
+  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-2xl border border-white/5 p-6 shadow-2xl max-h-[80vh] flex flex-col">
+    <div class="flex justify-between items-center mb-4 border-b border-white/5 pb-3">
+      <h3 class="text-lg font-bold flex items-center gap-2"><iconify-icon icon="mdi:bell-outline" class="text-brand-400"></iconify-icon> Bildirimlər</h3>
+      <button onclick="closeNotifs()" class="p-2 hover:bg-white/5 rounded-lg"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button>
+    </div>
+    <div id="notifList" class="flex-1 overflow-y-auto space-y-3 pr-2"></div>
+  </div>
+</div>
 
 <!-- REPORT MODAL -->
 <div id="reportModal" class="fixed inset-0 z-[180] hidden">
@@ -162,11 +176,9 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     <div class="flex items-center gap-3">
       <div class="search-box hidden md:flex items-center gap-2 glass rounded-xl px-4 py-2.5 border border-transparent transition-all w-56 focus-within:w-72 focus-within:border-brand-500/30">
         <iconify-icon icon="mdi:magnify" class="text-dark-400 text-lg"></iconify-icon>
-        <!-- AUTOFILL BUG FİXİ: type=search və autocomplete=off -->
-        <input type="search" id="searchInput" name="randox_search" autocomplete="off" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
+        <input type="search" id="searchInput" name="randox_search_query" autocomplete="new-password" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
       </div>
       
-      <!-- DROPDOWN BUG FİXİ: userArea və userDropdown eyni relative div içində yerləşdirildi -->
       <div class="relative flex items-center gap-2">
           <div id="userArea"></div>
           <div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105] shadow-2xl"><div id="dropdownContent"></div></div>
@@ -321,7 +333,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
           <div><label class="text-xs text-dark-400 mb-1.5 block">Qiymət (AZN)</label><input type="number" id="createPrice" class="input-field" min="0.5" step="0.1" placeholder="5.00"></div>
         </div>
         <div><label class="text-xs text-dark-400 mb-1.5 block">Açıqlama</label><textarea id="createDesc" class="input-field h-24 resize-none" placeholder="Məhsul haqqında bütün detalları yaz. Səviyyə, rütbə, skinlər və s."></textarea></div>
-        <div><label class="text-xs text-dark-400 mb-1.5 block">Şəkil</label>
+        <div><label class="text-xs text-dark-400 mb-1.5 block">Şəkil (Mütləqdir - Randox水印 əlavə olunacaq)</label>
           <div class="pp-upload-zone border-2 border-dashed border-white/10 rounded-xl p-5 text-center cursor-pointer hover:border-brand-500/40 transition-colors" onclick="document.getElementById('createImgFile').click()">
             <iconify-icon icon="mdi:cloud-upload" class="text-dark-400 text-3xl mb-2 block"></iconify-icon>
             <p class="text-sm text-dark-400">Şəkil yükləmək üçün tıklayın</p>
@@ -400,7 +412,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
           <div onclick="setCustomAmount(10)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">10 ₼</p></div>
           <div onclick="setCustomAmount(25)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">25 ₼</p></div>
           <div onclick="setCustomAmount(50)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">50 ₼</p></div>
-          <div onclick="setCustomAmount(100)" class="score-option glass-light rounded-xl p-3 text-center border-white/5 cursor-pointer"><p class="font-bold text-sm">100 ₼</p></div>
+          <div onclick="setCustomAmount(100)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">100 ₼</p></div>
           <div onclick="setCustomAmount(200)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">200 ₼</p></div>
         </div>
       </div>
@@ -418,6 +430,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
       <button onclick="switchAdminTab('disputes')" id="adminTabDisputes" class="admin-tab">Disputelər</button>
       <button onclick="switchAdminTab('reports')" id="adminTabReports" class="admin-tab">Şikayətlər</button>
       <button onclick="switchAdminTab('support')" id="adminTabSupport" class="admin-tab">Dəstək Mesajları</button>
+      <button onclick="switchAdminTab('notifs')" id="adminTabNotifs" class="admin-tab">Bildirimlər</button>
       <button onclick="switchAdminTab('spy')" id="adminTabSpy" class="admin-tab">Spy Mode</button>
     </div>
     
@@ -448,7 +461,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 /* ===== AYARLAR ===== */
 emailjs.init('ZaLCBng5Gicqv539R');
 const GOOGLE_CLIENT_ID = '523650358471-6m440tl0o89eq6balm1pe4uermmbiv88.apps.googleusercontent.com';
-const ADMIN_EMAILS = ['recysf11@gmail.com', 'recyusif41@gmail.com']; // Sənin Gmail ünvanların əlavə edildi
+const ADMIN_EMAILS = ['recysf11@gmail.com', 'recyusif41@gmail.com']; 
 const COMMISSION_RATE = 0.20; 
 
 /* ===== STATE ===== */
@@ -459,17 +472,24 @@ let chats = JSON.parse(localStorage.getItem('randox_chats') || '{}');
 let orders = JSON.parse(localStorage.getItem('randox_orders') || '[]');
 let reports = JSON.parse(localStorage.getItem('randox_reports') || '[]');
 let supportChats = JSON.parse(localStorage.getItem('randox_support_chats') || '{}');
+let notifications = JSON.parse(localStorage.getItem('randox_notifications') || '{}');
 
-let currentSection = 'home', selectedTopUpAmount = 0, selectedDeliveryMethod = null, featuresList = [], currentChatId = null, currentAdminTab = 'users';
+let currentSection = 'home', selectedTopUpAmount = 0, selectedDeliveryMethod = null, featuresList = [], currentChatId = null, currentAdminTab = 'users', currentSupportUser = null;
 let mobileMenuOpen = false, dropdownOpen = false, searchQuery = '';
 let vCode='',vEmail='',vAction='',vTempData={},resendCd=0,resendIv=null,googleInitialized=false;
 let reportingData = null;
+
+// Sayta girişde axtarış yerini təmizlə və yaddaşı sil
+window.addEventListener('load', () => {
+    const searchInput = document.getElementById('searchInput');
+    if(searchInput) searchInput.value = '';
+    setTimeout(initGoogleSignIn, 500);
+});
 
 /* ===== GOOGLE & AVATAR ===== */
 function initGoogleSignIn(){if(googleInitialized||typeof google==='undefined'||!google.accounts)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleResponse,auto_select:false,cancel_on_tap_outside:true});googleInitialized=true;}
 function handleGoogleLogin(){if(!googleInitialized&&typeof google!=='undefined'&&google.accounts)initGoogleSignIn();if(googleInitialized)google.accounts.id.prompt();}
 function handleGoogleResponse(r){try{const p=JSON.parse(atob(r.credential.split('.')[1]));const email=p.email;const name=p.name||email.split('@')[0];let u=users.find(x=>x.email===email);if(!u){u={username:name,email,password:'g_'+Date.now(),balance:0,avatar:p.picture,createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}};users.push(u);localStorage.setItem('randox_users',JSON.stringify(users));}currentUser={...u};localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();checkBanOnLogin();}catch(e){showToast('Google xətası','error');}}
-window.addEventListener('load',()=>setTimeout(initGoogleSignIn,500));
 function getAvatarColor(u){return u?`hsl(${(u.username||'K').charCodeAt(0)*37%360},60%,45%)`:'#22c55e';}
 
 /* ===== BAN & RESTRICTION CHECKS ===== */
@@ -502,21 +522,59 @@ function handleSearch(q){searchQuery=q.toLowerCase().trim();if(currentSection!==
 
 /* ===== İLANLAR ===== */
 function selectDelivery(t){selectedDeliveryMethod=t;document.getElementById('linkStockArea').classList.toggle('hidden',t!=='link');document.getElementById('manualStockArea').classList.toggle('hidden',t!=='manual');document.getElementById('deliveryLink').classList.toggle('border-brand-500/40',t==='link');document.getElementById('deliveryManual').classList.toggle('border-brand-500/40',t==='manual');}
-function handleImgUpload(input){if(!input.files[0])return;const r=new FileReader();r.onload=e=>{document.getElementById('createImg').value=e.target.result;document.getElementById('createImgName').textContent='Şəkil yükləndi';};r.readAsDataURL(input.files[0]);}
+
+// Şəkilə "Randox"水印 əlavə edən funksiya
+function handleImgUpload(input){
+    if(!input.files[0])return;
+    const file=input.files[0];
+    const reader=new FileReader();
+    reader.onload=function(e){
+        const img=new Image();
+        img.onload=function(){
+            const canvas=document.createElement('canvas');
+            const ctx=canvas.getContext('2d');
+            let w=img.width,h=img.height;
+            if(w>800){h=h*(800/w);w=800;}
+            canvas.width=w;canvas.height=h;
+            ctx.drawImage(img,0,0,w,h);
+            // Randox Watermark
+            ctx.font="bold 24px Inter, sans-serif";
+            ctx.fillStyle="rgba(255, 255, 255, 0.6)";
+            ctx.textAlign="left";
+            ctx.fillText("Randox", 15, h - 15);
+            const watermarkedDataUrl=canvas.toDataURL('image/jpeg',0.9);
+            document.getElementById('createImg').value=watermarkedDataUrl;
+            document.getElementById('createImgName').textContent='Şəkil yükləndi (Randox水印 əlavə edildi)';
+        };
+        img.src=e.target.result;
+    };
+    reader.readAsDataURL(file);
+}
+
 function addFeature(){featuresList.push({key:'',value:''});renderFeatures();}
 function renderFeatures(){const c=document.getElementById('featuresContainer');c.innerHTML=featuresList.map((f,i)=>`<div class="flex gap-2"><input type="text" class="input-field flex-1" placeholder="Ad (Məs: Səviyyə)" value="${f.key}" oninput="featuresList[${i}].key=this.value"><input type="text" class="input-field flex-1" placeholder="Dəyər (Məs: 75)" value="${f.value}" oninput="featuresList[${i}].value=this.value"><button onclick="featuresList.splice(${i},1);renderFeatures()" class="text-red-400 px-2"><iconify-icon icon="mdi:close"></iconify-icon></button></div>`).join('');}
+
 function submitListing(){
   if(!currentUser)return;
-  const title=document.getElementById('createTitle').value.trim();const cat=document.getElementById('createCategory').value;const price=parseFloat(document.getElementById('createPrice').value);const desc=document.getElementById('createDesc').value.trim();const img=document.getElementById('createImg').value||`https://picsum.photos/seed/${Math.random()}/400/500`;
+  const title=document.getElementById('createTitle').value.trim();
+  const cat=document.getElementById('createCategory').value;
+  const price=parseFloat(document.getElementById('createPrice').value);
+  const desc=document.getElementById('createDesc').value.trim();
+  const img=document.getElementById('createImg').value;
+  
   if(!title||!price||!desc){showToast('Bütün sahələri doldurun','error');return;}
+  if(!img){showToast('İlan üçün şəkil mütləqdir!','error');return;} // Şəkil məcburidir
   if(!selectedDeliveryMethod){showToast('Çatdırılma metodunu seçin','error');return;}
+  
   let stockLinks=[], manualStock=0;
   if(selectedDeliveryMethod==='link'){const raw=document.getElementById('createLinks').value.trim().split('\n').filter(l=>l.trim()!=='');if(raw.length===0){showToast('Ən azı 1 stok linki əlavə edin','error');return;}stockLinks=raw;}
   else{manualStock=parseInt(document.getElementById('createManualStock').value)||0;if(manualStock<1){showToast('Stok sayı 1-dən az ola bilməz','error');return;}}
+  
   const newListing={id:'l_'+Date.now(), title, cat, price, desc, img, sellerEmail:currentUser.email, sellerName:currentUser.username, sellerAvatar:currentUser.avatar||'', deliveryMethod:selectedDeliveryMethod, stockLinks, manualStock, features:featuresList.filter(f=>f.key&&f.value), soldCount:0, createdAt:new Date().toISOString()};
   listings.unshift(newListing);localStorage.setItem('randox_listings',JSON.stringify(listings));showToast('İlan uğurla yayımlandı!','success');
   document.getElementById('createTitle').value='';document.getElementById('createPrice').value='';document.getElementById('createDesc').value='';document.getElementById('createImg').value='';document.getElementById('createImgName').textContent='';featuresList=[];renderFeatures();selectedDeliveryMethod=null;selectDelivery('none');showSection('listings');
 }
+
 function listingCard(l){
   const stock = l.deliveryMethod==='link' ? l.stockLinks.length : l.manualStock;
   return `<div class="game-card cursor-pointer" onclick="openListingModal('${l.id}')"><div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all h-full flex flex-col"><div class="relative h-44 overflow-hidden"><img src="${l.img}" class="game-img w-full h-full object-cover" alt="${l.title}"><div class="absolute top-2 left-2 tag uppercase text-dark-900 bg-white/90 px-2 py-0.5 rounded-md">${l.cat}</div></div><div class="p-4 flex flex-col flex-1"><h3 class="font-semibold text-sm truncate">${l.title}</h3><p class="text-xs text-dark-500 mt-1 line-clamp-2 flex-1">${l.desc}</p><div class="flex items-center justify-between mt-3"><span class="text-brand-400 font-bold text-base">${l.price.toFixed(2)} ₼</span>${stock>0?`<span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">Stok: ${stock}</span>`:`<span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded-md">Bitdi</span>`}</div></div></div></div>`;
@@ -673,6 +731,35 @@ function submitReport(){
   showToast('Şikayət adminə göndərildi.','success');
 }
 
+/* ===== NOTIFICATION SYSTEM ===== */
+function openNotifs(){
+  document.getElementById('notifModal').classList.remove('hidden');
+  document.body.style.overflow = 'hidden';
+  renderNotifs();
+}
+function closeNotifs(){
+  document.getElementById('notifModal').classList.add('hidden');
+  document.body.style.overflow = '';
+}
+function renderNotifs(){
+  const el = document.getElementById('notifList');
+  const myNotifs = notifications[currentUser.email] || [];
+  if(myNotifs.length === 0){
+    el.innerHTML = '<div class="text-center text-dark-400 py-8 flex flex-col items-center"><iconify-icon icon="mdi:bell-off-outline" class="text-4xl mb-2"></iconify-icon>Bildirim yoxdur.</div>';
+    return;
+  }
+  el.innerHTML = myNotifs.slice().reverse().map(n => `
+    <div class="glass-light p-3 rounded-xl border border-white/5 ${!n.read ? 'border-l-4 border-l-brand-500' : ''}">
+      <p class="text-sm">${n.text}</p>
+      <p class="text-[10px] text-dark-500 mt-1">${new Date(n.time).toLocaleString('az')}</p>
+    </div>
+  `).join('');
+  // Mark as read
+  notifications[currentUser.email].forEach(n => n.read = true);
+  localStorage.setItem('randox_notifications', JSON.stringify(notifications));
+  updateUserArea();
+}
+
 /* ===== LIVE SUPPORT ===== */
 function openSupport(){
   document.getElementById('supportModal').classList.remove('hidden');
@@ -682,7 +769,8 @@ function openSupport(){
 function closeSupport(){document.getElementById('supportModal').classList.add('hidden');document.body.style.overflow='';}
 function renderSupportMessages(){
   const el=document.getElementById('supportMessages');
-  const mySupportChat = supportChats[currentUser.email] || {messages:[]};
+  if(!supportChats[currentUser.email]) supportChats[currentUser.email] = {messages:[]};
+  const mySupportChat = supportChats[currentUser.email];
   if(mySupportChat.messages.length===0){el.innerHTML='<div class="text-center text-dark-400 text-sm py-8">Sualınızı yazın, admin tez cavab verəcək.</div>';return;}
   el.innerHTML=mySupportChat.messages.map(m=>{
     if(m.sender==='system')return `<div class="chat-bubble sys">${m.text}</div>`;
@@ -789,9 +877,11 @@ function updateUserArea(){
   if(currentUser){
     const avatarInner=currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase();
     const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
-    // TAC (Crown) EMOJİSİ VƏ GİZLİ ADMİN KEÇİDİ
     const adminCrown = ADMIN_EMAILS.includes(currentUser.email) ? `<button onclick="showSection('admin')" class="text-xl hover:scale-110 transition-transform" title="Admin Paneli">👑</button>` : '';
-    area.innerHTML=`<button onclick="openSupport()" class="p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group"><iconify-icon icon="mdi:headset" class="text-xl text-dark-300 group-hover:text-brand-400"></iconify-icon></button><div class="avatar-sm text-white ml-2" style="${bgStyle}" onclick="toggleUserDropdown()">${avatarInner}</div>${adminCrown}`;
+    const unreadNotifs = notifications[currentUser.email]?.filter(n => !n.read).length || 0;
+    const notifBadge = unreadNotifs > 0 ? `<span class="notif-badge absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">${unreadNotifs}</span>` : '';
+    
+    area.innerHTML=`<button onclick="openSupport()" class="p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group"><iconify-icon icon="mdi:headset" class="text-xl text-dark-300 group-hover:text-brand-400"></iconify-icon></button><button onclick="openNotifs()" class="relative p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group"><iconify-icon icon="mdi:bell-outline" class="text-xl text-dark-300 group-hover:text-brand-400"></iconify-icon>${notifBadge}</button><div class="avatar-sm text-white ml-1" style="${bgStyle}" onclick="toggleUserDropdown()">${avatarInner}</div>${adminCrown}`;
     mobile.innerHTML=`<button onclick="showSection('profile');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium">Profilim</button>${ADMIN_EMAILS.includes(currentUser.email)?`<button onclick="showSection('admin');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium text-yellow-400">👑 Admin</button>`:''}<button onclick="openLogoutModal();toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm text-red-400">Çıxış</button>`;
   }else{
     area.innerHTML=`<button onclick="openAuthModal()" class="glass hover:border-brand-500/30 px-4 py-2 rounded-xl text-sm font-medium transition-all">Daxil ol</button>`;
@@ -799,7 +889,7 @@ function updateUserArea(){
   }
   const avatarInner2=currentUser?(currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase()):'';
   const bgStyle2=currentUser&&!currentUser.avatar?`background:${getAvatarColor(currentUser)}`:'';
-  document.getElementById('dropdownContent').innerHTML=currentUser?`<div class="p-4 border-b border-white/5 flex items-center gap-3"><div class="avatar-sm text-white" style="${bgStyle2}">${avatarInner2}</div><div><p class="font-semibold text-sm">${currentUser.username} ${ADMIN_EMAILS.includes(currentUser.email)?'👑':''}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div></div><div class="p-2"><a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a><a href="#" onclick="showSection('messages');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:chat" class="text-lg"></iconify-icon>Mesajlar</a><a href="#" onclick="openSupport();toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:headset" class="text-lg"></iconify-icon>Canlı Dəstək</a><a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Balans: ${(currentUser.balance||0).toFixed(2)} ₼</a><button onclick="openLogoutModal();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıxış</button></div>`:'';
+  document.getElementById('dropdownContent').innerHTML=currentUser?`<div class="p-4 border-b border-white/5 flex items-center gap-3"><div class="avatar-sm text-white" style="${bgStyle2}">${avatarInner2}</div><div><p class="font-semibold text-sm">${currentUser.username} ${ADMIN_EMAILS.includes(currentUser.email)?'👑':''}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div></div><div class="p-2"><a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a><a href="#" onclick="showSection('messages');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:chat" class="text-lg"></iconify-icon>Mesajlar</a><a href="#" onclick="openSupport();toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:headset" class="text-lg"></iconify-icon>Canlı Dəstək</a><a href="#" onclick="openNotifs();toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:bell" class="text-lg"></iconify-icon>Bildirimlər</a><a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Balans: ${(currentUser.balance||0).toFixed(2)} ₼</a><button onclick="openLogoutModal();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıxış</button></div>`:'';
 }
 function toggleUserDropdown(){dropdownOpen=!dropdownOpen;document.getElementById('userDropdown').classList.toggle('hidden',!dropdownOpen)}
 document.addEventListener('click',e=>{if(dropdownOpen&&!e.target.closest('#userArea')&&!e.target.closest('#userDropdown')){dropdownOpen=false;document.getElementById('userDropdown').classList.add('hidden')}});
@@ -833,17 +923,7 @@ function switchAdminTab(tab){
     if(pending.length===0)html+=`<p class="text-center text-dark-400 py-8">Baxışı gözləyən dispute yoxdur.</p>`;
     pending.forEach(o=>{
       let buyer=users.find(u=>u.email===o.buyerEmail);let seller=users.find(u=>u.email===o.sellerEmail);
-      html+=`<div class="glass-light p-4 rounded-xl border border-white/5">
-        <div class="flex justify-between items-start mb-2">
-          <div><p class="font-semibold text-sm">${o.listingTitle}</p><p class="text-xs text-dark-400">${o.amount} AZN</p></div>
-          <div class="text-xs text-right"><p class="text-red-400">Alıcı: ${buyer?.username||o.buyerEmail}</p><p>${o.disputeReason}</p></div>
-        </div>
-        <div class="text-xs text-right mt-2 border-t border-white/5 pt-2"><p class="text-yellow-400">Satıcı: ${seller?.username||o.sellerEmail}</p><p>${o.counterReason}</p></div>
-        <div class="flex gap-2 mt-4">
-          <button onclick="forcePaySeller('${o.id}')" class="btn-primary" style="width:auto;padding:8px 16px">Satıcıya Ödə</button>
-          <button onclick="refundBuyer('${o.id}')" class="btn-danger" style="width:auto;padding:8px 16px">Alıcıya Qaytar</button>
-        </div>
-      </div>`;
+      html+=`<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between items-start mb-2"><div><p class="font-semibold text-sm">${o.listingTitle}</p><p class="text-xs text-dark-400">${o.amount} AZN</p></div><div class="text-xs text-right"><p class="text-red-400">Alıcı: ${buyer?.username||o.buyerEmail}</p><p>${o.disputeReason}</p></div></div><div class="text-xs text-right mt-2 border-t border-white/5 pt-2"><p class="text-yellow-400">Satıcı: ${seller?.username||o.sellerEmail}</p><p>${o.counterReason}</p></div><div class="flex gap-2 mt-4"><button onclick="forcePaySeller('${o.id}')" class="btn-primary" style="width:auto;padding:8px 16px">Satıcıya Ödə</button><button onclick="refundBuyer('${o.id}')" class="btn-danger" style="width:auto;padding:8px 16px">Alıcıya Qaytar</button></div></div>`;
     });
     html+=`</div>`;c.innerHTML=html;
   }
@@ -852,11 +932,7 @@ function switchAdminTab(tab){
     if(reports.length===0)html+=`<p class="text-center text-dark-400 py-8">Şikayət yoxdur.</p>`;
     reports.forEach(r=>{
       let reporter=users.find(u=>u.email===r.reporterEmail);let reported=users.find(u=>u.email===r.reportedEmail);
-      html+=`<div class="glass-light p-4 rounded-xl border border-white/5">
-        <div class="flex justify-between mb-2"><span class="text-xs text-dark-400">Şikayət edən: ${reporter?.username||r.reporterEmail}</span><span class="text-xs text-dark-400">Təqsir eden: ${reported?.username||r.reportedEmail}</span></div>
-        <p class="text-xs bg-dark-900/50 p-2 rounded-lg my-2 border border-white/5">Mesaj: "${r.msgText}"</p>
-        <p class="text-sm text-red-400">Səbəb: ${r.reason}</p>
-      </div>`;
+      html+=`<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between mb-2"><span class="text-xs text-dark-400">Şikayət edən: ${reporter?.username||r.reporterEmail}</span><span class="text-xs text-dark-400">Təqsir eden: ${reported?.username||r.reportedEmail}</span></div><p class="text-xs bg-dark-900/50 p-2 rounded-lg my-2 border border-white/5">Mesaj: "${r.msgText}"</p><p class="text-sm text-red-400">Səbəb: ${r.reason}</p></div>`;
     });
     html+=`</div>`;c.innerHTML=html;
   }
@@ -871,6 +947,10 @@ function switchAdminTab(tab){
     html+=`</div><div class="w-2/3 flex flex-col"><div id="adminSupportWindow" class="flex-1 overflow-y-auto p-4 space-y-3 flex flex-col justify-end"></div><div class="p-4 border-t border-white/5"><div class="flex gap-2"><input type="text" id="adminSupportInput" class="input-field flex-1" placeholder="Cavab yazın..." onkeydown="if(event.key==='Enter')adminSendSupport()"><button onclick="adminSendSupport()" class="btn-primary" style="width:auto;padding:12px 20px"><iconify-icon icon="mdi:send"></iconify-icon></button></div></div></div></div>`;
     c.innerHTML=html;
   }
+  else if(tab==='notifs'){
+    let opts = users.map(u => `<option value="${u.email}">${u.username} (${u.email})</option>`).join('');
+    c.innerHTML = `<div class="flex flex-col md:flex-row gap-3 mb-6"><select id="adminNotifTarget" class="input-field md:w-1/3"><option value="all">Hamıya (Everyone)</option>${opts}</select><input type="text" id="adminNotifText" class="input-field flex-1" placeholder="Bildirim mesajını yazın..."><button onclick="adminSendNotif()" class="btn-primary md:w-auto" style="width:auto;padding:12px 24px">Göndər</button></div><p class="text-sm text-dark-400">İstifadəçilər bildirişi yuxarı sağdakı zəng ikonasında alacaqlar. Oxunmamış mesaj sayı qırmızı rəngdə yanır.</p>`;
+  }
   else if(tab==='spy'){
     c.innerHTML=`<div class="mb-4"><input type="text" id="adminSpySearch" class="input-field" placeholder="Email və ya mesaj axtar..." oninput="renderAdminSpy()"></div><div id="adminSpyList" class="space-y-3 max-h-[600px] overflow-y-auto"></div>`;
     renderAdminSpy();
@@ -880,28 +960,15 @@ function switchAdminTab(tab){
 function renderAdminUsers(){
   let q=(document.getElementById('adminUserSearch')?.value||'').toLowerCase();
   let list=users.filter(u=>u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q));
-  document.getElementById('adminUsersList').innerHTML=list.map(u=>`
-    <div class="glass-light p-4 rounded-xl border border-white/5 flex items-center justify-between">
-      <div class="flex items-center gap-3">
-        <div class="avatar-sm text-white" style="background:${getAvatarColor(u)}">${u.username.charAt(0).toUpperCase()}</div>
-        <div><p class="font-semibold text-sm">${u.username} ${u.banned?'<span class="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded ml-2">BAN</span>':''}</p><p class="text-xs text-dark-400">${u.email}</p><p class="text-xs text-brand-400">Balans: ${u.balance.toFixed(2)} ₼</p></div>
-      </div>
-      <div class="flex gap-2">
-        <input type="number" placeholder="+/- AZN" id="bal_${u.email}" class="input-field w-24 text-xs">
-        <button onclick="adminModifyBalance('${u.email}')" class="btn-primary text-xs" style="width:auto;padding:8px 10px">SET</button>
-        <button onclick="toggleBan('${u.email}')" class="text-xs px-2 py-2 rounded-lg ${u.banned?'bg-green-500 text-white':'bg-red-500 text-white'}">${u.banned?'UNBAN':'BAN'}</button>
-      </div>
-      <div class="flex gap-1 text-xs mt-2">
-        <button onclick="toggleRestriction('${u.email}','message')" class="px-2 py-1 rounded ${u.restrictions?.message?'bg-red-500 text-white':'bg-dark-800'}">Msg</button>
-        <button onclick="toggleRestriction('${u.email}','listing')" class="px-2 py-1 rounded ${u.restrictions?.listing?'bg-red-500 text-white':'bg-dark-800'}">Sell</button>
-        <button onclick="toggleRestriction('${u.email}','purchase')" class="px-2 py-1 rounded ${u.restrictions?.purchase?'bg-red-500 text-white':'bg-dark-800'}">Buy</button>
-      </div>
-    </div>
-  `).join('');
+  document.getElementById('adminUsersList').innerHTML=list.map(u=>{
+    const safeEmail = u.email.replace(/[^a-zA-Z0-9]/g, '');
+    return `<div class="glass-light p-4 rounded-xl border border-white/5 mb-3"><div class="flex items-center justify-between mb-3"><div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor(u)}">${u.username.charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${u.username} ${u.banned?'<span class="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded ml-2">BAN</span>':''}</p><p class="text-xs text-dark-400">${u.email}</p><p class="text-xs text-brand-400">Balans: ${u.balance.toFixed(2)} ₼</p></div></div><div class="flex gap-2"><input type="number" placeholder="Yeni Balans" id="bal_${safeEmail}" class="input-field w-32 text-xs"><button onclick="adminModifyBalance('${u.email}')" class="btn-primary text-xs" style="width:auto;padding:8px 10px">SET</button></div></div><div class="flex gap-2 flex-wrap border-t border-white/5 pt-3"><button onclick="toggleBan('${u.email}')" class="text-xs px-3 py-1.5 rounded-lg ${u.banned?'bg-green-500 text-white':'bg-red-500 text-white'}">${u.banned?'Banı Aç':'Banla'}</button><button onclick="toggleRestriction('${u.email}','message')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.message?'bg-red-500 text-white':'bg-dark-800'}">Mesaj Qadağan</button><button onclick="toggleRestriction('${u.email}','listing')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.listing?'bg-red-500 text-white':'bg-dark-800'}">Elan Qadağan</button><button onclick="toggleRestriction('${u.email}','purchase')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.purchase?'bg-red-500 text-white':'bg-dark-800'}">Alış Qadağan</button></div></div>`;
+  }).join('');
 }
 function adminModifyBalance(email){
   let u=users.find(x=>x.email===email);if(!u)return;
-  let val=parseFloat(document.getElementById('bal_'+email).value);
+  const safeId = 'bal_' + email.replace(/[^a-zA-Z0-9]/g, '');
+  let val=parseFloat(document.getElementById(safeId).value);
   if(isNaN(val))return;
   u.balance=val; 
   localStorage.setItem('randox_users',JSON.stringify(users));
@@ -935,7 +1002,6 @@ function refundBuyer(id){
   localStorage.setItem('randox_chats',JSON.stringify(chats));
   switchAdminTab('disputes');showToast('Pul alıcıya qaytarıldı.','success');
 }
-let currentSupportUser=null;
 function adminOpenSupport(email){
   currentSupportUser=email;
   let c=supportChats[email];
@@ -951,6 +1017,7 @@ function adminOpenSupport(email){
 function adminSendSupport(){
   if(!currentSupportUser)return;
   let inp=document.getElementById('adminSupportInput');let text=inp.value.trim();if(!text)return;
+  if(!supportChats[currentSupportUser]) supportChats[currentSupportUser] = {messages:[]};
   supportChats[currentSupportUser].messages.push({sender:'admin',text,time:new Date().toISOString()});
   localStorage.setItem('randox_support_chats',JSON.stringify(supportChats));
   inp.value='';adminOpenSupport(currentSupportUser);
@@ -962,6 +1029,25 @@ function renderAdminSpy(){
     let b=users.find(u=>u.email===c.buyerEmail);let s=users.find(u=>u.email===c.sellerEmail);
     return `<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between mb-2"><span class="text-xs text-brand-400">${b?.username||c.buyerEmail}</span><span class="text-xs text-dark-400">↔</span><span class="text-xs text-yellow-400">${s?.username||c.sellerEmail}</span></div><div class="space-y-1 max-h-40 overflow-y-auto">${c.messages.map(m=>`<p class="text-xs ${m.sender==='system'?'text-dark-500':m.sender===c.buyerEmail?'text-dark-300':'text-white'}">${m.sender}: ${m.text}</p>`).join('')}</div></div>`;
   }).join('')||'<p class="text-center text-dark-400 py-8">Söhbət tapılmadı.</p>';
+}
+
+// Admin Notification Sender
+function adminSendNotif(){
+  const target = document.getElementById('adminNotifTarget').value;
+  const text = document.getElementById('adminNotifText').value.trim();
+  if(!text){ showToast('Mesaj boşdur', 'error'); return; }
+  if(target === 'all'){
+    users.forEach(u => {
+      if(!notifications[u.email]) notifications[u.email] = [];
+      notifications[u.email].push({text, time: new Date().toISOString(), read: false});
+    });
+  } else {
+    if(!notifications[target]) notifications[target] = [];
+    notifications[target].push({text, time: new Date().toISOString(), read: false});
+  }
+  localStorage.setItem('randox_notifications', JSON.stringify(notifications));
+  showToast('Bildirim uğurla göndərildi!', 'success');
+  document.getElementById('adminNotifText').value = '';
 }
 
 /* ===== PROFİL ===== */
