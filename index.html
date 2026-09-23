@@ -54,6 +54,8 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .btn-primary:hover{box-shadow:0 0 20px rgba(34,197,94,.5);transform:translateY(-2px)}
 .btn-primary:active{transform:translateY(0) scale(.98)}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
+.btn-danger{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-weight:600;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%}
+.btn-danger:hover{box-shadow:0 0 20px rgba(239,68,68,.5);transform:translateY(-2px)}
 .btn-google{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#f8fafc;font-weight:500;padding:12px 24px;border-radius:12px;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
 .btn-google:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
 
@@ -79,25 +81,58 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .chat-bubble.me{background: linear-gradient(135deg, #16a34a, #22c55e); color: #fff; border-bottom-right-radius: 4px; margin-left: auto; box-shadow: 0 4px 15px rgba(34,197,94,0.2);}
 .chat-bubble.them{background: rgba(255,255,255,0.06); color: #f8fafc; border-bottom-left-radius: 4px;}
 .chat-bubble.sys{background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #4ade80; font-size: 12px; text-align: center; border-radius: 12px; margin: 10px auto; max-width: 90%;}
-.msg-report-btn{position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#dc2626;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:10px}
-.chat-bubble.them:hover .msg-report-btn{display:flex}
-
-/* BAN SCREEN */
-.ban-screen{position:fixed;inset:0;background:#020617;z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
-.ban-screen.active{display:flex}
+.report-btn{position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#ef4444;color:#fff;border-radius:50%;display:none;align-items:center;justify-content:center;font-size:10px;cursor:pointer;box-shadow:0 0 10px rgba(239,68,68,.5)}
+.chat-wrapper:hover .report-btn{display:flex}
+.admin-tab{padding:10px 20px;border-radius:10px;font-size:14px;font-weight:500;cursor:pointer;transition:all .3s;background:rgba(15,23,42,.5);border:1px solid rgba(255,255,255,.05)}
+.admin-tab.active{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.4)}
 </style>
 </head>
 <body class="bg-grid">
 
 <!-- BAN SCREEN -->
-<div id="banScreen" class="ban-screen">
+<div id="banScreen" class="fixed inset-0 z-[9999] hidden flex-col items-center justify-center bg-dark-950 text-center p-6">
   <div class="brand-logo mb-6" style="width:80px;height:80px"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div>
-  <h1 class="text-4xl font-bold text-red-500 mb-4">Hesabınız Bloklanıb</h1>
-  <p class="text-dark-400 max-w-md">Randox Platformasında qaydaları pozduğunuz üçün hesabınız admin tərəfindən bloklanmışdır. Əgər bu səhvdirsə, rəsmi Telegram kanalımız vasitəsilə əlaqə saxlayın.</p>
+  <h1 class="text-4xl md:text-5xl font-bold text-red-500 mb-2 tracking-tight">Hesab Bloklanıb</h1>
+  <p class="text-dark-400 max-w-md">Sizin hesabınız Randox təhlükəsizlik sistemi tərəfindən qəti olaraq bloklanmışdır. Əlavə məlumat üçün canlı dəstəklə əlaqə saxlayın.</p>
 </div>
 
 <div id="toastContainer" class="fixed top-24 right-6 z-[200] flex flex-col gap-3"></div>
 
+<!-- REPORT MODAL -->
+<div id="reportModal" class="fixed inset-0 z-[180] hidden">
+  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeReportModal()"></div>
+  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-2xl border border-white/5 p-8 shadow-2xl">
+    <h3 class="text-xl font-bold mb-4 flex items-center gap-2"><iconify-icon icon="mdi:flag-outline" class="text-red-400"></iconify-icon> Mesajı Şikayət Et</h3>
+    <textarea id="reportReason" class="input-field h-24 resize-none mb-4" placeholder="Şikayət səbəbinizi yazın..."></textarea>
+    <div class="flex gap-3">
+      <button onclick="closeReportModal()" class="flex-1 py-3 rounded-xl border border-white/10 text-sm font-medium hover:bg-white/5">Ləğv Et</button>
+      <button onclick="submitReport()" class="btn-danger">Göndər</button>
+    </div>
+  </div>
+</div>
+
+<!-- LIVE SUPPORT MODAL -->
+<div id="supportModal" class="fixed inset-0 z-[175] hidden">
+  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeSupport()"></div>
+  <div class="modal-content absolute inset-2 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full md:max-w-2xl h-full md:h-[80vh] bg-dark-900 rounded-2xl border border-white/5 overflow-hidden flex flex-col shadow-2xl">
+    <div class="p-4 border-b border-white/5 flex items-center justify-between glass">
+      <div class="flex items-center gap-3">
+        <div class="avatar-sm text-white bg-brand-500"><iconify-icon icon="mdi:headset"></iconify-icon></div>
+        <div><p class="font-semibold text-sm">Canlı Dəstək</p><p class="text-xs text-brand-400">Online</p></div>
+      </div>
+      <button onclick="closeSupport()" class="p-2 hover:bg-white/5 rounded-lg"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button>
+    </div>
+    <div id="supportMessages" class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col"></div>
+    <div class="p-4 border-t border-white/5">
+      <div class="flex gap-2">
+        <input type="text" id="supportInput" class="input-field flex-1" placeholder="Mesajınızı yazın..." onkeydown="if(event.key==='Enter')sendSupport()">
+        <button onclick="sendSupport()" class="btn-primary" style="width:auto;padding:12px 20px"><iconify-icon icon="mdi:send"></iconify-icon></button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- LOGOUT MODAL -->
 <div id="logoutModal" class="fixed inset-0 z-[170] hidden">
   <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeLogoutModal()"></div>
   <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-dark-900 rounded-2xl border border-white/5 p-8 text-center shadow-2xl">
@@ -107,50 +142,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     <div class="flex gap-3">
       <button onclick="closeLogoutModal()" class="flex-1 py-3 rounded-xl border border-white/10 text-sm font-medium hover:bg-white/5 transition-all">Ləğv Et</button>
       <button onclick="confirmLogout()" class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-400 text-white text-sm font-semibold transition-all">Çıx</button>
-    </div>
-  </div>
-</div>
-
-<!-- DISPUTE MODAL -->
-<div id="disputeModal" class="fixed inset-0 z-[165] hidden">
-  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeDisputeModal()"></div>
-  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-3xl border border-white/5 p-8 shadow-2xl">
-    <h3 class="text-xl font-bold mb-4">Problem Bildir (Dispute)</h3>
-    <p class="text-dark-400 text-sm mb-4">Zəhmət olmasa probleminizi təsvir edin. Satıcı cavab verdənədək vəsait müvəqqəti dondurulacaq.</p>
-    <textarea id="disputeReason" class="input-field h-32 resize-none mb-4" placeholder="Probleminizi detallı şəkildə yazın..."></textarea>
-    <button onclick="submitDispute()" class="btn-primary bg-red-500" style="background:linear-gradient(135deg,#dc2626,#ef4444)">Bildir və Dondur</button>
-  </div>
-</div>
-
-<!-- REPORT MSG MODAL -->
-<div id="reportModal" class="fixed inset-0 z-[165] hidden">
-  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeReportModal()"></div>
-  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-3xl border border-white/5 p-8 shadow-2xl">
-    <h3 class="text-xl font-bold mb-4">Mesajı Şikayət Et</h3>
-    <input type="hidden" id="reportedMsgId">
-    <input type="hidden" id="reportedSenderId">
-    <textarea id="reportReason" class="input-field h-32 resize-none mb-4" placeholder="Şikayət səbəbi..."></textarea>
-    <button onclick="submitReport()" class="btn-primary bg-red-500" style="background:linear-gradient(135deg,#dc2626,#ef4444)">Şikayət Et</button>
-  </div>
-</div>
-
-<!-- LIVE SUPPORT MODAL -->
-<div id="supportModal" class="fixed inset-0 z-[160] hidden">
-  <div class="modal-overlay absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeSupportModal()"></div>
-  <div class="modal-content absolute inset-4 md:inset-8 lg:inset-y-8 lg:left-[20%] lg:right-[20%] bg-dark-900 rounded-3xl border border-white/5 overflow-hidden flex flex-col shadow-2xl">
-    <div class="p-4 border-b border-white/5 flex justify-between items-center glass">
-      <div class="flex items-center gap-3">
-        <div class="avatar-sm text-white bg-brand-500"><iconify-icon icon="mdi:headset"></iconify-icon></div>
-        <div><p class="font-semibold text-sm">Randox Live Dəstək</p><p class="text-xs text-brand-400">Online</p></div>
-      </div>
-      <button onclick="closeSupportModal()" class="p-2 hover:bg-white/5 rounded-lg transition-colors"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button>
-    </div>
-    <div id="supportMessages" class="flex-1 overflow-y-auto p-6 space-y-3 flex flex-col"></div>
-    <div class="p-4 border-t border-white/5 glass">
-      <div class="flex gap-2">
-        <input type="text" id="supportInput" class="input-field flex-1" placeholder="Mesajınızı yazın..." onkeydown="if(event.key==='Enter')sendSupportMsg()">
-        <button onclick="sendSupportMsg()" class="btn-primary" style="width:auto;padding:12px 20px"><iconify-icon icon="mdi:send"></iconify-icon></button>
-      </div>
     </div>
   </div>
 </div>
@@ -173,9 +164,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
         <iconify-icon icon="mdi:magnify" class="text-dark-400 text-lg"></iconify-icon>
         <input type="text" id="searchInput" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
       </div>
-      <button onclick="openSupportModal()" class="p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group">
-        <iconify-icon icon="mdi:lifebuoy" class="text-xl text-dark-300 group-hover:text-brand-400 transition-colors"></iconify-icon>
-      </button>
       <div id="userArea" class="relative"></div>
       <button onclick="toggleMobileMenu()" class="md:hidden p-2 glass rounded-xl"><iconify-icon icon="mdi:menu" class="text-xl"></iconify-icon></button>
     </div>
@@ -250,6 +238,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 
 <div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105] shadow-2xl"><div id="dropdownContent"></div></div>
 
+<!-- TAM EKRAN PREMIUM İLAN DETAL MODALI -->
 <div id="listingModal" class="fixed inset-0 z-[150] hidden">
   <div class="modal-overlay absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeListingModal()"></div>
   <div class="modal-content absolute inset-0 md:inset-4 lg:inset-8 bg-dark-900 rounded-3xl border border-white/5 overflow-hidden flex flex-col shadow-2xl">
@@ -266,7 +255,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
       <div>
         <div class="animate-up"><span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1.5 rounded-full border border-brand-500/20 inline-flex items-center gap-1.5"><iconify-icon icon="mdi:store" class="text-xs"></iconify-icon> Real Bazar Platformu</span></div>
         <h1 class="mt-6 text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight animate-up delay-1">Öz Məhsulunu<br><span class="shimmer-text">Sat Və Ya Al</span></h1>
-        <p class="mt-6 text-lg text-dark-400 leading-relaxed max-w-lg animate-up delay-2">İlk dəfə olaraq birbaşan alıcı və satıcı əlaqəsi. Avtomatik link ötürmə, real mesajlaşma, Escrow (Təhlükəsiz Ticarət) və premium interfeyslə məhsullarını sat.</p>
+        <p class="mt-6 text-lg text-dark-400 leading-relaxed max-w-lg animate-up delay-2">Escrow (Təhlükəsiz Alış) sistemi ilə pulunuz qoruma altındadır. Avtomatik link ötürmə, real mesajlaşma və premium interfeyslə məhsullarını sat.</p>
         <div class="mt-10 flex flex-wrap gap-4 animate-up delay-3">
           <button onclick="showSection('listings')" class="btn-primary flex items-center gap-2" style="width:auto;padding:16px 32px;font-size:16px">İlanları Kəşf Et <iconify-icon icon="mdi:arrow-right" class="text-lg"></iconify-icon></button>
           <button onclick="showSection('create')" class="glass hover:border-brand-500/30 font-semibold px-8 py-4 rounded-xl transition-all flex items-center gap-2"><iconify-icon icon="mdi:plus-circle" class="text-brand-400"></iconify-icon> İlan Paylaş</button>
@@ -274,7 +263,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
         <div class="mt-12 flex gap-8 animate-up delay-4">
           <div><span class="text-3xl font-bold text-brand-400">1000+</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İstifadəçi</p></div>
           <div class="w-px bg-white/10"></div>
-          <div><span class="text-3xl font-bold text-brand-400">24/7</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Avtomatik</p></div>
+          <div><span class="text-3xl font-bold text-brand-400">24/7</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Dəstək</p></div>
         </div>
       </div>
       <div class="relative animate-left delay-3 hidden lg:block">
@@ -311,7 +300,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     <div class="text-center mb-12"><span class="tag uppercase text-brand-400 tracking-widest">Yeni İlan</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">İlanını Yüklə</h2><p class="mt-2 text-dark-400">Məhsul məlumatlarını dəqiq və açıq şəkildə daxil et.</p></div>
     <div class="glass rounded-3xl p-8 border border-white/5 shadow-2xl">
       <div class="space-y-6">
-        <div class="text-center mb-4 p-4 glass-light rounded-xl"><p class="text-dark-400 text-sm mb-1">Cari Balans</p><p class="text-3xl font-bold text-brand-400" id="currentBalance">0.00 ₼</p><p class="text-xs text-dark-500 mt-1">Məhsul satıldığında komissiya (20%) kəsilir, qalan məbləğ sizə keçir.</p></div>
+        <div class="text-center mb-4 p-4 glass-light rounded-xl"><p class="text-dark-400 text-sm mb-1">Cari Balans</p><p class="text-3xl font-bold text-brand-400" id="currentBalance">0.00 ₼</p></div>
         <div><label class="text-xs text-dark-400 mb-1.5 block">Məhsul Adı</label><input type="text" id="createTitle" class="input-field" placeholder="Məsələn: Valorant Hesab v1"></div>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
           <div><label class="text-xs text-dark-400 mb-1.5 block">Kateqoriya</label>
@@ -327,7 +316,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
           <div><label class="text-xs text-dark-400 mb-1.5 block">Qiymət (AZN)</label><input type="number" id="createPrice" class="input-field" min="0.5" step="0.1" placeholder="5.00"></div>
         </div>
         <div><label class="text-xs text-dark-400 mb-1.5 block">Açıqlama</label><textarea id="createDesc" class="input-field h-24 resize-none" placeholder="Məhsul haqqında bütün detalları yaz. Səviyyə, rütbə, skinlər və s."></textarea></div>
-        <div><label class="text-xs text-dark-400 mb-1.5 block">Şəkil (URL və ya Yüklə)</label>
+        <div><label class="text-xs text-dark-400 mb-1.5 block">Şəkil</label>
           <div class="pp-upload-zone border-2 border-dashed border-white/10 rounded-xl p-5 text-center cursor-pointer hover:border-brand-500/40 transition-colors" onclick="document.getElementById('createImgFile').click()">
             <iconify-icon icon="mdi:cloud-upload" class="text-dark-400 text-3xl mb-2 block"></iconify-icon>
             <p class="text-sm text-dark-400">Şəkil yükləmək üçün tıklayın</p>
@@ -342,28 +331,24 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
             <div onclick="selectDelivery('link')" id="deliveryLink" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer transition-all hover:border-brand-500/40">
               <iconify-icon icon="mdi:link-variant" class="text-lg mb-1 text-brand-400 block"></iconify-icon>
               <span class="text-xs font-medium">Avtomatik Link</span>
-              <p class="text-[10px] text-dark-500 mt-1">Alıcı alınca avtomatik göndərilir</p>
             </div>
             <div onclick="selectDelivery('manual')" id="deliveryManual" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer transition-all hover:border-brand-500/40">
               <iconify-icon icon="mdi:handshake" class="text-lg mb-1 text-brand-400 block"></iconify-icon>
               <span class="text-xs font-medium">Manuel Əlaqə</span>
-              <p class="text-[10px] text-dark-500 mt-1">Söhbət vasitəsilə əlaqə</p>
             </div>
           </div>
         </div>
         <div id="linkStockArea" class="hidden">
           <label class="text-xs text-dark-400 mb-1.5 block">Stok Linkləri (Hər sətirdə bir link)</label>
-          <textarea id="createLinks" class="input-field h-32 resize-none font-mono text-xs" placeholder="https://link1.com/abc&#10;https://link2.com/def&#10;https://link3.com/ghi"></textarea>
-          <p class="text-xs text-dark-500 mt-1">Boş sətirlər avtomatik silinir. Hər alışda 1-ci link göndərilir.</p>
+          <textarea id="createLinks" class="input-field h-32 resize-none font-mono text-xs" placeholder="https://link1.com/abc&#10;https://link2.com/def"></textarea>
         </div>
         <div id="manualStockArea" class="hidden">
           <label class="text-xs text-dark-400 mb-1.5 block">Stok Sayı</label>
           <input type="number" id="createManualStock" class="input-field" min="1" placeholder="Məsələn: 5">
-          <p class="text-xs text-dark-500 mt-1">Hər alışda stok sayı 1 azalır.</p>
         </div>
         <div class="border border-white/10 rounded-xl p-5">
           <div class="flex justify-between items-center mb-3">
-            <label class="text-sm font-semibold">Xüsusiyyətlər (Opsional)</label>
+            <label class="text-sm font-semibold">Xüsusiyyətlər</label>
             <button onclick="addFeature()" class="text-brand-400 text-xs font-medium flex items-center gap-1 hover:text-brand-300"><iconify-icon icon="mdi:plus"></iconify-icon> Əlavə Et</button>
           </div>
           <div id="featuresContainer" class="space-y-2"></div>
@@ -399,11 +384,11 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 
 <section id="section-topup" class="hidden pt-24 pb-20 min-h-screen">
   <div class="max-w-3xl mx-auto px-6">
-    <div class="text-center mb-12"><span class="tag uppercase text-brand-400 tracking-widest">Balans</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Balans Yüklə</h2><p class="mt-2 text-dark-400">Məhsul almaq üçün balans yüklə</p></div>
+    <div class="text-center mb-12"><span class="tag uppercase text-brand-400 tracking-widest">Balans</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Balans Yüklə</h2></div>
     <div class="glass rounded-3xl p-8 border border-white/5 shadow-2xl">
       <div class="text-center mb-8"><p class="text-dark-400 text-sm mb-1">Cari Balans</p><p class="text-5xl font-bold text-brand-400" id="currentBalanceTop">0.00 ₼</p></div>
       <div class="mb-8">
-        <label class="text-sm text-dark-400 mb-2 block">Məbləği seçin və ya daxil edin (AZN)</label>
+        <label class="text-sm text-dark-400 mb-2 block">Məbləği daxil edin (AZN)</label>
         <input type="number" id="customAmountInput" min="1" step="0.01" placeholder="Məsələn: 5.50" class="input-field text-center text-2xl font-bold mb-4">
         <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
           <div onclick="setCustomAmount(5)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">5 ₼</p></div>
@@ -421,17 +406,17 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 
 <section id="section-admin" class="hidden pt-24 pb-20 min-h-screen">
   <div class="max-w-7xl mx-auto px-6">
-    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">İdarəetmə</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">God Mode Admin Panel</h2></div>
+    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">İdarəetmə</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Admin Paneli (God Mode)</h2></div>
     
-    <div class="flex gap-2 mb-6 border-b border-white/10 pb-2 overflow-x-auto">
-      <button onclick="switchAdminTab('users')" class="admin-tab-btn active text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors">İstifadəçilər</button>
-      <button onclick="switchAdminTab('disputes')" class="admin-tab-btn text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors text-dark-400">Disputelar</button>
-      <button onclick="switchAdminTab('reports')" class="admin-tab-btn text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors text-dark-400">Şikayətlər</button>
-      <button onclick="switchAdminTab('support')" class="admin-tab-btn text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors text-dark-400">Live Dəstək</button>
-      <button onclick="switchAdminTab('spy')" class="admin-tab-btn text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors text-dark-400">Mesaj İnspeksiyası</button>
+    <div class="flex gap-2 mb-6 flex-wrap">
+      <button onclick="switchAdminTab('users')" id="adminTabUsers" class="admin-tab active">İstifadəçilər</button>
+      <button onclick="switchAdminTab('disputes')" id="adminTabDisputes" class="admin-tab">Disputelər</button>
+      <button onclick="switchAdminTab('reports')" id="adminTabReports" class="admin-tab">Şikayətlər</button>
+      <button onclick="switchAdminTab('support')" id="adminTabSupport" class="admin-tab">Dəstək Mesajları</button>
+      <button onclick="switchAdminTab('spy')" id="adminTabSpy" class="admin-tab">Spy Mode</button>
     </div>
-
-    <div id="adminContent"></div>
+    
+    <div id="adminContent" class="glass rounded-2xl border border-white/5 p-6 shadow-2xl min-h-[400px]"></div>
   </div>
 </section>
 
@@ -445,7 +430,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
         <p class="text-dark-400 text-sm leading-relaxed">Real rəqəmsal məhsul bazarı.</p>
       </div>
       <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Platforma</h4><ul class="space-y-3"><li><a href="#" onclick="showSection('listings')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İlanlar</a></li><li><a href="#" onclick="showSection('create')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İlan Paylaş</a></li><li><a href="#" onclick="showSection('messages')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Mesajlar</a></li></ul></div>
-      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Dəstək</h4><ul class="space-y-3"><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">FAQ</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Əlaqə</a></li></ul></div>
+      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Dəstək</h4><ul class="space-y-3"><li><a href="#" onclick="openSupport()" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Canlı Dəstək</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">FAQ</a></li></ul></div>
       <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Qanun</h4><ul class="space-y-3"><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Məxfilik</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Şərtlər</a></li></ul></div>
     </div>
     <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
@@ -458,52 +443,54 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 /* ===== AYARLAR ===== */
 emailjs.init('ZaLCBng5Gicqv539R');
 const GOOGLE_CLIENT_ID = '523650358471-6m440tl0o89eq6balm1pe4uermmbiv88.apps.googleusercontent.com';
-const ADMIN_EMAILS = ['senin@email.com', 'admin2@gmail.com']; // ÖZ GMAİL ADRESLERİNİ ƏLAVƏ ET
-const COMMISSION_RATE = 0.20; // 20% Komissiya
-const ESCROW_HOURS = 24;
+const ADMIN_EMAILS = ['senin@email.com']; // BURAYA ÖZ GMAILini ƏLAVƏ ET. Birdən çox əlavə etmək olar.
+const COMMISSION_RATE = 0.20; 
 
 /* ===== STATE ===== */
 let currentUser = JSON.parse(localStorage.getItem('randox_user')) || null;
 let users = JSON.parse(localStorage.getItem('randox_users') || '[]');
 let listings = JSON.parse(localStorage.getItem('randox_listings') || '[]');
 let chats = JSON.parse(localStorage.getItem('randox_chats') || '{}');
-let transactions = JSON.parse(localStorage.getItem('randox_transactions') || '[]');
-let userReports = JSON.parse(localStorage.getItem('randox_reports') || '[]');
-let supportChats = JSON.parse(localStorage.getItem('randox_support') || '{}');
-let currentSection = 'home', selectedTopUpAmount = 0, selectedDeliveryMethod = null, featuresList = [], currentChatId = null, currentAdminTab = 'users', activeSupportChat = null, currentDisputeTx = null;
+let orders = JSON.parse(localStorage.getItem('randox_orders') || '[]');
+let reports = JSON.parse(localStorage.getItem('randox_reports') || '[]');
+let supportChats = JSON.parse(localStorage.getItem('randox_support_chats') || '{}');
+
+let currentSection = 'home', selectedTopUpAmount = 0, selectedDeliveryMethod = null, featuresList = [], currentChatId = null, currentAdminTab = 'users';
 let mobileMenuOpen = false, dropdownOpen = false, searchQuery = '';
 let vCode='',vEmail='',vAction='',vTempData={},resendCd=0,resendIv=null,googleInitialized=false;
+let reportingData = null;
 
 /* ===== GOOGLE & AVATAR ===== */
 function initGoogleSignIn(){if(googleInitialized||typeof google==='undefined'||!google.accounts)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleResponse,auto_select:false,cancel_on_tap_outside:true});googleInitialized=true;}
 function handleGoogleLogin(){if(!googleInitialized&&typeof google!=='undefined'&&google.accounts)initGoogleSignIn();if(googleInitialized)google.accounts.id.prompt();}
-function handleGoogleResponse(r){try{const p=JSON.parse(atob(r.credential.split('.')[1]));const email=p.email;const name=p.name||email.split('@')[0];let u=users.find(x=>x.email===email);if(!u){u={username:name,email,password:'g_'+Date.now(),balance:0,avatar:p.picture,createdAt:new Date().toISOString(),banned:false};users.push(u);localStorage.setItem('randox_users',JSON.stringify(users));}currentUser={...u};localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();checkBanAndInit();}catch(e){showToast('Google xətası','error');}}
+function handleGoogleResponse(r){try{const p=JSON.parse(atob(r.credential.split('.')[1]));const email=p.email;const name=p.name||email.split('@')[0];let u=users.find(x=>x.email===email);if(!u){u={username:name,email,password:'g_'+Date.now(),balance:0,avatar:p.picture,createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}};users.push(u);localStorage.setItem('randox_users',JSON.stringify(users));}currentUser={...u};localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();checkBanOnLogin();}catch(e){showToast('Google xətası','error');}}
 window.addEventListener('load',()=>setTimeout(initGoogleSignIn,500));
 function getAvatarColor(u){return u?`hsl(${(u.username||'K').charCodeAt(0)*37%360},60%,45%)`:'#22c55e';}
 
-/* ===== BAN CHECK ===== */
-function checkBanAndInit() {
-  const u = users.find(x => x.email === currentUser.email);
-  if (u && u.banned) {
-    document.getElementById('banScreen').classList.add('active');
-  } else {
-    document.getElementById('banScreen').classList.remove('active');
-    updateUserArea();
-    showToast('Xoş gəldin, ' + currentUser.username + '!', 'success');
+/* ===== BAN & RESTRICTION CHECKS ===== */
+function checkBanOnLogin() {
+  if(currentUser?.banned) {
+    document.getElementById('banScreen').classList.remove('hidden');
+    document.getElementById('banScreen').classList.add('flex');
+    return false;
   }
+  document.getElementById('banScreen').classList.add('hidden');
+  document.getElementById('banScreen').classList.remove('flex');
+  return true;
 }
 
 /* ===== NAVİGASYON ===== */
 function showSection(s){
+  if(currentUser?.banned){checkBanOnLogin();return;}
   document.querySelectorAll('main > section').forEach(el=>el.classList.add('hidden'));
   const sec=document.getElementById('section-'+s);if(sec){sec.classList.remove('hidden');sec.classList.add('animate-fade')}
   currentSection=s;window.scrollTo({top:0,behavior:'smooth'});
   if((s==='profile'||s==='create'||s==='messages')&&!currentUser){openAuthModal();showSection('home');return}
   if(s==='profile')renderProfile();
-  if(s==='create'){document.getElementById('currentBalance').textContent=(currentUser?.balance||0).toFixed(2)+' ₼';renderFeatures();}
+  if(s==='create'){if(currentUser?.restrictions?.listing){showToast('Sizə elan vermək qadağan edilib.','error');showSection('home');return;}document.getElementById('currentBalance').textContent=(currentUser?.balance||0).toFixed(2)+' ₼';renderFeatures();}
   if(s==='topup')document.getElementById('currentBalanceTop').textContent=(currentUser?.balance||0).toFixed(2)+' ₼';
   if(s==='messages')renderChatList();
-  if(s==='admin'&&ADMIN_EMAILS.includes(currentUser.email)){renderAdminPanel();}
+  if(s==='admin'&&ADMIN_EMAILS.includes(currentUser?.email))switchAdminTab('users');
 }
 function toggleMobileMenu(){const m=document.getElementById('mobileMenu');mobileMenuOpen=!mobileMenuOpen;m.classList.toggle('hidden',!mobileMenuOpen);m.classList.toggle('flex',mobileMenuOpen)}
 function handleSearch(q){searchQuery=q.toLowerCase().trim();if(currentSection!=='listings'&&searchQuery.length>0)showSection('listings');if(currentSection==='listings')renderListings();const i=document.getElementById('searchInput');if(i&&document.activeElement===i){const v=i.value;i.value='';i.value=v;}}
@@ -515,52 +502,19 @@ function addFeature(){featuresList.push({key:'',value:''});renderFeatures();}
 function renderFeatures(){const c=document.getElementById('featuresContainer');c.innerHTML=featuresList.map((f,i)=>`<div class="flex gap-2"><input type="text" class="input-field flex-1" placeholder="Ad (Məs: Səviyyə)" value="${f.key}" oninput="featuresList[${i}].key=this.value"><input type="text" class="input-field flex-1" placeholder="Dəyər (Məs: 75)" value="${f.value}" oninput="featuresList[${i}].value=this.value"><button onclick="featuresList.splice(${i},1);renderFeatures()" class="text-red-400 px-2"><iconify-icon icon="mdi:close"></iconify-icon></button></div>`).join('');}
 function submitListing(){
   if(!currentUser)return;
-  if(currentUser.restrictList){showToast('İlan paylaşmaq sizə qadağan edilib','error');return;}
-  const title=document.getElementById('createTitle').value.trim();
-  const cat=document.getElementById('createCategory').value;
-  const price=parseFloat(document.getElementById('createPrice').value);
-  const desc=document.getElementById('createDesc').value.trim();
-  const img=document.getElementById('createImg').value||`https://picsum.photos/seed/${Math.random()}/400/500`;
+  const title=document.getElementById('createTitle').value.trim();const cat=document.getElementById('createCategory').value;const price=parseFloat(document.getElementById('createPrice').value);const desc=document.getElementById('createDesc').value.trim();const img=document.getElementById('createImg').value||`https://picsum.photos/seed/${Math.random()}/400/500`;
   if(!title||!price||!desc){showToast('Bütün sahələri doldurun','error');return;}
   if(!selectedDeliveryMethod){showToast('Çatdırılma metodunu seçin','error');return;}
   let stockLinks=[], manualStock=0;
-  if(selectedDeliveryMethod==='link'){
-    const raw=document.getElementById('createLinks').value.trim().split('\n').filter(l=>l.trim()!=='');
-    if(raw.length===0){showToast('Ən azı 1 stok linki əlavə edin','error');return;}
-    stockLinks=raw;
-  }else{
-    manualStock=parseInt(document.getElementById('createManualStock').value)||0;
-    if(manualStock<1){showToast('Stok sayı 1-dən az ola bilməz','error');return;}
-  }
+  if(selectedDeliveryMethod==='link'){const raw=document.getElementById('createLinks').value.trim().split('\n').filter(l=>l.trim()!=='');if(raw.length===0){showToast('Ən azı 1 stok linki əlavə edin','error');return;}stockLinks=raw;}
+  else{manualStock=parseInt(document.getElementById('createManualStock').value)||0;if(manualStock<1){showToast('Stok sayı 1-dən az ola bilməz','error');return;}}
   const newListing={id:'l_'+Date.now(), title, cat, price, desc, img, sellerEmail:currentUser.email, sellerName:currentUser.username, sellerAvatar:currentUser.avatar||'', deliveryMethod:selectedDeliveryMethod, stockLinks, manualStock, features:featuresList.filter(f=>f.key&&f.value), soldCount:0, createdAt:new Date().toISOString()};
-  listings.unshift(newListing);
-  localStorage.setItem('randox_listings',JSON.stringify(listings));
-  showToast('İlan uğurla yayımlandı!','success');
-  document.getElementById('createTitle').value='';document.getElementById('createPrice').value='';document.getElementById('createDesc').value='';
-  document.getElementById('createImg').value='';document.getElementById('createImgName').textContent='';
-  featuresList=[];renderFeatures();selectedDeliveryMethod=null;selectDelivery('none');
-  showSection('listings');
+  listings.unshift(newListing);localStorage.setItem('randox_listings',JSON.stringify(listings));showToast('İlan uğurla yayımlandı!','success');
+  document.getElementById('createTitle').value='';document.getElementById('createPrice').value='';document.getElementById('createDesc').value='';document.getElementById('createImg').value='';document.getElementById('createImgName').textContent='';featuresList=[];renderFeatures();selectedDeliveryMethod=null;selectDelivery('none');showSection('listings');
 }
-
 function listingCard(l){
   const stock = l.deliveryMethod==='link' ? l.stockLinks.length : l.manualStock;
-  const stockHtml = stock>0 ? `<span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md font-medium">Stok: ${stock}</span>` : `<span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded-md font-medium">Bitdi</span>`;
-  return `<div class="game-card cursor-pointer" onclick="openListingModal('${l.id}')">
-    <div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all h-full flex flex-col">
-      <div class="relative h-44 overflow-hidden">
-        <img src="${l.img}" class="game-img w-full h-full object-cover" alt="${l.title}">
-        <div class="absolute top-2 left-2 tag uppercase text-dark-900 bg-white/90 px-2 py-0.5 rounded-md backdrop-blur-sm">${l.cat}</div>
-      </div>
-      <div class="p-4 flex flex-col flex-1">
-        <h3 class="font-semibold text-sm truncate">${l.title}</h3>
-        <p class="text-xs text-dark-500 mt-1 line-clamp-2 flex-1">${l.desc}</p>
-        <div class="flex items-center justify-between mt-3">
-          <span class="text-brand-400 font-bold text-base">${l.price.toFixed(2)} ₼</span>
-          ${stockHtml}
-        </div>
-      </div>
-    </div>
-  </div>`;
+  return `<div class="game-card cursor-pointer" onclick="openListingModal('${l.id}')"><div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all h-full flex flex-col"><div class="relative h-44 overflow-hidden"><img src="${l.img}" class="game-img w-full h-full object-cover" alt="${l.title}"><div class="absolute top-2 left-2 tag uppercase text-dark-900 bg-white/90 px-2 py-0.5 rounded-md">${l.cat}</div></div><div class="p-4 flex flex-col flex-1"><h3 class="font-semibold text-sm truncate">${l.title}</h3><p class="text-xs text-dark-500 mt-1 line-clamp-2 flex-1">${l.desc}</p><div class="flex items-center justify-between mt-3"><span class="text-brand-400 font-bold text-base">${l.price.toFixed(2)} ₼</span>${stock>0?`<span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">Stok: ${stock}</span>`:`<span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded-md">Bitdi</span>`}</div></div></div></div>`;
 }
 function renderListings(){
   let list=listings.filter(l=>l.deliveryMethod==='link'?l.stockLinks.length>0:l.manualStock>0);
@@ -572,122 +526,76 @@ function openListingModal(id){
   const l=listings.find(x=>x.id===id);if(!l)return;
   const stock=l.deliveryMethod==='link'?l.stockLinks.length:l.manualStock;
   const featuresHtml=l.features.length>0?`<div class="mt-6"><h4 class="font-bold mb-3 text-sm uppercase tracking-wider text-dark-400">Xüsusiyyətlər</h4><div class="grid grid-cols-2 gap-3">${l.features.map(f=>`<div class="glass-light p-3 rounded-lg border border-white/5"><p class="text-[10px] uppercase tracking-wider text-dark-500">${f.key}</p><p class="text-sm font-semibold mt-0.5">${f.value}</p></div>`).join('')}</div></div>`:'';
-  document.getElementById('modalBody').innerHTML=`
-    <div class="flex flex-col md:flex-row h-full">
-      <div class="md:w-1/2 h-64 md:h-full relative overflow-hidden bg-dark-950">
-        <img src="${l.img}" class="w-full h-full object-cover">
-        <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-dark-900 to-transparent"></div>
-      </div>
-      <div class="md:w-1/2 p-6 md:p-10 overflow-y-auto flex flex-col">
-        <div class="flex-1">
-          <span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">${l.cat}</span>
-          <h2 class="text-3xl md:text-4xl font-bold mt-4">${l.title}</h2>
-          <div class="flex items-center gap-3 mt-4 p-3 glass-light rounded-xl">
-            <div class="avatar-sm text-white" style="background:${getAvatarColor({username:l.sellerName})}">${l.sellerName.charAt(0).toUpperCase()}</div>
-            <div><p class="font-semibold text-sm">${l.sellerName}</p><p class="text-xs text-dark-400">${l.soldCount} Satış</p></div>
-          </div>
-          <div class="mt-6 p-5 glass rounded-xl flex justify-between items-center border border-white/5">
-            <div><p class="text-xs uppercase tracking-wider text-dark-500">Qiymət</p><p class="text-3xl font-bold text-brand-400">${l.price.toFixed(2)} ₼</p></div>
-            <div class="text-right"><p class="text-xs uppercase tracking-wider text-dark-500">Stokda</p><p class="text-2xl font-bold ${stock>0?'text-white':'text-red-400'}">${stock>0?stock:'Bitdi'}</p></div>
-          </div>
-          <div class="mt-6"><h4 class="font-bold mb-2 text-sm uppercase tracking-wider text-dark-400">Açıqlama</h4><p class="text-dark-300 text-sm leading-relaxed whitespace-pre-wrap">${l.desc}</p></div>
-          ${featuresHtml}
-        </div>
-        <div class="mt-8 flex gap-3 sticky bottom-0 bg-dark-900/80 backdrop-blur-sm pt-4 -mx-6 md:-mx-10 px-6 md:px-10 pb-1">
-          <button onclick="buyListing('${l.id}')" class="btn-primary flex-1 text-base ${stock===0?'opacity-40 pointer-events-none':''}">${stock>0?'Təhlükəsiz Satın Al (Escrow)':'Stok Bitdi'}</button>
-          <button onclick="contactSeller('${l.id}')" class="glass hover:border-brand-500/30 px-6 py-3 rounded-xl text-sm font-medium transition-all flex items-center gap-2"><iconify-icon icon="mdi:chat-processing-outline" class="text-lg"></iconify-icon></button>
-        </div>
-      </div>
-    </div>`;
+  document.getElementById('modalBody').innerHTML=`<div class="flex flex-col md:flex-row h-full"><div class="md:w-1/2 h-64 md:h-full relative overflow-hidden bg-dark-950"><img src="${l.img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-dark-900 to-transparent"></div></div><div class="md:w-1/2 p-6 md:p-10 overflow-y-auto flex flex-col"><div class="flex-1"><span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">${l.cat}</span><h2 class="text-3xl md:text-4xl font-bold mt-4">${l.title}</h2><div class="flex items-center gap-3 mt-4 p-3 glass-light rounded-xl"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:l.sellerName})}">${l.sellerName.charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${l.sellerName}</p><p class="text-xs text-dark-400">${l.soldCount} Satış</p></div></div><div class="mt-6 p-5 glass rounded-xl flex justify-between items-center border border-white/5"><div><p class="text-xs uppercase tracking-wider text-dark-500">Qiymət</p><p class="text-3xl font-bold text-brand-400">${l.price.toFixed(2)} ₼</p></div><div class="text-right"><p class="text-xs uppercase tracking-wider text-dark-500">Stokda</p><p class="text-2xl font-bold ${stock>0?'text-white':'text-red-400'}">${stock>0?stock:'Bitdi'}</p></div></div><div class="mt-6"><h4 class="font-bold mb-2 text-sm uppercase tracking-wider text-dark-400">Açıqlama</h4><p class="text-dark-300 text-sm leading-relaxed whitespace-pre-wrap">${l.desc}</p></div>${featuresHtml}</div><div class="mt-8 flex gap-3 sticky bottom-0 bg-dark-900/80 backdrop-blur-sm pt-4 -mx-6 md:-mx-10 px-6 md:px-10 pb-1"><button onclick="buyListing('${l.id}')" class="btn-primary flex-1 text-base ${stock===0||currentUser?.restrictions?.purchase?'opacity-40 pointer-events-none':''}">${stock>0?'Təhlükəsiz Satın Al (Escrow)':'Stok Bitdi'}</button><button onclick="contactSeller('${l.id}')" class="glass hover:border-brand-500/30 px-6 py-3 rounded-xl text-sm font-medium transition-all flex items-center gap-2"><iconify-icon icon="mdi:chat-processing-outline" class="text-lg"></iconify-icon></button></div></div></div>`;
   document.getElementById('listingModal').classList.remove('hidden');document.body.style.overflow='hidden';
 }
 function closeListingModal(){document.getElementById('listingModal').classList.add('hidden');document.body.style.overflow='';}
 
 /* ===== ESCROW & SATIN ALMA ===== */
 function buyListing(id){
-  if(currentUser.restrictBuy){showToast('Satın almaq sizə qadağan edilib','error');return;}
+  if(currentUser?.restrictions?.purchase){showToast('Sizə satın almaq qadağan edilib.','error');return;}
   const l=listings.find(x=>x.id===id);if(!l)return;
   const stock=l.deliveryMethod==='link'?l.stockLinks.length:l.manualStock;
   if(stock===0){showToast('Stok bitib','error');return;}
-  if(currentUser.balance<l.price){showToast('Balansınız çatışmır. Zəhmət olmasa balans yükləyin.','error');showSection('topup');return;}
+  if(currentUser.balance<l.price){showToast('Balansınız çatışmır.','error');showSection('topup');return;}
 
-  currentUser.balance-=l.price;
-  const tx={id:'tx_'+Date.now(),listingId:l.id,title:l.title,buyerEmail:currentUser.email,sellerEmail:l.sellerEmail,amount:l.price,status:'escrow',createdAt:Date.now()};
-  transactions.push(tx);
-
+  currentUser.balance-=l.price;localStorage.setItem('randox_user',JSON.stringify(currentUser));
   let deliveredItem='';
-  if(l.deliveryMethod==='link'){
-    deliveredItem=l.stockLinks.shift();
-    l.soldCount++;
-  }else{
-    l.manualStock--;
-    l.soldCount++;
-    deliveredItem='Manuel təhvil. Satıcı ilə əlaqə saxlayın.';
-  }
+  if(l.deliveryMethod==='link'){deliveredItem=l.stockLinks.shift();l.soldCount++;}else{l.manualStock--;l.soldCount++;deliveredItem='Manuel təhvil. Satıcı ilə əlaqə saxlayın.';}
   localStorage.setItem('randox_listings',JSON.stringify(listings));
-  localStorage.setItem('randox_user',JSON.stringify(currentUser));
-  const seller=users.find(u=>u.email===l.sellerEmail);
-  if(seller){seller.balance=seller.balance||0;} // balansı sonra update edirik escrow bitende
-  localStorage.setItem('randox_users',JSON.stringify(users));
 
   const chatId=`${currentUser.email}_${l.sellerEmail}_${l.id}`;
-  if(!chats[chatId]){chats[chatId]={id:chatId,listingId:l.id,listingTitle:l.title,buyerEmail:currentUser.email,sellerEmail:l.sellerEmail,txId:tx.id,messages:[]};}
-  chats[chatId].messages.push({sender:'system',text:`Sifariş tamamlandı! Ödəniş Escrow'da (Təhlükəsiz trade) saxlanılır. 24 saat ərzində təsdiqləsəniz və ya vaxt bitərsə, vəsait satıcıya keçəcək.`,time:new Date().toISOString(),txAction:'escrow_pending'});
+  if(!chats[chatId]){chats[chatId]={id:chatId,listingId:l.id,listingTitle:l.title,buyerEmail:currentUser.email,sellerEmail:l.sellerEmail,messages:[]};}
+  
+  const order={id:'o_'+Date.now(), chatId:chatId, listingId:l.id, listingTitle:l.title, buyerEmail:currentUser.email, sellerEmail:l.sellerEmail, amount:l.price, commission:l.price*COMMISSION_RATE, status:'escrow', expireTime:Date.now()+(24*60*60*1000), disputeReason:null, counterReason:null};
+  orders.push(order);localStorage.setItem('randox_orders',JSON.stringify(orders));
+
+  chats[chatId].messages.push({sender:'system',text:`Sifariş tamamlandı! ${l.price} AZN təhlükəsiz şəkildə saxlanılır (Escrow). Məhsulu qəbul edəndə təsdiqləyin.`,orderId:order.id,time:new Date().toISOString()});
   if(deliveredItem){chats[chatId].messages.push({sender:'system',text:`Avtomatik Çatdırılma:\n${deliveredItem}`,time:new Date().toISOString()});}
   localStorage.setItem('randox_chats',JSON.stringify(chats));
-  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
 
-  updateUserArea();closeListingModal();showSection('messages');openChat(chatId);
-  showToast('Satın alma uğurlu! Vəsait Escrow'da donduruldu.','success');
+  updateUserArea();closeListingModal();showSection('messages');openChat(chatId);showToast('Satın alma uğurlu! Pul Escrow-da saxlanılır.','success');
 }
 
-function confirmEscrow(txId){
-  let tx=transactions.find(t=>t.id===txId);if(!tx)return;
-  tx.status='completed';tx.resolvedAt=Date.now();
-  const seller=users.find(u=>u.email===tx.sellerEmail);
-  if(seller){seller.balance=(seller.balance||0)+(tx.amount*(1-COMMISSION_RATE));}
+function confirmDelivery(orderId){
+  let order=orders.find(o=>o.id===orderId);if(!order||order.status!=='escrow')return;
+  order.status='completed';
+  let seller=users.find(u=>u.email===order.sellerEmail);
+  if(seller){seller.balance+=order.amount-order.commission;}
   localStorage.setItem('randox_users',JSON.stringify(users));
-  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
-  // add system msg
-  const chat=Object.values(chats).find(c=>c.txId===txId);
-  if(chat){
-    chat.messages.push({sender:'system',text:'Alıcı təhveri təsdiqlədi! Vəsait satıcının balansına keçdi.',time:new Date().toISOString()});
-    localStorage.setItem('randox_chats',JSON.stringify(chats));
-    if(currentChatId===chat.id)openChat(chat.id);
-  }
+  localStorage.setItem('randox_orders',JSON.stringify(orders));
+  chats[order.chatId].messages.push({sender:'system',text:`Alıcı təsdiqlədi. ${order.amount} AZN-dən ${order.amount-order.commission} AZN satıcıya köçürüldü.`,orderId:order.id,time:new Date().toISOString()});
+  localStorage.setItem('randox_chats',JSON.stringify(chats));
+  openChat(order.chatId);showToast('Təsdiqləndi!','success');
 }
-function openDisputeModal(txId){
-  currentDisputeTx=txId;
-  document.getElementById('disputeModal').classList.remove('hidden');
+function disputeOrder(orderId){
+  let reason=prompt("Etiraz səbəbinizi qeyd edin:");
+  if(!reason)return;
+  let order=orders.find(o=>o.id===orderId);if(!order||order.status!=='escrow')return;
+  order.status='disputed';order.disputeReason=reason;
+  localStorage.setItem('randox_orders',JSON.stringify(orders));
+  chats[order.chatId].messages.push({sender:'system',text:`Alıcı etiraz etdi: "${reason}". Ödəniş donduruldu.`,orderId:order.id,time:new Date().toISOString()});
+  localStorage.setItem('randox_chats',JSON.stringify(chats));
+  openChat(order.chatId);showToast('Etiraz qeydə alındı.','info');
 }
-function closeDisputeModal(){document.getElementById('disputeModal').classList.add('hidden');}
-function submitDispute(){
-  const reason=document.getElementById('disputeReason').value.trim();
-  if(!reason){showToast('Səbəbi daxil edin','error');return;}
-  let tx=transactions.find(t=>t.id===currentDisputeTx);if(!tx)return;
-  tx.status='disputed_buyer';tx.reason=reason;
-  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
-  const chat=Object.values(chats).find(c=>c.txId===tx.id);
-  if(chat){
-    chat.messages.push({sender:'system',text:`Alıcı problemi bildirdi (Dispute): ${reason}. Vəsait donduruldu. Satıcı cavab verməlidir.`,time:new Date().toISOString()});
-    localStorage.setItem('randox_chats',JSON.stringify(chats));
-    if(currentChatId===chat.id)openChat(chat.id);
-  }
-  closeDisputeModal();showToast('Dispute açıldı. Adminə yönləndirildi.','info');
-}
-function counterDispute(txId){
-  let tx=transactions.find(t=>t.id===txId);if(!tx)return;
-  tx.status='admin_review';tx.sellerCounter=true;
-  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
-  const chat=Object.values(chats).find(c=>c.txId===txId);
-  if(chat){
-    chat.messages.push({sender:'system',text:'Satıcı iddia etdi ki, məhsulu düzgün verib. Adminə yönləndirildi.',time:new Date().toISOString()});
-    localStorage.setItem('randox_chats',JSON.stringify(chats));
-    if(currentChatId===chat.id)openChat(chat.id);
-  }
+function counterDispute(orderId){
+  let reason=prompt("Sübutunuzu və izahınızı yazın:");
+  if(!reason)return;
+  let order=orders.find(o=>o.id===orderId);if(!order||order.status!=='disputed')return;
+  order.status='admin_review';order.counterReason=reason;
+  localStorage.setItem('randox_orders',JSON.stringify(orders));
+  chats[order.chatId].messages.push({sender:'system',text:`Satıcı etiraza cavab verdi: "${reason}". Admin baxışına göndərildi.`,orderId:order.id,time:new Date().toISOString()});
+  localStorage.setItem('randox_chats',JSON.stringify(chats));
+  openChat(order.chatId);showToast('Admin baxışına göndərildi.','info');
 }
 
-/* ===== MESAJLAŞMA ===== */
+/* ===== DM SİSTEMİ ===== */
+function contactSeller(id){
+  const l=listings.find(x=>x.id===id);if(!l)return;
+  const chatId=`${currentUser.email}_${l.sellerEmail}_${l.id}`;
+  if(!chats[chatId]){chats[chatId]={id:chatId,listingId:l.id,listingTitle:l.title,buyerEmail:currentUser.email,sellerEmail:l.sellerEmail,messages:[]};chats[chatId].messages.push({sender:'system',text:`${l.title} haqqında sorğu başladı.`,time:new Date().toISOString()});localStorage.setItem('randox_chats',JSON.stringify(chats));}
+  closeListingModal();showSection('messages');openChat(chatId);
+}
 function renderChatList(){
   const listEl=document.getElementById('chatList');
   const myChats=Object.values(chats).filter(c=>c.buyerEmail===currentUser.email||c.sellerEmail===currentUser.email);
@@ -696,15 +604,7 @@ function renderChatList(){
     const lastMsg=c.messages[c.messages.length-1];
     const otherEmail=c.buyerEmail===currentUser.email?c.sellerEmail:c.buyerEmail;
     const otherUser=users.find(u=>u.email===otherEmail);
-    return `<div onclick="openChat('${c.id}')" class="p-4 border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors ${currentChatId===c.id?'bg-white/5 border-l-4 border-l-brand-500':''}">
-      <div class="flex items-center gap-3">
-        <div class="avatar-sm text-white" style="background:${getAvatarColor({username:otherUser?.username||otherEmail})}">${(otherUser?.username||otherEmail).charAt(0).toUpperCase()}</div>
-        <div class="flex-1 min-w-0">
-          <p class="font-semibold text-sm truncate">${otherUser?.username||otherEmail}</p>
-          <p class="text-xs text-dark-500 truncate">${lastMsg?.text||'Söhbət başladı'}</p>
-        </div>
-      </div>
-    </div>`;
+    return `<div onclick="openChat('${c.id}')" class="p-4 border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors ${currentChatId===c.id?'bg-white/5 border-l-4 border-l-brand-500':''}"><div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:otherUser?.username||otherEmail})}">${(otherUser?.username||otherEmail).charAt(0).toUpperCase()}</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">${otherUser?.username||otherEmail}</p><p class="text-xs text-dark-500 truncate">${lastMsg?.text||'Söhbət başladı'}</p></div></div></div>`;
   }).join('');
 }
 function openChat(chatId){
@@ -714,90 +614,87 @@ function openChat(chatId){
   const otherUser=users.find(u=>u.email===otherEmail);
   document.getElementById('chatHeader').classList.remove('hidden');
   document.getElementById('chatHeader').innerHTML=`<div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:otherUser?.username||otherEmail})}">${(otherUser?.username||otherEmail).charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${otherUser?.username||otherEmail}</p><p class="text-xs text-brand-400">${c.listingTitle}</p></div></div>`;
-  document.getElementById('chatInputArea').classList.remove('hidden');
-  
-  let escrowActionsHtml='';
-  if(c.txId){
-    const tx=transactions.find(t=>t.id===c.txId);
-    if(tx){
-      if(tx.status==='escrow' && currentUser.email===tx.buyerEmail){
-        escrowActionsHtml=`<div class="flex gap-2 p-3 glass-light rounded-xl mb-4 border border-brand-500/20"><button onclick="confirmEscrow('${tx.id}')" class="btn-primary text-xs" style="padding:8px 16px">✔ Təhveri Təsdiqlə</button><button onclick="openDisputeModal('${tx.id}')" class="btn-primary text-xs" style="padding:8px 16px;background:linear-gradient(135deg,#dc2626,#ef4444)">❌ Problem Var (Dispute)</button></div>`;
-      } else if(tx.status==='disputed_buyer' && currentUser.email===tx.sellerEmail){
-        escrowActionsHtml=`<div class="flex gap-2 p-3 glass-light rounded-xl mb-4 border border-red-500/30"><p class="text-xs text-red-400 self-center">Alıcı disputedi. Öz tərəfinizi müdafiə edin:</p><button onclick="counterDispute('${tx.id}')" class="btn-primary text-xs" style="padding:8px 16px;background:linear-gradient(135deg,#3b82f6,#2563eb)">Mənim haqqım var (Cavab ver)</button></div>`;
-      } else if(tx.status==='admin_review'){
-        escrowActionsHtml=`<div class="p-3 glass-light rounded-xl mb-4 border border-yellow-500/30"><p class="text-xs text-yellow-400">Bu sifariş admin tərəfindən incələnir.</p></div>`;
-      } else if(tx.status==='completed'){
-        escrowActionsHtml=`<div class="p-3 glass-light rounded-xl mb-4 border border-brand-500/30"><p class="text-xs text-brand-400">Təhveri təsdiqləndi. Ticarət tamamlandı.</p></div>`;
-      }
-    }
-  }
-
+  document.getElementById('chatInputArea').classList.toggle('hidden', currentUser.restrictions?.message);
   const msgEl=document.getElementById('chatMessages');
-  msgEl.innerHTML=escrowActionsHtml+c.messages.map((m,idx)=>{
-    if(m.sender==='system')return `<div class="chat-bubble sys">${m.text.replace(/\n/g,'<br>')}</div>`;
+  msgEl.innerHTML=c.messages.map((m,i)=>{
+    if(m.sender==='system'){
+      let btns='';
+      if(m.orderId){
+        let o=orders.find(x=>x.id===m.orderId);
+        if(o){
+          if(o.status==='escrow'&&currentUser.email===o.buyerEmail){
+            btns=`<div class="flex gap-2 mt-2 justify-center"><button onclick="confirmDelivery('${o.id}')" class="btn-primary" style="width:auto;padding:6px 12px">✔ Təsdiqlə</button><button onclick="disputeOrder('${o.id}')" class="btn-danger" style="width:auto;padding:6px 12px">❌ Etiraz</button></div>`;
+            let diff=o.expireTime-Date.now();
+            if(diff>0){btns+=`<p class="text-[10px] text-yellow-400 mt-1 text-center">Avto-tamamlanma: ${Math.floor(diff/3600000)}s ${Math.floor((diff%3600000)/60000)}d</p>`;}
+          }else if(o.status==='escrow'&&currentUser.email===o.sellerEmail){
+            btns=`<p class="text-[10px] text-yellow-400 mt-1 text-center">Alıcı təsdiqi gözlənilir...</p>`;
+          }else if(o.status==='disputed'&&currentUser.email===o.sellerEmail){
+            btns=`<button onclick="counterDispute('${o.id}')" class="btn-primary mt-2" style="width:auto;padding:6px 12px">⚖ Müqavimət Göstər</button>`;
+          }else if(o.status==='admin_review'){
+            btns=`<p class="text-[10px] text-orange-400 mt-1 text-center">Admin baxışı...</p>`;
+          }else if(o.status==='completed'){
+            btns=`<p class="text-[10px] text-brand-400 mt-1 text-center">Tamamlandı</p>`;
+          }else if(o.status==='refunded'){
+            btns=`<p class="text-[10px] text-blue-400 mt-1 text-center">Pul qaytarıldı</p>`;
+          }
+        }
+      }
+      return `<div class="chat-bubble sys">${m.text.replace(/\n/g,'<br>')}${btns}</div>`;
+    }
     const isMe=m.sender===currentUser.email;
-    return `<div class="flex ${isMe?'justify-end':'justify-start'} relative group">
-      <div class="chat-bubble ${isMe?'me':'them'}">${m.text.replace(/\n/g,'<br>')}</div>
-      ${!isMe?`<div class="msg-report-btn" onclick="openReportModal('${idx}','${m.sender}')"><iconify-icon icon="mdi:flag"></iconify-icon></div>`:''}
-    </div>`;
+    const reportBtn = !isMe ? `<div onclick="openReportModal('${m.sender}','${encodeURIComponent(m.text)}')" class="report-btn"><iconify-icon icon="mdi:flag"></iconify-icon></div>` : '';
+    return `<div class="chat-wrapper relative flex ${isMe?'justify-end':'justify-start'}"><div class="chat-bubble ${isMe?'me':'them'}">${m.text.replace(/\n/g,'<br>')}</div>${reportBtn}</div>`;
   }).join('');
   msgEl.scrollTop=msgEl.scrollHeight;
 }
 function sendMessage(){
-  if(currentUser.restrictMsg){showToast('Mesaj göndərmək sizə qadağan edilib','error');return;}
-  if(!currentChatId)return;
-  const inp=document.getElementById('msgInput');
-  const text=inp.value.trim();if(!text)return;
-  chats[currentChatId].messages.push({sender:currentUser.email,text,time:new Date().toISOString()});
-  localStorage.setItem('randox_chats',JSON.stringify(chats));
-  inp.value='';openChat(currentChatId);
+  if(currentUser?.restrictions?.message){showToast('Sizə mesaj göndərmək qadağan edilib.','error');return;}
+  if(!currentChatId)return;const inp=document.getElementById('msgInput');const text=inp.value.trim();if(!text)return;
+  chats[currentChatId].messages.push({sender:currentUser.email,text,time:new Date().toISOString()});localStorage.setItem('randox_chats',JSON.stringify(chats));inp.value='';openChat(currentChatId);
 }
 setInterval(()=>{if(currentSection==='messages'&&currentChatId)openChat(currentChatId);if(currentSection==='messages')renderChatList();},3000);
 
-/* ===== REPORT MESAJ ===== */
-function openReportModal(msgId,senderId){
-  document.getElementById('reportedMsgId').value=msgId;
-  document.getElementById('reportedSenderId').value=senderId;
+/* ===== REPORT MODAL ===== */
+function openReportModal(reportedEmail, msgText){
+  reportingData = {reportedEmail, msgText: decodeURIComponent(msgText), reporterEmail: currentUser.email};
   document.getElementById('reportModal').classList.remove('hidden');
 }
 function closeReportModal(){document.getElementById('reportModal').classList.add('hidden');}
 function submitReport(){
-  const msgId=document.getElementById('reportedMsgId').value;
-  const senderId=document.getElementById('reportedSenderId').value;
-  const reason=document.getElementById('reportReason').value.trim();
-  if(!reason){showToast('Səbəb daxil edin','error');return;}
-  userReports.push({id:'r_'+Date.now(),reporterEmail:currentUser.email,senderId,msgId,reason,date:new Date().toISOString(),chatId:currentChatId});
-  localStorage.setItem('randox_reports',JSON.stringify(userReports));
-  closeReportModal();showToast('Şikayət göndərildi','success');
+  const reason=document.getElementById('reportReason').value.trim();if(!reason){showToast('Səbəb qeyd edin','error');return;}
+  reports.push({id:'r_'+Date.now(), ...reportingData, reason, time:new Date().toISOString(), status:'pending'});
+  localStorage.setItem('randox_reports',JSON.stringify(reports));
+  closeReportModal();document.getElementById('reportReason').value='';
+  showToast('Şikayət adminə göndərildi.','success');
 }
 
 /* ===== LIVE SUPPORT ===== */
-function openSupportModal(){
+function openSupport(){
   document.getElementById('supportModal').classList.remove('hidden');
+  document.body.style.overflow='hidden';
   renderSupportMessages();
 }
-function closeSupportModal(){document.getElementById('supportModal').classList.add('hidden');}
+function closeSupport(){document.getElementById('supportModal').classList.add('hidden');document.body.style.overflow='';}
 function renderSupportMessages(){
   const el=document.getElementById('supportMessages');
-  const mySupport=supportChats[currentUser.email]||{messages:[]};
-  el.innerHTML=mySupport.messages.map(m=>{
-    if(m.sender==='admin')return `<div class="flex justify-start"><div class="chat-bubble them">${m.text}</div></div>`;
+  const mySupportChat = supportChats[currentUser.email] || {messages:[]};
+  if(mySupportChat.messages.length===0){el.innerHTML='<div class="text-center text-dark-400 text-sm py-8">Sualınızı yazın, admin tez cavab verəcək.</div>';return;}
+  el.innerHTML=mySupportChat.messages.map(m=>{
     if(m.sender==='system')return `<div class="chat-bubble sys">${m.text}</div>`;
-    return `<div class="flex justify-end"><div class="chat-bubble me">${m.text}</div></div>`;
+    const isMe=m.sender===currentUser.email;
+    return `<div class="flex ${isMe?'justify-end':'justify-start'}"><div class="chat-bubble ${isMe?'me':'them'}">${m.text.replace(/\n/g,'<br>')}</div></div>`;
   }).join('');
   el.scrollTop=el.scrollHeight;
 }
-function sendSupportMsg(){
-  if(currentUser.restrictMsg){showToast('Mesaj göndərmək sizə qadağan edilib','error');return;}
-  const inp=document.getElementById('supportInput');
-  const text=inp.value.trim();if(!text)return;
+function sendSupport(){
+  const inp=document.getElementById('supportInput');const text=inp.value.trim();if(!text)return;
   if(!supportChats[currentUser.email])supportChats[currentUser.email]={messages:[]};
-  supportChats[currentUser.email].messages.push({sender:'user',text,time:new Date().toISOString()});
-  localStorage.setItem('randox_support',JSON.stringify(supportChats));
-  inp.value='';renderSupportMessages();
+  supportChats[currentUser.email].messages.push({sender:currentUser.email,text,time:new Date().toISOString()});
+  localStorage.setItem('randox_support_chats',JSON.stringify(supportChats));
+  inp.value='';renderSupportMessages();showToast('Mesaj göndərildi.','success');
 }
 
-/* ===== DOĞRULAMA ===== */
+/* ===== DOĞRULAMA (2FA GİRİŞ) ===== */
 function genCode(){return Math.floor(100000+Math.random()*900000).toString()}
 function createCodeInputs(){const c=document.getElementById('codeInputs');c.innerHTML='';for(let i=0;i<6;i++){const inp=document.createElement('input');inp.type='text';inp.maxLength=1;inp.className='code-input';inp.inputMode='numeric';inp.addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v;if(v&&i<5)document.querySelectorAll('.code-input')[i+1].focus();e.target.classList.toggle('filled',!!v);checkCodeFull()});inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!e.target.value&&i>0){const p=document.querySelectorAll('.code-input')[i-1];p.focus();p.value='';p.classList.remove('filled')}});inp.addEventListener('paste',e=>{e.preventDefault();const txt=e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6);const inps=document.querySelectorAll('.code-input');txt.split('').forEach((ch,j)=>{if(inps[j]){inps[j].value=ch;inps[j].classList.add('filled')}});if(txt.length>0)inps[Math.min(txt.length,5)].focus();checkCodeFull()});inp.addEventListener('focus',()=>inp.select());c.appendChild(inp)}}
 function checkCodeFull(){if(getEnteredCode().length===6)setTimeout(verifyCode,200)}
@@ -836,19 +733,18 @@ function verifyCode(){
 }
 function completeAuth(){
   if(vAction==='register'){
-    users.push({username:vTempData.username,email:vTempData.email,password:vTempData.password,balance:0,avatar:'',createdAt:new Date().toISOString(),banned:false,restrictMsg:false,restrictList:false,restrictBuy:false});
+    users.push({username:vTempData.username,email:vTempData.email,password:vTempData.password,balance:0,avatar:'',createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}});
     localStorage.setItem('randox_users',JSON.stringify(users));
-    currentUser={username:vTempData.username,email:vTempData.email,balance:0,avatar:'',createdAt:new Date().toISOString()};
+    currentUser={username:vTempData.username,email:vTempData.email,balance:0,avatar:'',createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}};
   }else{
-    currentUser={username:vTempData.username,email:vTempData.email,balance:vTempData.balance||0,avatar:vTempData.avatar||'',createdAt:vTempData.createdAt||new Date().toISOString()};
+    let u=users.find(x=>x.email===vTempData.email);currentUser={...u};
   }
-  localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();checkBanAndInit();clearResendCd();
+  localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();checkBanOnLogin();showToast('Xoş gəldin, '+currentUser.username+'!','success');clearResendCd();
 }
 function resendCode(){if(resendCd>0)return;sendVCode(vEmail,vAction,vTempData)}
 function startResendCd(){clearResendCd();resendCd=120;const btn=document.getElementById('resendBtn');btn.disabled=true;const timer=document.getElementById('resendTimer');resendIv=setInterval(()=>{resendCd--;const m=Math.floor(resendCd/60);const s=resendCd%60;timer.textContent=m+':'+(s<10?'0':'')+s;if(resendCd<=0){clearResendCd();btn.disabled=false}},1000)}
 function clearResendCd(){if(resendIv){clearInterval(resendIv);resendIv=null}resendCd=0}
 function backToAuth(){clearResendCd();document.getElementById('verifyForm').classList.add('hidden');document.getElementById('authTabs').classList.remove('hidden');if(vAction==='login')switchAuthTab('login');else switchAuthTab('register')}
-
 function switchAuthTab(tab){
   document.getElementById('authTabs').classList.remove('hidden');document.getElementById('verifyForm').classList.add('hidden');clearResendCd();hideErrors();
   document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');document.getElementById('registerForm').classList.toggle('hidden',tab!=='register');
@@ -861,13 +757,12 @@ function hideErrors(){['loginError','regError','verifyError','verifySuccess'].fo
 function showErr(id,msg){const el=document.getElementById(id);el.textContent=msg;el.classList.remove('hidden')}
 function openAuthModal(){document.getElementById('authModal').classList.remove('hidden');document.body.style.overflow='hidden';switchAuthTab('login');hideErrors();setTimeout(()=>{const f=document.getElementById('loginEmail');if(f)f.focus()},200)}
 function closeAuthModal(){document.getElementById('authModal').classList.add('hidden');document.body.style.overflow='';clearResendCd();hideErrors()}
-
 function handleLogin(){
   hideErrors();const email=document.getElementById('loginEmail').value.trim();const pwd=document.getElementById('loginPassword').value;
   if(!email||!pwd){showErr('loginError','Bütün sahələri doldurun');return}
   const user=users.find(u=>u.email===email);if(!user){showErr('loginError','Hesab tapılmadı');return}
   if(user.password!==pwd){showErr('loginError','Şifrə yanlış');return}
-  sendVCode(email,'login',{username:user.username,email:user.email,balance:user.balance,avatar:user.avatar||'',createdAt:user.createdAt});
+  sendVCode(email,'login',{username:user.username,email:user.email});
 }
 function handleRegister(){
   hideErrors();const uname=document.getElementById('regUsername').value.trim();const email=document.getElementById('regEmail').value.trim();const pwd=document.getElementById('regPassword').value;const pwd2=document.getElementById('regPassword2').value;
@@ -884,13 +779,12 @@ function togglePwd(id,el){const inp=document.getElementById(id);const isP=inp.ty
 function openLogoutModal(){document.getElementById('logoutModal').classList.remove('hidden')}
 function closeLogoutModal(){document.getElementById('logoutModal').classList.add('hidden')}
 function confirmLogout(){closeLogoutModal();currentUser=null;localStorage.removeItem('randox_user');updateUserArea();showToast('Çıxış edildi','info');if(currentSection==='profile'||currentSection==='admin'||currentSection==='create'||currentSection==='messages')showSection('home')}
-
 function updateUserArea(){
   const area=document.getElementById('userArea');const mobile=document.getElementById('mobileAuthBtns');
   if(currentUser){
     const avatarInner=currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase();
     const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
-    area.innerHTML=`<div class="avatar-sm text-white" style="${bgStyle}" onclick="toggleUserDropdown()">${avatarInner}</div>`;
+    area.innerHTML=`<button onclick="openSupport()" class="p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group"><iconify-icon icon="mdi:headset" class="text-xl text-dark-300 group-hover:text-brand-400"></iconify-icon></button><div class="avatar-sm text-white ml-2" style="${bgStyle}" onclick="toggleUserDropdown()">${avatarInner}</div>`;
     mobile.innerHTML=`<button onclick="showSection('profile');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium">Profilim</button><button onclick="openLogoutModal();toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm text-red-400">Çıxış</button>`;
   }else{
     area.innerHTML=`<button onclick="openAuthModal()" class="glass hover:border-brand-500/30 px-4 py-2 rounded-xl text-sm font-medium transition-all">Daxil ol</button>`;
@@ -899,7 +793,7 @@ function updateUserArea(){
   const avatarInner2=currentUser?(currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase()):'';
   const bgStyle2=currentUser&&!currentUser.avatar?`background:${getAvatarColor(currentUser)}`:'';
   let adminLink = (currentUser && ADMIN_EMAILS.includes(currentUser.email)) ? `<a href="#" onclick="showSection('admin');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:shield-account" class="text-lg"></iconify-icon>Admin Paneli</a>` : '';
-  document.getElementById('dropdownContent').innerHTML=currentUser?`<div class="p-4 border-b border-white/5 flex items-center gap-3"><div class="avatar-sm text-white" style="${bgStyle2}">${avatarInner2}</div><div><p class="font-semibold text-sm">${currentUser.username}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div></div><div class="p-2"><a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a><a href="#" onclick="showSection('messages');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:chat" class="text-lg"></iconify-icon>Mesajlar</a><a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Balans: ${(currentUser.balance||0).toFixed(2)} ₼</a>${adminLink}<button onclick="openLogoutModal();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıxış</button></div>`:'';
+  document.getElementById('dropdownContent').innerHTML=currentUser?`<div class="p-4 border-b border-white/5 flex items-center gap-3"><div class="avatar-sm text-white" style="${bgStyle2}">${avatarInner2}</div><div><p class="font-semibold text-sm">${currentUser.username}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div></div><div class="p-2"><a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a><a href="#" onclick="showSection('messages');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:chat" class="text-lg"></iconify-icon>Mesajlar</a><a href="#" onclick="openSupport();toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:headset" class="text-lg"></iconify-icon>Canlı Dəstək</a><a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Balans: ${(currentUser.balance||0).toFixed(2)} ₼</a>${adminLink}<button onclick="openLogoutModal();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıxış</button></div>`:'';
 }
 function toggleUserDropdown(){dropdownOpen=!dropdownOpen;document.getElementById('userDropdown').classList.toggle('hidden',!dropdownOpen)}
 document.addEventListener('click',e=>{if(dropdownOpen&&!e.target.closest('#userArea')&&!e.target.closest('#userDropdown')){dropdownOpen=false;document.getElementById('userDropdown').classList.add('hidden')}});
@@ -908,134 +802,160 @@ document.addEventListener('click',e=>{if(dropdownOpen&&!e.target.closest('#userA
 function setCustomAmount(amt){document.getElementById('customAmountInput').value=amt;selectedTopUpAmount=amt;document.getElementById('topUpBtn').disabled=false;}
 document.addEventListener('input',e=>{if(e.target.id==='customAmountInput'){selectedTopUpAmount=parseFloat(e.target.value)||0;document.getElementById('topUpBtn').disabled=selectedTopUpAmount<=0;}});
 function processTopUp(){
-  if(!currentUser){openAuthModal();return}
-  if(!selectedTopUpAmount||selectedTopUpAmount<=0)return;
-  currentUser.balance=(currentUser.balance||0)+selectedTopUpAmount;
-  localStorage.setItem('randox_user',JSON.stringify(currentUser));
-  const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;
-  localStorage.setItem('randox_users',JSON.stringify(users));
+  if(!currentUser)return;if(!selectedTopUpAmount||selectedTopUpAmount<=0)return;
+  currentUser.balance=(currentUser.balance||0)+selectedTopUpAmount;localStorage.setItem('randox_user',JSON.stringify(currentUser));
+  const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;localStorage.setItem('randox_users',JSON.stringify(users));
   document.getElementById('currentBalanceTop').textContent=currentUser.balance.toFixed(2)+' ₼';
   document.getElementById('customAmountInput').value='';selectedTopUpAmount=0;document.getElementById('topUpBtn').disabled=true;
-  updateUserArea();showToast(selectedTopUpAmount+' AZN balansınıza əlavə edildi (Demo).','success');
+  updateUserArea();showToast(selectedTopUpAmount+' AZN balansınıza əlavə edildi.','success');
 }
 
-/* ===== ADMİN PANEL ===== */
+/* ===== ADMİN PANEL (GOD MODE) ===== */
 function switchAdminTab(tab){
   currentAdminTab=tab;
-  document.querySelectorAll('.admin-tab-btn').forEach(b=>{b.classList.toggle('text-dark-400',b.textContent.trim()!==tab.charAt(0).toUpperCase()+tab.slice(1));b.classList.toggle('active',b.textContent.trim()===tab.charAt(0).toUpperCase()+tab.slice(1))});
-  // simple visual fix for active
-  document.querySelectorAll('.admin-tab-btn').forEach(b=>{b.classList.remove('active','text-brand-400');b.classList.add('text-dark-400')});
-  event.target.classList.add('active','text-brand-400');event.target.classList.remove('text-dark-400');
-  renderAdminPanel();
-}
-function renderAdminPanel(){
-  const el=document.getElementById('adminContent');
-  if(currentAdminTab==='users')return renderAdminUsers(el);
-  if(currentAdminTab==='disputes')return renderAdminDisputes(el);
-  if(currentAdminTab==='reports')return renderAdminReports(el);
-  if(currentAdminTab==='support')return renderAdminSupport(el);
-  if(currentAdminTab==='spy')return renderAdminSpy(el);
-}
-function renderAdminUsers(el){
-  el.innerHTML=`<div class="glass rounded-2xl p-6 border border-white/5 shadow-2xl"><h3 class="font-bold text-lg mb-4">God Mode: İstifadəçilər</h3><input type="text" id="adminUserSearch" class="input-field mb-4" placeholder="Email və ya ad axtar..." oninput="renderAdminUserList()"><div id="adminUserList" class="space-y-3"></div></div>`;
-  renderAdminUserList();
-}
-function renderAdminUserList(){
-  const q=(document.getElementById('adminUserSearch')?.value||'').toLowerCase();
-  const list=users.filter(u=>u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q));
-  document.getElementById('adminUserList').innerHTML=list.map(u=>`
-    <div class="glass-light p-4 rounded-xl border border-white/5 flex flex-col md:flex-row md:items-center gap-4">
-      <div class="flex-1">
-        <p class="font-semibold text-sm">${u.username} ${u.banned?'<span class="text-xs text-red-400">(Banlı)</span>':''}</p>
-        <p class="text-xs text-dark-400">${u.email}</p>
-        <p class="text-xs text-brand-400 mt-1">Balans: ${u.balance.toFixed(2)} ₼</p>
-      </div>
-      <div class="flex flex-wrap gap-2">
-        <input type="number" id="admin_bal_${u.email}" placeholder="Məbləğ" class="input-field w-32" style="padding:8px 12px">
-        <button onclick="adminModifyBalance('${u.email}', 1)" class="px-3 py-1.5 bg-brand-500 hover:bg-brand-400 rounded-lg text-xs font-medium text-white">Əlavə Et</button>
-        <button onclick="adminModifyBalance('${u.email}', -1)" class="px-3 py-1.5 bg-red-500 hover:bg-red-400 rounded-lg text-xs font-medium text-white">Çıxar</button>
-        <button onclick="adminToggleBan('${u.email}')" class="px-3 py-1.5 ${u.banned?'bg-yellow-500':'bg-red-500'} hover:opacity-80 rounded-lg text-xs font-medium text-white">${u.banned?'Banı Aç':'Banla'}</button>
-        <div class="flex gap-1 mt-1 md:mt-0">
-          <button onclick="adminToggleRestrict('${u.email}','restrictMsg')" class="px-2 py-1.5 ${u.restrictMsg?'bg-red-500':'bg-dark-700'} rounded-lg text-xs" title="Mesaj Ban">Msg</button>
-          <button onclick="adminToggleRestrict('${u.email}','restrictList')" class="px-2 py-1.5 ${u.restrictList?'bg-red-500':'bg-dark-700'} rounded-lg text-xs" title="İlan Ban">List</button>
-          <button onclick="adminToggleRestrict('${u.email}','restrictBuy')" class="px-2 py-1.5 ${u.restrictBuy?'bg-red-500':'bg-dark-700'} rounded-lg text-xs" title="Satınalma Ban">Buy</button>
-        </div>
-      </div>
-    </div>`).join('');
-}
-function adminModifyBalance(email, mult){
-  const amt=parseFloat(document.getElementById(`admin_bal_${email}`).value)||0;
-  if(amt<=0)return;
-  const u=users.find(x=>x.email===email);if(!u)return;
-  u.balance=(u.balance||0)+(amt*mult);
-  if(u.balance<0)u.balance=0;
-  localStorage.setItem('randox_users',JSON.stringify(users));
-  if(currentUser.email===email){currentUser.balance=u.balance;localStorage.setItem('randox_user',JSON.stringify(currentUser));updateUserArea();}
-  renderAdminUserList();showToast('Balans dəyişdirildi','success');
-}
-function adminToggleBan(email){
-  const u=users.find(x=>x.email===email);if(!u)return;
-  u.banned=!u.banned;localStorage.setItem('randox_users',JSON.stringify(users));
-  renderAdminUserList();showToast(u.banned?'İstifadəçi banlandı':'Ban açıldı','success');
-}
-function adminToggleRestrict(email,key){
-  const u=users.find(x=>x.email===email);if(!u)return;
-  u[key]=!u[key];localStorage.setItem('randox_users',JSON.stringify(users));
-  renderAdminUserList();showToast('Restrict dəyişdirildi','success');
-}
-function renderAdminDisputes(el){
-  const disp=transactions.filter(t=>t.status==='admin_review');
-  el.innerHTML=`<div class="glass rounded-2xl p-6 border border-white/5 shadow-2xl"><h3 class="font-bold text-lg mb-4">Dispute İncələmə</h3><div class="space-y-3">${disp.map(t=>`<div class="glass-light p-4 rounded-xl border border-yellow-500/30"><div class="flex justify-between mb-2"><div><p class="text-sm font-bold">${t.title}</p><p class="text-xs text-dark-400">Alıcı: ${t.buyerEmail} | Satıcı: ${t.sellerEmail}</p><p class="text-xs text-yellow-400 mt-1">Səbəb: ${t.reason}</p></div><div class="text-right"><p class="text-lg font-bold text-brand-400">${t.amount.toFixed(2)} ₼</p></div></div><div class="flex gap-2 mt-3"><button onclick="adminResolveDispute('${t.id}','refund')" class="px-4 py-2 bg-red-500 rounded-lg text-xs font-medium text-white">Alıcıya Qaytar</button><button onclick="adminResolveDispute('${t.id}','pay')" class="px-4 py-2 bg-brand-500 rounded-lg text-xs font-medium text-white">Satıcıya Ödə</button></div></div>`).join('')||'<p class="text-dark-400 text-sm text-center py-4">Aktiv dispute yoxdur.</p>'}</div></div>`;
-}
-function adminResolveDispute(txId,action){
-  let t=transactions.find(x=>x.id===txId);if(!t)return;
-  if(action==='refund'){
-    const buyer=users.find(u=>u.email===t.buyerEmail);if(buyer)buyer.balance=(buyer.balance||0)+t.amount;
-  }else{
-    const seller=users.find(u=>u.email===t.sellerEmail);if(seller)seller.balance=(seller.balance||0)+(t.amount*(1-COMMISSION_RATE));
+  document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
+  document.getElementById('adminTab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
+  
+  const c=document.getElementById('adminContent');
+  if(tab==='users'){
+    c.innerHTML=`<div class="mb-4"><input type="text" id="adminUserSearch" class="input-field" placeholder="Email və ya ad axtar..." oninput="renderAdminUsers()"></div><div id="adminUsersList" class="space-y-3 max-h-[600px] overflow-y-auto"></div>`;
+    renderAdminUsers();
   }
-  t.status='resolved_'+action;t.resolvedAt=Date.now();
+  else if(tab==='disputes'){
+    let html=`<div class="space-y-3 max-h-[600px] overflow-y-auto">`;
+    let pending=orders.filter(o=>o.status==='admin_review');
+    if(pending.length===0)html+=`<p class="text-center text-dark-400 py-8">Baxışı gözləyən dispute yoxdur.</p>`;
+    pending.forEach(o=>{
+      let buyer=users.find(u=>u.email===o.buyerEmail);let seller=users.find(u=>u.email===o.sellerEmail);
+      html+=`<div class="glass-light p-4 rounded-xl border border-white/5">
+        <div class="flex justify-between items-start mb-2">
+          <div><p class="font-semibold text-sm">${o.listingTitle}</p><p class="text-xs text-dark-400">${o.amount} AZN</p></div>
+          <div class="text-xs text-right"><p class="text-red-400">Alıcı: ${buyer?.username||o.buyerEmail}</p><p>${o.disputeReason}</p></div>
+        </div>
+        <div class="text-xs text-right mt-2 border-t border-white/5 pt-2"><p class="text-yellow-400">Satıcı: ${seller?.username||o.sellerEmail}</p><p>${o.counterReason}</p></div>
+        <div class="flex gap-2 mt-4">
+          <button onclick="forcePaySeller('${o.id}')" class="btn-primary" style="width:auto;padding:8px 16px">Satıcıya Ödə</button>
+          <button onclick="refundBuyer('${o.id}')" class="btn-danger" style="width:auto;padding:8px 16px">Alıcıya Qaytar</button>
+        </div>
+      </div>`;
+    });
+    html+=`</div>`;c.innerHTML=html;
+  }
+  else if(tab==='reports'){
+    let html=`<div class="space-y-3 max-h-[600px] overflow-y-auto">`;
+    if(reports.length===0)html+=`<p class="text-center text-dark-400 py-8">Şikayət yoxdur.</p>`;
+    reports.forEach(r=>{
+      let reporter=users.find(u=>u.email===r.reporterEmail);let reported=users.find(u=>u.email===r.reportedEmail);
+      html+=`<div class="glass-light p-4 rounded-xl border border-white/5">
+        <div class="flex justify-between mb-2"><span class="text-xs text-dark-400">Şikayət edən: ${reporter?.username||r.reporterEmail}</span><span class="text-xs text-dark-400">Təqsir eden: ${reported?.username||r.reportedEmail}</span></div>
+        <p class="text-xs bg-dark-900/50 p-2 rounded-lg my-2 border border-white/5">Mesaj: "${r.msgText}"</p>
+        <p class="text-sm text-red-400">Səbəb: ${r.reason}</p>
+      </div>`;
+    });
+    html+=`</div>`;c.innerHTML=html;
+  }
+  else if(tab==='support'){
+    let html=`<div class="flex gap-4 h-[500px]"><div class="w-1/3 border-r border-white/5 overflow-y-auto" id="supportList">`;
+    let activeSupports=Object.keys(supportChats);
+    if(activeSupports.length===0)html+=`<p class="p-4 text-center text-dark-400 text-sm">Dəstək mesajı yoxdur.</p>`;
+    activeSupports.forEach(email=>{
+      let u=users.find(x=>x.email===email);
+      html+=`<div onclick="adminOpenSupport('${email}')" class="p-3 border-b border-white/5 cursor-pointer hover:bg-white/5"><p class="font-semibold text-sm">${u?.username||email}</p><p class="text-xs text-dark-500 truncate">${supportChats[email].messages[supportChats[email].messages.length-1]?.text||'...'}</p></div>`;
+    });
+    html+=`</div><div class="w-2/3 flex flex-col"><div id="adminSupportWindow" class="flex-1 overflow-y-auto p-4 space-y-3 flex flex-col justify-end"></div><div class="p-4 border-t border-white/5"><div class="flex gap-2"><input type="text" id="adminSupportInput" class="input-field flex-1" placeholder="Cavab yazın..." onkeydown="if(event.key==='Enter')adminSendSupport()"><button onclick="adminSendSupport()" class="btn-primary" style="width:auto;padding:12px 20px"><iconify-icon icon="mdi:send"></iconify-icon></button></div></div></div></div>`;
+    c.innerHTML=html;
+  }
+  else if(tab==='spy'){
+    c.innerHTML=`<div class="mb-4"><input type="text" id="adminSpySearch" class="input-field" placeholder="Email və ya mesaj axtar..." oninput="renderAdminSpy()"></div><div id="adminSpyList" class="space-y-3 max-h-[600px] overflow-y-auto"></div>`;
+    renderAdminSpy();
+  }
+}
+
+function renderAdminUsers(){
+  let q=(document.getElementById('adminUserSearch')?.value||'').toLowerCase();
+  let list=users.filter(u=>u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q));
+  document.getElementById('adminUsersList').innerHTML=list.map(u=>`
+    <div class="glass-light p-4 rounded-xl border border-white/5 flex items-center justify-between">
+      <div class="flex items-center gap-3">
+        <div class="avatar-sm text-white" style="background:${getAvatarColor(u)}">${u.username.charAt(0).toUpperCase()}</div>
+        <div><p class="font-semibold text-sm">${u.username} ${u.banned?'<span class="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded ml-2">BAN</span>':''}</p><p class="text-xs text-dark-400">${u.email}</p><p class="text-xs text-brand-400">Balans: ${u.balance.toFixed(2)} ₼</p></div>
+      </div>
+      <div class="flex gap-2">
+        <input type="number" placeholder="+/- AZN" id="bal_${u.email}" class="input-field w-24 text-xs">
+        <button onclick="adminModifyBalance('${u.email}')" class="btn-primary text-xs" style="width:auto;padding:8px 10px">SET</button>
+        <button onclick="toggleBan('${u.email}')" class="text-xs px-2 py-2 rounded-lg ${u.banned?'bg-green-500 text-white':'bg-red-500 text-white'}">${u.banned?'UNBAN':'BAN'}</button>
+      </div>
+      <div class="flex gap-1 text-xs mt-2">
+        <button onclick="toggleRestriction('${u.email}','message')" class="px-2 py-1 rounded ${u.restrictions?.message?'bg-red-500 text-white':'bg-dark-800'}">Msg</button>
+        <button onclick="toggleRestriction('${u.email}','listing')" class="px-2 py-1 rounded ${u.restrictions?.listing?'bg-red-500 text-white':'bg-dark-800'}">Sell</button>
+        <button onclick="toggleRestriction('${u.email}','purchase')" class="px-2 py-1 rounded ${u.restrictions?.purchase?'bg-red-500 text-white':'bg-dark-800'}">Buy</button>
+      </div>
+    </div>
+  `).join('');
+}
+function adminModifyBalance(email){
+  let u=users.find(x=>x.email===email);if(!u)return;
+  let val=parseFloat(document.getElementById('bal_'+email).value);
+  if(isNaN(val))return;
+  u.balance=val; // GOD MODE: birbaşa balansı təyin edir
   localStorage.setItem('randox_users',JSON.stringify(users));
-  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
-  const chat=Object.values(chats).find(c=>c.txId===txId);
-  if(chat){chat.messages.push({sender:'system',text:`Admin qərarı: ${action==='refund'?'Ödəniş alıcıya qaytarıldı':'Vəsait satıcıya ödənildi'}.`,time:new Date().toISOString()});localStorage.setItem('randox_chats',JSON.stringify(chats));}
-  renderAdminPanel();showToast('Dispute həll edildi','success');
+  if(currentUser.email===email){currentUser.balance=val;localStorage.setItem('randox_user',JSON.stringify(currentUser));updateUserArea();}
+  renderAdminUsers();showToast(`${u.username} balansı ${val} AZN oldu.`,'success');
 }
-function renderAdminReports(el){
-  el.innerHTML=`<div class="glass rounded-2xl p-6 border border-white/5 shadow-2xl"><h3 class="font-bold text-lg mb-4">Mesaj Şikayətləri</h3><div class="space-y-3">${userReports.map(r=>`<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between"><div><p class="text-sm">Şikayət edən: <span class="text-brand-400">${r.reporterEmail}</span></p><p class="text-sm">Şikayət edilən: <span class="text-red-400">${r.senderId}</span></p></div></div><p class="text-xs text-dark-400 mt-2">Səbəb: ${r.reason}</p></div>`).join('')||'<p class="text-dark-400 text-sm text-center py-4">Şikayət yoxdur.</p>'}</div></div>`;
+function toggleBan(email){
+  let u=users.find(x=>x.email===email);if(!u)return;
+  u.banned=!u.banned;localStorage.setItem('randox_users',JSON.stringify(users));
+  renderAdminUsers();showToast(`${u.username} ${u.banned?'banlandı':'banı açıldı'}.`,'info');
 }
-function renderAdminSupport(el){
-  const supUsers=Object.keys(supportChats);
-  el.innerHTML=`<div class="glass rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex" style="height:60vh;"><div class="w-1/3 border-r border-white/5 overflow-y-auto">${supUsers.map(e=>`<div onclick="adminOpenSupport('${e}')" class="p-4 border-b border-white/5 cursor-pointer hover:bg-white/5 ${activeSupportChat===e?'bg-white/5':''}"><p class="font-semibold text-sm">${e}</p><p class="text-xs text-dark-500 truncate">${supportChats[e].messages[supportChats[e].messages.length-1]?.text||''}</p></div>`).join('')||'<div class="p-4 text-center text-dark-400 text-sm">Support yok</div>'}</div><div class="w-2/3 flex flex-col"><div id="adminSupportWindow" class="flex-1 overflow-y-auto p-6 space-y-3 flex flex-col"><p class="self-center text-dark-400 m-auto">Söhbət seçin</p></div><div class="p-4 border-t border-white/5 hidden" id="adminSupportInput"><div class="flex gap-2"><input type="text" id="adminSupportMsg" class="input-field flex-1" placeholder="Cavab yazın..." onkeydown="if(event.key==='Enter')adminSendSupport()"><button onclick="adminSendSupport()" class="btn-primary" style="width:auto;padding:12px 20px"><iconify-icon icon="mdi:send"></iconify-icon></button></div></div></div></div>`;
+function toggleRestriction(email,type){
+  let u=users.find(x=>x.email===email);if(!u)return;
+  if(!u.restrictions)u.restrictions={message:false,listing:false,purchase:false};
+  u.restrictions[type]=!u.restrictions[type];localStorage.setItem('randox_users',JSON.stringify(users));
+  renderAdminUsers();
 }
+function forcePaySeller(id){
+  let o=orders.find(x=>x.id===id);if(!o)return;
+  o.status='completed';let seller=users.find(u=>u.email===o.sellerEmail);if(seller)seller.balance+=o.amount-o.commission;
+  localStorage.setItem('randox_users',JSON.stringify(users));localStorage.setItem('randox_orders',JSON.stringify(orders));
+  chats[o.chatId].messages.push({sender:'system',text:'Admin satıcı lehinə qərar verdi. Pul köçürüldü.',orderId:o.id,time:new Date().toISOString()});
+  localStorage.setItem('randox_chats',JSON.stringify(chats));
+  switchAdminTab('disputes');showToast('Pul satıcıya köçürüldü.','success');
+}
+function refundBuyer(id){
+  let o=orders.find(x=>x.id===id);if(!o)return;
+  o.status='refunded';let buyer=users.find(u=>u.email===o.buyerEmail);if(buyer)buyer.balance+=o.amount;
+  localStorage.setItem('randox_users',JSON.stringify(users));localStorage.setItem('randox_orders',JSON.stringify(orders));
+  chats[o.chatId].messages.push({sender:'system',text:'Admin alıcı lehinə qərar verdi. Pul qaytarıldı.',orderId:o.id,time:new Date().toISOString()});
+  localStorage.setItem('randox_chats',JSON.stringify(chats));
+  switchAdminTab('disputes');showToast('Pul alıcıya qaytarıldı.','success');
+}
+let currentSupportUser=null;
 function adminOpenSupport(email){
-  activeSupportChat=email;renderAdminSupport();
-  const w=document.getElementById('adminSupportWindow');
-  document.getElementById('adminSupportInput').classList.remove('hidden');
-  const c=supportChats[email];
-  w.innerHTML=c.messages.map(m=>{if(m.sender==='user')return `<div class="flex justify-start"><div class="chat-bubble them">${m.text}</div></div>`;return `<div class="flex justify-end"><div class="chat-bubble me">${m.text}</div></div>`}).join('');
+  currentSupportUser=email;
+  let c=supportChats[email];
+  let u=users.find(x=>x.email===email);
+  let w=document.getElementById('adminSupportWindow');
+  w.innerHTML=c.messages.map(m=>{
+    if(m.sender==='system')return `<div class="chat-bubble sys">${m.text}</div>`;
+    const isMe=m.sender===email; // alıcı isə mən değilim
+    return `<div class="flex ${!isMe?'justify-end':'justify-start'}"><div class="chat-bubble ${!isMe?'me':'them'}">${m.text}</div></div>`;
+  }).join('');
   w.scrollTop=w.scrollHeight;
 }
 function adminSendSupport(){
-  if(!activeSupportChat)return;
-  const inp=document.getElementById('adminSupportMsg');const txt=inp.value.trim();if(!txt)return;
-  supportChats[activeSupportChat].messages.push({sender:'admin',text:txt,time:new Date().toISOString()});
-  localStorage.setItem('randox_support',JSON.stringify(supportChats));
-  inp.value='';adminOpenSupport(activeSupportChat);
+  if(!currentSupportUser)return;
+  let inp=document.getElementById('adminSupportInput');let text=inp.value.trim();if(!text)return;
+  supportChats[currentSupportUser].messages.push({sender:'admin',text,time:new Date().toISOString()});
+  localStorage.setItem('randox_support_chats',JSON.stringify(supportChats));
+  inp.value='';adminOpenSupport(currentSupportUser);
 }
-function renderAdminSpy(el){
-  el.innerHTML=`<div class="glass rounded-2xl p-6 border border-white/5 shadow-2xl"><h3 class="font-bold text-lg mb-4">Mesaj İnspeksiyası (Spy Mode)</h3><input type="text" id="adminSpySearch" class="input-field mb-4" placeholder="Email və ya ilan adı axtar..." oninput="renderSpyList()"><div id="spyList" class="space-y-3"></div></div>`;
-  renderSpyList();
-}
-function renderSpyList(){
-  const q=(document.getElementById('adminSpySearch')?.value||'').toLowerCase();
-  const list=Object.values(chats).filter(c=>c.buyerEmail.toLowerCase().includes(q)||c.sellerEmail.toLowerCase().includes(q)||c.listingTitle.toLowerCase().includes(q));
-  document.getElementById('spyList').innerHTML=list.map(c=>`<div onclick="adminSpyOpen('${c.id}')" class="glass-light p-4 rounded-xl border border-white/5 cursor-pointer hover:bg-white/5"><p class="text-sm font-medium">${c.listingTitle}</p><p class="text-xs text-dark-400">${c.buyerEmail} ↔ ${c.sellerEmail}</p></div>`).join('')||'<p class="text-dark-400 text-sm text-center py-4">Söhbət tapılmadı.</p>';
-}
-function adminSpyOpen(id){
-  const c=chats[id];
-  const w=document.getElementById('spyList');
-  w.innerHTML=`<button onclick="renderSpyList()" class="text-sm text-brand-400 mb-4 flex items-center gap-1"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Geri</button><div class="space-y-3">${c.messages.map(m=>{if(m.sender==='system')return `<div class="chat-bubble sys">${m.text}</div>`;const isBuyer=m.sender===c.buyerEmail;return `<div class="flex ${isBuyer?'justify-start':'justify-end'}"><div class="chat-bubble ${isBuyer?'them':'me'}">${m.text}</div></div>`}).join('')}</div>`;
+function renderAdminSpy(){
+  let q=(document.getElementById('adminSpySearch')?.value||'').toLowerCase();
+  let list=Object.values(chats).filter(c=>c.buyerEmail.toLowerCase().includes(q)||c.sellerEmail.toLowerCase().includes(q)||c.messages.some(m=>m.text.toLowerCase().includes(q)));
+  document.getElementById('adminSpyList').innerHTML=list.map(c=>{
+    let b=users.find(u=>u.email===c.buyerEmail);let s=users.find(u=>u.email===c.sellerEmail);
+    return `<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between mb-2"><span class="text-xs text-brand-400">${b?.username||c.buyerEmail}</span><span class="text-xs text-dark-400">↔</span><span class="text-xs text-yellow-400">${s?.username||c.sellerEmail}</span></div><div class="space-y-1 max-h-40 overflow-y-auto">${c.messages.map(m=>`<p class="text-xs ${m.sender==='system'?'text-dark-500':m.sender===c.buyerEmail?'text-dark-300':'text-white'}">${m.sender}: ${m.text}</p>`).join('')}</div></div>`;
+  }).join('')||'<p class="text-center text-dark-400 py-8">Söhbət tapılmadı.</p>';
 }
 
 /* ===== PROFİL ===== */
@@ -1045,24 +965,10 @@ function renderProfile(){
   const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
   const myListings=listings.filter(l=>l.sellerEmail===currentUser.email);
   document.getElementById('profileContent').innerHTML=`
-    <div class="text-center mb-10 animate-up">
-      <div class="avatar-lg text-white mx-auto mb-4" style="${bgStyle}">${avatarInner}</div>
-      <h2 class="text-2xl font-bold">${currentUser.username}</h2>
-      <p class="text-dark-400 text-sm mt-1">${currentUser.email}</p>
-    </div>
-    <div class="grid grid-cols-3 gap-4 mb-10 animate-up delay-1">
-      <div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold text-brand-400">${(currentUser.balance||0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Balans</p></div>
-      <div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.length}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İlan</p></div>
-      <div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.reduce((s,l)=>s+l.soldCount,0)}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Satış</p></div>
-    </div>
-    <div class="glass rounded-2xl border border-white/5 overflow-hidden mb-6 animate-up delay-2">
-      <div class="p-5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold">İlanlarım</h3><button onclick="showSection('create')" class="text-brand-400 text-sm hover:text-brand-300">Yeni İlan</button></div>
-      <div class="p-5">${myListings.length===0?'<p class="text-dark-500 text-center py-8">İlan yoxdur</p>':myListings.map(l=>`<div onclick="openListingModal('${l.id}')" class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0 cursor-pointer hover:bg-white/5 rounded-xl px-2 transition-colors"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${l.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${l.title}</p><p class="text-xs text-dark-500">${l.price.toFixed(2)} ₼ • Satıldı: ${l.soldCount}</p></div></div>`).join('')}</div>
-    </div>
-    <button onclick="openLogoutModal()" class="w-full glass rounded-2xl border border-red-500/20 p-4 flex items-center justify-center gap-3 text-red-400 hover:bg-red-500/5 transition-all">
-      <iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon>
-      <span class="font-medium text-sm">Hesabdan Çıx</span>
-    </button>`;
+    <div class="text-center mb-10 animate-up"><div class="avatar-lg text-white mx-auto mb-4" style="${bgStyle}">${avatarInner}</div><h2 class="text-2xl font-bold">${currentUser.username}</h2><p class="text-dark-400 text-sm mt-1">${currentUser.email}</p></div>
+    <div class="grid grid-cols-3 gap-4 mb-10 animate-up delay-1"><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold text-brand-400">${(currentUser.balance||0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Balans</p></div><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.length}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İlan</p></div><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.reduce((s,l)=>s+l.soldCount,0)}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Satış</p></div></div>
+    <div class="glass rounded-2xl border border-white/5 overflow-hidden mb-6 animate-up delay-2"><div class="p-5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold">İlanlarım</h3><button onclick="showSection('create')" class="text-brand-400 text-sm hover:text-brand-300">Yeni İlan</button></div><div class="p-5">${myListings.length===0?'<p class="text-dark-500 text-center py-8">İlan yoxdur</p>':myListings.map(l=>`<div onclick="openListingModal('${l.id}')" class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0 cursor-pointer hover:bg-white/5 rounded-xl px-2 transition-colors"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${l.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${l.title}</p><p class="text-xs text-dark-500">${l.price.toFixed(2)} ₼ • Satıldı: ${l.soldCount}</p></div></div>`).join('')}</div></div>
+    <button onclick="openLogoutModal()" class="w-full glass rounded-2xl border border-red-500/20 p-4 flex items-center justify-center gap-3 text-red-400 hover:bg-red-500/5 transition-all"><iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon><span class="font-medium text-sm">Hesabdan Çıx</span></button>`;
 }
 
 /* ===== TOAST ===== */
@@ -1079,9 +985,7 @@ function showToast(msg,type='info'){
 window.addEventListener('scroll',()=>{const n=document.getElementById('navbar');if(window.scrollY>50){n.classList.add('glass');n.style.borderBottom='1px solid rgba(255,255,255,0.05)';n.style.boxShadow='0 4px 20px rgba(0,0,0,0.3)'}else{n.classList.remove('glass');n.style.borderBottom='none';n.style.boxShadow='none'}});
 
 // BOOTSTRAP
-if(currentUser && users.find(u=>u.email===currentUser.email)?.banned){
-  document.getElementById('banScreen').classList.add('active');
-}
+if(currentUser && !checkBanOnLogin()){ currentUser = null; localStorage.removeItem('randox_user'); }
 renderListings();updateUserArea();
 </script>
 </body>
