@@ -1,9 +1,9 @@
 <!DOCTYPE html>
-<html lang="tr">
+<html lang="az">
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Randox — Oyun Platformu</title>
+<title>Randox — Premium Bazar</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/@emailjs/browser@4/dist/email.min.js"></script>
@@ -15,91 +15,142 @@ tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],serif:['
 <style>
 *{margin:0;padding:0;box-sizing:border-box}
 body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:hidden}
-::-webkit-scrollbar{width:6px}::-webkit-scrollbar-track{background:#0f172a}::-webkit-scrollbar-thumb{background:#22c55e;border-radius:3px}
+::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#020617}::-webkit-scrollbar-thumb{background:linear-gradient(to bottom, #22c55e, #16a34a);border-radius:4px}
+
+/* PREMIUM ANIMATIONS */
 @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes slideUp{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
-@keyframes slideLeft{0%{opacity:0;transform:translateX(40px)}100%{opacity:1;transform:translateX(0)}}
 @keyframes scaleIn{0%{opacity:0;transform:scale(0.9)}100%{opacity:1;transform:scale(1)}}
 @keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-10px)}}
 @keyframes shimmer{0%{background-position:-200% 0}100%{background-position:200% 0}}
-@keyframes marquee{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-@keyframes borderGlow{0%,100%{border-color:rgba(34,197,94,0.3)}50%{border-color:rgba(34,197,94,0.8)}}
+@keyframes borderGlow{0%,100%{box-shadow:0 0 15px rgba(34,197,94,0.1), inset 0 0 5px rgba(34,197,94,0.1)}50%{box-shadow:0 0 30px rgba(34,197,94,0.3), inset 0 0 15px rgba(34,197,94,0.2)}}
 @keyframes shake{0%,100%{transform:translateX(0)}20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-4px)}80%{transform:translateX(4px)}}
 @keyframes spin{0%{transform:rotate(0deg)}100%{transform:rotate(360deg)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:0.5}}
+@keyframes gridScroll{0%{background-position:0 0}100%{background-position:60px 60px}}
+
+/* LAYOUTS */
 .animate-fade{animation:fadeIn .6s ease-out both}.animate-up{animation:slideUp .8s ease-out both}
 .animate-left{animation:slideLeft .8s ease-out both}.animate-scale{animation:scaleIn .6s ease-out both}
-.animate-float{animation:float 3s ease-in-out infinite}.animate-border{animation:borderGlow 2s ease-in-out infinite}
-.animate-shake{animation:shake .5s ease-in-out}
 .delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}
-.glass{background:rgba(15,23,42,.7);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.08)}
-.glass-light{background:rgba(30,41,59,.5);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06)}
+
+/* PREMIUM GLASS */
+.glass{background:rgba(2,6,23,.6);backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.05)}
+.glass-light{background:rgba(15,23,42,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06)}
 .glass-green{background:rgba(34,197,94,.08);backdrop-filter:blur(12px);border:1px solid rgba(34,197,94,.2)}
-.game-card{transition:all .4s cubic-bezier(.16,1,.3,1)}.game-card:hover{transform:translateY(-6px)}.game-card:active{transform:translateY(-2px) scale(.98)}
-.game-card:hover .game-img{transform:scale(1.06)}.game-card:hover .game-overlay{opacity:1}.game-card:hover .game-border{border-color:rgba(34,197,94,.5)}
-.game-img{transition:transform .6s cubic-bezier(.16,1,.3,1)}.game-overlay{transition:opacity .35s ease}
-.cat-btn{transition:all .3s ease}.cat-btn:hover,.cat-btn.active{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.4)}
-.score-option{transition:all .3s ease;cursor:pointer}.score-option:hover{border-color:rgba(34,197,94,.5);background:rgba(34,197,94,.05)}
-.score-option.selected{border-color:#22c55e;background:rgba(34,197,94,.1);box-shadow:0 0 20px rgba(34,197,94,.15)}
-.hero-bg{background:linear-gradient(135deg,#020617 0%,#0f172a 30%,#14532d 70%,#020617 100%);position:relative;overflow:hidden}
-.hero-bg::before{content:'';position:absolute;top:-50%;left:-50%;width:200%;height:200%;background:radial-gradient(circle at 30% 50%,rgba(34,197,94,.08) 0%,transparent 50%),radial-gradient(circle at 70% 80%,rgba(34,197,94,.05) 0%,transparent 40%);animation:float 8s ease-in-out infinite}
+
+/* HERO & BG */
+.hero-bg{background:radial-gradient(circle at 20% 20%, rgba(34,197,94,0.1), transparent 40%), radial-gradient(circle at 80% 80%, rgba(22,163,74,0.1), transparent 40%), #020617;position:relative;overflow:hidden}
+.bg-grid{background-image:linear-gradient(rgba(34,197,94,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.04) 1px,transparent 1px);background-size:60px 60px;animation:gridScroll 8s linear infinite}
 .shimmer-text{background:linear-gradient(90deg,#22c55e,#4ade80,#86efac,#4ade80,#22c55e);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s linear infinite}
-.marquee-track{display:flex;animation:marquee 30s linear infinite}.marquee-track:hover{animation-play-state:paused}
-.modal-overlay{transition:opacity .3s ease}.modal-content{transition:all .4s cubic-bezier(.16,1,.3,1)}
-.toast{animation:slideUp .4s ease-out,fadeIn .3s ease-out}
-.nav-link{position:relative}.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:#22c55e;transition:width .3s ease}.nav-link:hover::after{width:100%}
-.stat-card{transition:all .4s ease}.stat-card:hover{transform:translateY(-4px);border-color:rgba(34,197,94,.3)}
-.tag{font-size:10px;letter-spacing:.1em}
-.search-box:focus-within{border-color:rgba(34,197,94,.5);box-shadow:0 0 0 3px rgba(34,197,94,.1)}
-.cart-badge{animation:scaleIn .3s ease-out}
-.bg-grid{background-image:linear-gradient(rgba(34,197,94,.03) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.03) 1px,transparent 1px);background-size:60px 60px}
-.brand-logo{width:40px;height:40px;border-radius:12px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 15px rgba(34,197,94,.25);transition:box-shadow .3s ease}
-.brand-logo img{width:100%;height:100%;object-fit:cover;display:block}
-.group:hover .brand-logo{box-shadow:0 4px 25px rgba(34,197,94,.45)}
-.brand-logo-sm{width:40px;height:40px;border-radius:12px;overflow:hidden;flex-shrink:0}.brand-logo-sm img{width:100%;height:100%;object-fit:cover;display:block}
-.auth-tab{transition:all .3s ease;position:relative}.auth-tab.active{color:#22c55e}
-.auth-tab.active::after{content:'';position:absolute;bottom:-1px;left:0;right:0;height:2px;background:#22c55e;border-radius:1px}
-.input-field{background:rgba(30,41,59,.6);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px;color:#f8fafc;font-size:14px;outline:none;transition:all .3s ease;width:100%}
-.input-field:focus{border-color:rgba(34,197,94,.5);box-shadow:0 0 0 3px rgba(34,197,94,.1)}.input-field::placeholder{color:#64748b}
-.btn-primary{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;font-weight:600;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%}
-.btn-primary:hover{box-shadow:0 8px 25px rgba(34,197,94,.3);transform:translateY(-1px)}.btn-primary:active{transform:translateY(0) scale(.98)}
+
+/* CARDS & BUTTONS */
+.game-card{transition:all .4s cubic-bezier(.16,1,.3,1);transform-style:preserve-3d}
+.game-card:hover{transform:translateY(-8px) scale(1.02)}
+.game-card:hover .game-img{transform:scale(1.1)}
+.game-card:hover .game-border{border-color:rgba(34,197,94,.5);box-shadow:0 20px 40px -10px rgba(0,0,0,0.5), 0 0 0 1px rgba(34,197,94,.5), 0 0 30px rgba(34,197,94,.2)}
+.game-img{transition:transform .6s cubic-bezier(.16,1,.3,1)}
+.btn-primary{background:linear-gradient(135deg,#16a34a,#22c55e);color:#fff;font-weight:600;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%;position:relative;overflow:hidden}
+.btn-primary:hover{box-shadow:0 0 20px rgba(34,197,94,.5);transform:translateY(-2px)}
+.btn-primary:active{transform:translateY(0) scale(.98)}
 .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .btn-google{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#f8fafc;font-weight:500;padding:12px 24px;border-radius:12px;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
 .btn-google:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
-.avatar-lg{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;flex-shrink:0;position:relative;overflow:hidden}
+
+/* INPUTS */
+.input-field{background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px;color:#f8fafc;font-size:14px;outline:none;transition:all .3s ease;width:100%}
+.input-field:focus{border-color:rgba(34,197,94,.6);box-shadow:0 0 0 3px rgba(34,197,94,.1), inset 0 0 10px rgba(34,197,94,.05)}
+
+/* MISC */
+.tag{font-size:10px;letter-spacing:.1em}
+.modal-overlay{transition:opacity .3s ease}.modal-content{transition:all .4s cubic-bezier(.16,1,.3,1)}
+.toast{animation:slideUp .4s ease-out,fadeIn .3s ease-out}
+.nav-link{position:relative}.nav-link::after{content:'';position:absolute;bottom:-2px;left:0;width:0;height:2px;background:#22c55e;transition:width .3s ease;box-shadow:0 0 10px #22c55e}.nav-link:hover::after{width:100%}
+.cart-badge{animation:scaleIn .3s ease-out, pulse 2s infinite}
+.brand-logo{width:40px;height:40px;border-radius:12px;overflow:hidden;flex-shrink:0;box-shadow:0 4px 15px rgba(34,197,94,.25);transition:box-shadow .3s ease}
+.brand-logo img{width:100%;height:100%;object-fit:cover;display:block}
 .avatar-sm{width:36px;height:36px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:600;flex-shrink:0;cursor:pointer;transition:all .3s ease;overflow:hidden}
 .avatar-sm:hover{transform:scale(1.1);box-shadow:0 0 15px rgba(34,197,94,.3)}
-.avatar-sm img,.avatar-lg img{width:100%;height:100%;object-fit:cover}
-.profile-stat{transition:all .3s ease}.profile-stat:hover{transform:translateY(-2px);border-color:rgba(34,197,94,.3)}
-.password-toggle{position:absolute;right:12px;top:50%;transform:translateY(-50%);cursor:pointer;color:#64748b;transition:color .2s}.password-toggle:hover{color:#94a3b8}
-.dropdown-menu{transform-origin:top right;transition:all .2s cubic-bezier(.16,1,.3,1)}
-.dropdown-menu.hidden{opacity:0;transform:scale(.95) translateY(-4px);pointer-events:none}
-.dropdown-menu:not(.hidden){opacity:1;transform:scale(1) translateY(0);pointer-events:all}
-.code-input{width:48px;height:56px;text-align:center;font-size:24px;font-weight:700;background:rgba(30,41,59,.6);border:2px solid rgba(255,255,255,.08);border-radius:12px;color:#f8fafc;outline:none;transition:all .3s ease}
-.code-input:focus{border-color:rgba(34,197,94,.6);box-shadow:0 0 0 3px rgba(34,197,94,.15)}
-.code-input.filled{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.06)}
-.code-input.error{border-color:rgba(239,68,68,.6);background:rgba(239,68,68,.06);animation:shake .5s ease-in-out}
-.spinner{width:18px;height:18px;border:2px solid rgba(255,255,255,.3);border-top-color:#fff;border-radius:50%;animation:spin .6s linear infinite;display:inline-block}
-.pp-upload-zone{border:2px dashed rgba(255,255,255,.1);border-radius:16px;padding:24px;text-align:center;cursor:pointer;transition:all .3s ease}
-.pp-upload-zone:hover{border-color:rgba(34,197,94,.4);background:rgba(34,197,94,.03)}
-.setting-card{transition:all .3s ease}.setting-card:hover{border-color:rgba(34,197,94,.2)}
+.avatar-sm img{width:100%;height:100%;object-fit:cover}
+.avatar-lg{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;flex-shrink:0;position:relative;overflow:hidden;border: 2px solid rgba(34,197,94,0.3);box-shadow: 0 0 30px rgba(34,197,94,0.2)}
+
+/* CHAT UI */
+.chat-bubble{max-width: 80%; padding: 12px 16px; border-radius: 18px; word-break: break-word; font-size: 14px; line-height: 1.4; position: relative;}
+.chat-bubble.me{background: linear-gradient(135deg, #16a34a, #22c55e); color: #fff; border-bottom-right-radius: 4px; margin-left: auto; box-shadow: 0 4px 15px rgba(34,197,94,0.2);}
+.chat-bubble.them{background: rgba(255,255,255,0.06); color: #f8fafc; border-bottom-left-radius: 4px;}
+.chat-bubble.sys{background: rgba(34,197,94,0.1); border: 1px solid rgba(34,197,94,0.2); color: #4ade80; font-size: 12px; text-align: center; border-radius: 12px; margin: 10px auto; max-width: 90%;}
+.msg-report-btn{position:absolute;top:-8px;right:-8px;width:20px;height:20px;background:#dc2626;border-radius:50%;display:none;align-items:center;justify-content:center;cursor:pointer;color:white;font-size:10px}
+.chat-bubble.them:hover .msg-report-btn{display:flex}
+
+/* BAN SCREEN */
+.ban-screen{position:fixed;inset:0;background:#020617;z-index:9999;display:none;flex-direction:column;align-items:center;justify-content:center;text-align:center;padding:20px}
+.ban-screen.active{display:flex}
 </style>
 </head>
 <body class="bg-grid">
 
+<!-- BAN SCREEN -->
+<div id="banScreen" class="ban-screen">
+  <div class="brand-logo mb-6" style="width:80px;height:80px"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div>
+  <h1 class="text-4xl font-bold text-red-500 mb-4">Hesabınız Bloklanıb</h1>
+  <p class="text-dark-400 max-w-md">Randox Platformasında qaydaları pozduğunuz üçün hesabınız admin tərəfindən bloklanmışdır. Əgər bu səhvdirsə, rəsmi Telegram kanalımız vasitəsilə əlaqə saxlayın.</p>
+</div>
+
 <div id="toastContainer" class="fixed top-24 right-6 z-[200] flex flex-col gap-3"></div>
 
-<!-- ÇIKIŞ ONAY MODALI -->
 <div id="logoutModal" class="fixed inset-0 z-[170] hidden">
-  <div class="modal-overlay absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeLogoutModal()"></div>
-  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-dark-900 rounded-2xl border border-white/5 p-8 text-center">
-    <div class="w-16 h-16 mx-auto rounded-full bg-red-500/10 flex items-center justify-center mb-5">
-      <iconify-icon icon="mdi:logout" class="text-red-400 text-3xl"></iconify-icon>
-    </div>
-    <h3 class="text-xl font-bold mb-2">Emin misiniz?</h3>
-    <p class="text-dark-400 text-sm mb-8">Çıkış yaparsanız hesabınızdan çıkacaksınız.</p>
+  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeLogoutModal()"></div>
+  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-dark-900 rounded-2xl border border-white/5 p-8 text-center shadow-2xl">
+    <div class="w-16 h-16 mx-auto rounded-full bg-red-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:logout" class="text-red-400 text-3xl"></iconify-icon></div>
+    <h3 class="text-xl font-bold mb-2">Əminsiniz?</h3>
+    <p class="text-dark-400 text-sm mb-8">Çıxış etsəniz hesabınızdan çıxacaqsınız.</p>
     <div class="flex gap-3">
-      <button onclick="closeLogoutModal()" class="flex-1 py-3 rounded-xl border border-white/10 text-sm font-medium hover:bg-white/5 transition-all">İptal Et</button>
-      <button onclick="confirmLogout()" class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-400 text-white text-sm font-semibold transition-all">Çık</button>
+      <button onclick="closeLogoutModal()" class="flex-1 py-3 rounded-xl border border-white/10 text-sm font-medium hover:bg-white/5 transition-all">Ləğv Et</button>
+      <button onclick="confirmLogout()" class="flex-1 py-3 rounded-xl bg-red-500 hover:bg-red-400 text-white text-sm font-semibold transition-all">Çıx</button>
+    </div>
+  </div>
+</div>
+
+<!-- DISPUTE MODAL -->
+<div id="disputeModal" class="fixed inset-0 z-[165] hidden">
+  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeDisputeModal()"></div>
+  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-3xl border border-white/5 p-8 shadow-2xl">
+    <h3 class="text-xl font-bold mb-4">Problem Bildir (Dispute)</h3>
+    <p class="text-dark-400 text-sm mb-4">Zəhmət olmasa probleminizi təsvir edin. Satıcı cavab verdənədək vəsait müvəqqəti dondurulacaq.</p>
+    <textarea id="disputeReason" class="input-field h-32 resize-none mb-4" placeholder="Probleminizi detallı şəkildə yazın..."></textarea>
+    <button onclick="submitDispute()" class="btn-primary bg-red-500" style="background:linear-gradient(135deg,#dc2626,#ef4444)">Bildir və Dondur</button>
+  </div>
+</div>
+
+<!-- REPORT MSG MODAL -->
+<div id="reportModal" class="fixed inset-0 z-[165] hidden">
+  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeReportModal()"></div>
+  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-3xl border border-white/5 p-8 shadow-2xl">
+    <h3 class="text-xl font-bold mb-4">Mesajı Şikayət Et</h3>
+    <input type="hidden" id="reportedMsgId">
+    <input type="hidden" id="reportedSenderId">
+    <textarea id="reportReason" class="input-field h-32 resize-none mb-4" placeholder="Şikayət səbəbi..."></textarea>
+    <button onclick="submitReport()" class="btn-primary bg-red-500" style="background:linear-gradient(135deg,#dc2626,#ef4444)">Şikayət Et</button>
+  </div>
+</div>
+
+<!-- LIVE SUPPORT MODAL -->
+<div id="supportModal" class="fixed inset-0 z-[160] hidden">
+  <div class="modal-overlay absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeSupportModal()"></div>
+  <div class="modal-content absolute inset-4 md:inset-8 lg:inset-y-8 lg:left-[20%] lg:right-[20%] bg-dark-900 rounded-3xl border border-white/5 overflow-hidden flex flex-col shadow-2xl">
+    <div class="p-4 border-b border-white/5 flex justify-between items-center glass">
+      <div class="flex items-center gap-3">
+        <div class="avatar-sm text-white bg-brand-500"><iconify-icon icon="mdi:headset"></iconify-icon></div>
+        <div><p class="font-semibold text-sm">Randox Live Dəstək</p><p class="text-xs text-brand-400">Online</p></div>
+      </div>
+      <button onclick="closeSupportModal()" class="p-2 hover:bg-white/5 rounded-lg transition-colors"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button>
+    </div>
+    <div id="supportMessages" class="flex-1 overflow-y-auto p-6 space-y-3 flex flex-col"></div>
+    <div class="p-4 border-t border-white/5 glass">
+      <div class="flex gap-2">
+        <input type="text" id="supportInput" class="input-field flex-1" placeholder="Mesajınızı yazın..." onkeydown="if(event.key==='Enter')sendSupportMsg()">
+        <button onclick="sendSupportMsg()" class="btn-primary" style="width:auto;padding:12px 20px"><iconify-icon icon="mdi:send"></iconify-icon></button>
+      </div>
     </div>
   </div>
 </div>
@@ -109,22 +160,21 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     <a href="#" onclick="showSection('home')" class="flex items-center gap-3 group">
       <div class="brand-logo"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div>
       <span class="text-xl font-bold tracking-tight">Randox</span>
-      <span class="tag uppercase text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded-full border border-brand-500/20">Gaming</span>
+      <span class="tag uppercase text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded-full border border-brand-500/20">Premium</span>
     </a>
     <div class="hidden md:flex items-center gap-8">
-      <a href="#" onclick="showSection('home')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Ana Sayfa</a>
-      <a href="#" onclick="showSection('games')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Oyunlar</a>
-      <a href="#" onclick="showSection('apps')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Uygulamalar</a>
-      <a href="#" onclick="showSection('topup')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Puan Yükle</a>
+      <a href="#" onclick="showSection('home')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">Ana Səhifə</a>
+      <a href="#" onclick="showSection('listings')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">İlanlar</a>
+      <a href="#" onclick="showSection('create')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors">İlan Paylaş</a>
+      <a href="#" onclick="showSection('messages')" class="nav-link text-sm font-medium text-dark-300 hover:text-white transition-colors flex items-center gap-1">Mesajlar <span id="msgBadge" class="hidden w-2 h-2 bg-brand-500 rounded-full"></span></a>
     </div>
     <div class="flex items-center gap-3">
-      <div class="search-box hidden md:flex items-center gap-2 glass rounded-xl px-4 py-2.5 border border-transparent transition-all w-56 focus-within:w-72">
+      <div class="search-box hidden md:flex items-center gap-2 glass rounded-xl px-4 py-2.5 border border-transparent transition-all w-56 focus-within:w-72 focus-within:border-brand-500/30">
         <iconify-icon icon="mdi:magnify" class="text-dark-400 text-lg"></iconify-icon>
-        <input type="text" id="searchInput" placeholder="Oyun ara..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
+        <input type="text" id="searchInput" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
       </div>
-      <button onclick="toggleCart()" class="relative p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group">
-        <iconify-icon icon="mdi:cart-outline" class="text-xl text-dark-300 group-hover:text-brand-400 transition-colors"></iconify-icon>
-        <span id="cartCount" class="cart-badge absolute -top-1.5 -right-1.5 w-5 h-5 bg-brand-500 rounded-full text-[10px] font-bold flex items-center justify-center text-white hidden">0</span>
+      <button onclick="openSupportModal()" class="p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group">
+        <iconify-icon icon="mdi:lifebuoy" class="text-xl text-dark-300 group-hover:text-brand-400 transition-colors"></iconify-icon>
       </button>
       <div id="userArea" class="relative"></div>
       <button onclick="toggleMobileMenu()" class="md:hidden p-2 glass rounded-xl"><iconify-icon icon="mdi:menu" class="text-xl"></iconify-icon></button>
@@ -133,112 +183,79 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 </nav>
 
 <div id="mobileMenu" class="fixed inset-0 z-[99] bg-dark-950/95 backdrop-blur-xl hidden flex-col items-center justify-center gap-6">
-  <a href="#" onclick="showSection('home');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Ana Sayfa</a>
-  <a href="#" onclick="showSection('games');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Oyunlar</a>
-  <a href="#" onclick="showSection('apps');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Uygulamalar</a>
-  <a href="#" onclick="showSection('topup');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Puan Yükle</a>
+  <a href="#" onclick="showSection('home');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Ana Səhifə</a>
+  <a href="#" onclick="showSection('listings');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">İlanlar</a>
+  <a href="#" onclick="showSection('create');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">İlan Paylaş</a>
+  <a href="#" onclick="showSection('messages');toggleMobileMenu()" class="text-2xl font-semibold hover:text-brand-400 transition-colors">Mesajlar</a>
   <div id="mobileAuthBtns" class="mt-4"></div>
-  <button onclick="toggleMobileMenu()" class="mt-4 glass rounded-xl px-6 py-3 text-sm">Kapat</button>
+  <button onclick="toggleMobileMenu()" class="mt-4 glass rounded-xl px-6 py-3 text-sm">Bağla</button>
 </div>
 
-<!-- AUTH MODAL -->
 <div id="authModal" class="fixed inset-0 z-[160] hidden">
-  <div class="modal-overlay absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeAuthModal()"></div>
-  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-3xl border border-white/5 overflow-hidden">
+  <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeAuthModal()"></div>
+  <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-3xl border border-white/5 overflow-hidden shadow-2xl">
     <div class="p-8">
       <div class="text-center mb-6" id="authHeader">
         <div class="brand-logo mx-auto mb-4" style="width:48px;height:48px"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div>
-        <h2 id="authTitle" class="text-2xl font-bold">Hesabınıza Giriş Yapın</h2>
-        <p id="authSubtitle" class="text-sm text-dark-400 mt-1">Devam etmek için giriş yapın</p>
+        <h2 id="authTitle" class="text-2xl font-bold">Hesabınıza Daxil Olun</h2>
+        <p id="authSubtitle" class="text-sm text-dark-400 mt-1">Davam etmək üçün daxil olun</p>
       </div>
       <div id="authTabs" class="flex gap-6 border-b border-white/10 mb-6">
-        <button onclick="switchAuthTab('login')" id="tabLogin" class="auth-tab active pb-3 text-sm font-medium">Giriş</button>
-        <button onclick="switchAuthTab('register')" id="tabRegister" class="auth-tab pb-3 text-sm font-medium text-dark-400">Kayıt Ol</button>
+        <button onclick="switchAuthTab('login')" id="tabLogin" class="auth-tab active pb-3 text-sm font-medium">Daxil ol</button>
+        <button onclick="switchAuthTab('register')" id="tabRegister" class="auth-tab pb-3 text-sm font-medium text-dark-400">Qeydiyyat</button>
       </div>
-      <!-- GİRİŞ FORMU -->
       <div id="loginForm">
         <div class="space-y-4">
-          <div><label class="text-xs text-dark-400 mb-1.5 block">E-posta</label><input type="email" id="loginEmail" class="input-field" placeholder="email@example.com"></div>
-          <div><label class="text-xs text-dark-400 mb-1.5 block">Şifre</label><div class="relative"><input type="password" id="loginPassword" class="input-field pr-10" placeholder="••••••••"><span class="password-toggle" onclick="togglePwd('loginPassword',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span></div></div>
-          <div class="flex items-center justify-between">
-            <label class="flex items-center gap-2 cursor-pointer"><input type="checkbox" id="rememberMe" class="w-4 h-4 rounded border-white/20 bg-dark-800 text-brand-500 focus:ring-brand-500 focus:ring-offset-0"><span class="text-xs text-dark-400">Beni hatırla</span></label>
-            <a href="#" onclick="showForgotPassword();return false" class="text-xs text-brand-400 hover:text-brand-300 transition-colors">Şifremi unuttum?</a>
-          </div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">E-poçt</label><input type="email" id="loginEmail" class="input-field" placeholder="email@example.com"></div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">Şifrə</label><div class="relative"><input type="password" id="loginPassword" class="input-field pr-10" placeholder="••••••••"><span class="absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer text-dark-500 hover:text-white" onclick="togglePwd('loginPassword',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span></div></div>
           <div id="loginError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"></div>
-          <button onclick="handleLogin()" id="loginBtn" class="btn-primary">Giriş Yap</button>
-          <div class="relative my-4"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div><div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">veya</span></div></div>
+          <button onclick="handleLogin()" id="loginBtn" class="btn-primary">Daxil ol</button>
+          <div class="relative my-4"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div><div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">və ya</span></div></div>
           <button onclick="handleGoogleLogin()" class="btn-google">
             <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Google ile devam et
+            Google ilə davam et
           </button>
         </div>
       </div>
-      <!-- KAYIT FORMU -->
       <div id="registerForm" class="hidden">
         <div class="space-y-4">
-          <div><label class="text-xs text-dark-400 mb-1.5 block">Kullanıcı adı</label><input type="text" id="regUsername" class="input-field" placeholder="kullaniciadi"></div>
-          <div><label class="text-xs text-dark-400 mb-1.5 block">E-posta</label><input type="email" id="regEmail" class="input-field" placeholder="email@example.com"></div>
-          <div><label class="text-xs text-dark-400 mb-1.5 block">Şifre</label><div class="relative"><input type="password" id="regPassword" class="input-field pr-10" placeholder="Minimum 6 karakter"><span class="password-toggle" onclick="togglePwd('regPassword',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span></div></div>
-          <div><label class="text-xs text-dark-400 mb-1.5 block">Şifre tekrarı</label><div class="relative"><input type="password" id="regPassword2" class="input-field pr-10" placeholder="Şifreyi tekrarlayın"><span class="password-toggle" onclick="togglePwd('regPassword2',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span></div></div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">İstifadəçi adı</label><input type="text" id="regUsername" class="input-field" placeholder="istifadeciadi"></div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">E-poçt</label><input type="email" id="regEmail" class="input-field" placeholder="email@example.com"></div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">Şifrə</label><div class="relative"><input type="password" id="regPassword" class="input-field pr-10" placeholder="Minimum 6 simvol"><span class="absolute right-12 top-1/2 -translate-y-1/2 cursor-pointer text-dark-500 hover:text-white" onclick="togglePwd('regPassword',this)"><iconify-icon icon="mdi:eye-off-outline" class="text-lg"></iconify-icon></span></div></div>
           <div id="regError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"></div>
-          <button onclick="handleRegister()" id="regBtn" class="btn-primary">Hesap Oluştur</button>
-          <div class="relative my-4"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div><div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">veya</span></div></div>
+          <button onclick="handleRegister()" id="regBtn" class="btn-primary">Hesab Yarat</button>
+          <div class="relative my-4"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div><div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">və ya</span></div></div>
           <button onclick="handleGoogleLogin()" class="btn-google">
             <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Google ile kayıt ol
+            Google ilə qeydiyyatdan keç
           </button>
         </div>
       </div>
-      <!-- ŞİFREMİ UNUTTUM -->
-      <div id="forgotForm" class="hidden">
-        <div class="space-y-4">
-          <div class="text-center mb-2">
-            <div class="w-14 h-14 mx-auto rounded-full bg-orange-500/10 flex items-center justify-center mb-3"><iconify-icon icon="mdi:lock-reset" class="text-orange-400 text-2xl"></iconify-icon></div>
-            <h3 class="text-lg font-bold">Şifremi Unuttum</h3>
-            <p class="text-sm text-dark-400 mt-1">Lütfen Gmail adresinizi yazınız</p>
-          </div>
-          <div><label class="text-xs text-dark-400 mb-1.5 block">E-posta</label><input type="email" id="forgotEmail" class="input-field" placeholder="email@example.com"></div>
-          <div id="forgotError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"></div>
-          <button onclick="handleForgotPassword()" id="forgotBtn" class="btn-primary">Kod Gönder</button>
-          <button onclick="backToAuthFromForgot()" class="w-full text-sm text-dark-500 hover:text-dark-300 transition-colors py-2">← Geri dön</button>
-        </div>
-      </div>
-      <!-- DOĞRULAMA FORMU -->
       <div id="verifyForm" class="hidden">
         <div class="text-center mb-6">
           <div class="w-16 h-16 mx-auto rounded-full bg-brand-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:shield-lock-outline" class="text-brand-400 text-3xl"></iconify-icon></div>
-          <h3 class="text-lg font-bold">Doğrulama Kodu</h3>
-          <p class="text-sm text-dark-400 mt-1.5" id="verifyEmailText">Kod gönderildi: —</p>
+          <h3 class="text-lg font-bold">Təsdiqləmə Kodu</h3>
+          <p class="text-sm text-dark-400 mt-1.5" id="verifyEmailText">Kod göndərildi: —</p>
         </div>
         <div class="flex gap-2.5 justify-center mb-6" id="codeInputs"></div>
         <div id="verifyError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2 mb-4 text-center"></div>
         <div id="verifySuccess" class="hidden text-brand-400 text-xs bg-brand-500/10 border border-brand-500/20 rounded-lg px-3 py-2 mb-4 text-center"></div>
-        <button onclick="verifyCode()" id="verifyBtn" class="btn-primary mb-3">Doğrula</button>
-        <button onclick="resendCode()" id="resendBtn" class="w-full text-sm text-dark-400 hover:text-brand-400 transition-colors py-2 disabled:opacity-30 disabled:cursor-not-allowed" disabled>Kodu yeniden gönder (<span id="resendTimer">2:00</span>)</button>
-        <button onclick="backToAuth()" class="w-full text-sm text-dark-500 hover:text-dark-300 transition-colors py-2 mt-1">← Geri dön</button>
+        <button onclick="verifyCode()" id="verifyBtn" class="btn-primary mb-3">Təsdiqlə</button>
+        <button onclick="resendCode()" id="resendBtn" class="w-full text-sm text-dark-400 hover:text-brand-400 transition-colors py-2 disabled:opacity-30 disabled:cursor-not-allowed" disabled>Kodu yenidən göndər (<span id="resendTimer">2:00</span>)</button>
+        <button onclick="backToAuth()" class="w-full text-sm text-dark-500 hover:text-dark-300 transition-colors py-2 mt-1">← Geri qayıt</button>
       </div>
     </div>
   </div>
 </div>
 
-<div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105]"><div id="dropdownContent"></div></div>
+<div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105] shadow-2xl"><div id="dropdownContent"></div></div>
 
-<div id="cartOverlay" class="fixed inset-0 z-[110] bg-black/60 backdrop-blur-sm hidden modal-overlay" onclick="toggleCart()"></div>
-<div id="cartSidebar" class="fixed top-0 right-0 bottom-0 z-[120] w-full max-w-md bg-dark-900 border-l border-white/5 transform translate-x-full transition-transform duration-500 ease-[cubic-bezier(0.16,1,0.3,1)] flex flex-col">
-  <div class="p-6 border-b border-white/5 flex items-center justify-between">
-    <h3 class="text-lg font-bold flex items-center gap-2"><iconify-icon icon="mdi:cart" class="text-brand-400"></iconify-icon> Sepetiniz</h3>
-    <button onclick="toggleCart()" class="p-2 hover:bg-white/5 rounded-lg transition-colors"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button>
+<div id="listingModal" class="fixed inset-0 z-[150] hidden">
+  <div class="modal-overlay absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeListingModal()"></div>
+  <div class="modal-content absolute inset-0 md:inset-4 lg:inset-8 bg-dark-900 rounded-3xl border border-white/5 overflow-hidden flex flex-col shadow-2xl">
+    <button onclick="closeListingModal()" class="absolute top-4 right-4 z-10 w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button>
+    <div id="modalBody" class="flex-1 overflow-y-auto"></div>
   </div>
-  <div id="cartItems" class="flex-1 overflow-y-auto p-6 space-y-4"></div>
-  <div id="cartFooter" class="p-6 border-t border-white/5 hidden">
-    <div class="flex justify-between items-center mb-4"><span class="text-dark-400">Toplam:</span><span id="cartTotal" class="text-2xl font-bold text-brand-400">0 ₼</span></div>
-    <button onclick="checkout()" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-3.5 rounded-xl transition-all shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40">Siparişi Tamamla</button>
-  </div>
-</div>
-
-<div id="gameModal" class="fixed inset-0 z-[150] hidden">
-  <div class="modal-overlay absolute inset-0 bg-black/70 backdrop-blur-sm" onclick="closeGameModal()"></div>
-  <div class="modal-content absolute inset-4 md:inset-8 lg:inset-y-8 lg:left-[10%] lg:right-[10%] bg-dark-900 rounded-3xl border border-white/5 overflow-hidden flex flex-col"><div id="modalBody" class="flex-1 overflow-y-auto"></div></div>
 </div>
 
 <main>
@@ -247,144 +264,131 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
   <div class="hero-bg min-h-screen flex items-center relative">
     <div class="max-w-7xl mx-auto px-6 pt-32 pb-20 grid lg:grid-cols-2 gap-12 items-center relative z-10">
       <div>
-        <div class="animate-up"><span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1.5 rounded-full border border-brand-500/20 inline-flex items-center gap-1.5"><iconify-icon icon="mdi:star-four-points" class="text-xs"></iconify-icon> Yeni Oyunlar Burada</span></div>
-        <h1 class="mt-6 text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight animate-up delay-1">En İyi<br><span class="shimmer-text">Oyunlar</span><br>Platformu</h1>
-        <p class="mt-6 text-lg text-dark-400 leading-relaxed max-w-lg animate-up delay-2">Sevdiğin oyunun puanını seç, hemen al. Yüzlerce oyun ve uygulama, en uygun fiyatlarla Randox'ta.</p>
+        <div class="animate-up"><span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1.5 rounded-full border border-brand-500/20 inline-flex items-center gap-1.5"><iconify-icon icon="mdi:store" class="text-xs"></iconify-icon> Real Bazar Platformu</span></div>
+        <h1 class="mt-6 text-5xl md:text-7xl font-bold leading-[1.05] tracking-tight animate-up delay-1">Öz Məhsulunu<br><span class="shimmer-text">Sat Və Ya Al</span></h1>
+        <p class="mt-6 text-lg text-dark-400 leading-relaxed max-w-lg animate-up delay-2">İlk dəfə olaraq birbaşan alıcı və satıcı əlaqəsi. Avtomatik link ötürmə, real mesajlaşma, Escrow (Təhlükəsiz Ticarət) və premium interfeyslə məhsullarını sat.</p>
         <div class="mt-10 flex flex-wrap gap-4 animate-up delay-3">
-          <button onclick="showSection('games')" class="bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold px-8 py-4 rounded-xl transition-all shadow-lg shadow-brand-500/25 hover:shadow-brand-500/40 flex items-center gap-2">Oyunları Keşfet <iconify-icon icon="mdi:arrow-right" class="text-lg"></iconify-icon></button>
-          <button onclick="showSection('topup')" class="glass hover:border-brand-500/30 font-semibold px-8 py-4 rounded-xl transition-all flex items-center gap-2"><iconify-icon icon="mdi:wallet-plus" class="text-brand-400"></iconify-icon> Puan Yükle</button>
+          <button onclick="showSection('listings')" class="btn-primary flex items-center gap-2" style="width:auto;padding:16px 32px;font-size:16px">İlanları Kəşf Et <iconify-icon icon="mdi:arrow-right" class="text-lg"></iconify-icon></button>
+          <button onclick="showSection('create')" class="glass hover:border-brand-500/30 font-semibold px-8 py-4 rounded-xl transition-all flex items-center gap-2"><iconify-icon icon="mdi:plus-circle" class="text-brand-400"></iconify-icon> İlan Paylaş</button>
         </div>
         <div class="mt-12 flex gap-8 animate-up delay-4">
-          <div><span class="text-3xl font-bold text-brand-400">500+</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Oyun</p></div>
+          <div><span class="text-3xl font-bold text-brand-400">1000+</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İstifadəçi</p></div>
           <div class="w-px bg-white/10"></div>
-          <div><span class="text-3xl font-bold text-brand-400">50K+</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Kullanıcı</p></div>
-          <div class="w-px bg-white/10"></div>
-          <div><span class="text-3xl font-bold text-brand-400">24/7</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Destek</p></div>
+          <div><span class="text-3xl font-bold text-brand-400">24/7</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Avtomatik</p></div>
         </div>
       </div>
       <div class="relative animate-left delay-3 hidden lg:block">
-        <div class="relative rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/10 animate-border border border-white/10">
-          <img src="https://z-cdn-media.chatglm.cn/files/a6111907-9687-4215-93b6-d440fa4d20d2.jpg?auth_key=1882175679-42e4d8f3bf15441f9334db1f4d5bce75-0-a8809e366cfa07eadf304b059c3113b7" class="w-full h-[600px] object-cover" alt="PUBG Mobile">
+        <div class="relative rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/10 animate-float">
+          <img src="https://z-cdn-media.chatglm.cn/files/a6111907-9687-4215-93b6-d440fa4d20d2.jpg?auth_key=1882175679-42e4d8f3bf15441f9334db1f4d5bce75-0-a8809e366cfa07eadf304b059c3113b7" class="w-full h-[600px] object-cover" alt="Market">
           <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-transparent"></div>
           <div class="absolute bottom-6 left-6 right-6">
             <div class="glass rounded-2xl p-5">
               <div class="flex items-center gap-3 mb-3">
-                <div class="w-12 h-12 rounded-xl overflow-hidden"><img src="https://z-cdn-media.chatglm.cn/files/a6111907-9687-4215-93b6-d440fa4d20d2.jpg?auth_key=1882175679-42e4d8f3bf15441f9334db1f4d5bce75-0-a8809e366cfa07eadf304b059c3113b7" class="w-full h-full object-cover"></div>
-                <div><h4 class="font-semibold text-sm">PUBG Mobile</h4><div class="flex items-center gap-1 mt-0.5"><iconify-icon icon="mdi:star" class="text-yellow-400 text-xs"></iconify-icon><span class="text-xs text-dark-400">4.7 • Battle Royale</span></div></div>
-                <span class="ml-auto text-brand-400 font-bold">1.00 ₼</span>
+                <div class="w-12 h-12 rounded-xl overflow-hidden bg-brand-500 flex items-center justify-center"><iconify-icon icon="mdi:sword-cross" class="text-white text-2xl"></iconify-icon></div>
+                <div><h4 class="font-semibold text-sm">Pubg Mobile Hesab</h4><div class="flex items-center gap-1 mt-0.5"><iconify-icon icon="mdi:star" class="text-yellow-400 text-xs"></iconify-icon><span class="text-xs text-dark-400">4.9 • 15 Satış</span></div></div>
+                <span class="ml-auto text-brand-400 font-bold">45.00 ₼</span>
               </div>
-              <div class="flex gap-2"><span class="text-[10px] bg-white/5 px-2 py-1 rounded-md">60 UC</span><span class="text-[10px] bg-white/5 px-2 py-1 rounded-md">325 UC</span><span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">POPÜLER</span></div>
+              <div class="flex gap-2"><span class="text-[10px] bg-white/5 px-2 py-1 rounded-md">Avtomatik</span><span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">Stok: 3</span></div>
             </div>
           </div>
         </div>
-        <div class="absolute -top-4 -right-4 glass-green rounded-2xl p-4 animate-float"><iconify-icon icon="mdi:lightning-bolt" class="text-brand-400 text-2xl"></iconify-icon><p class="text-xs font-semibold mt-1">Anında Teslimat</p></div>
+        <div class="absolute -top-4 -right-4 glass-green rounded-2xl p-4 animate-float" style="animation-delay:1s"><iconify-icon icon="mdi:lightning-bolt" class="text-brand-400 text-2xl"></iconify-icon><p class="text-xs font-semibold mt-1">Anında Ötürmə</p></div>
       </div>
     </div>
   </div>
-  <div class="border-y border-white/5 py-4 overflow-hidden bg-dark-900/50">
-    <div class="marquee-track whitespace-nowrap">
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:gamepad-variant" class="text-brand-500"></iconify-icon> PUBG Mobile</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:sword-cross" class="text-brand-500"></iconify-icon> Mobile Legends</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:car-sports" class="text-brand-500"></iconify-icon> Free Fire</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:gun" class="text-brand-500"></iconify-icon> Call of Duty</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:chess-knight" class="text-brand-500"></iconify-icon> Clash Royale</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:shield-sword" class="text-brand-500"></iconify-icon> Genshin Impact</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:ghost" class="text-brand-500"></iconify-icon> Phasmophobia</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:rocket-launch" class="text-brand-500"></iconify-icon> Fortnite</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:soccer" class="text-brand-500"></iconify-icon> eFootball</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:puzzle" class="text-brand-500"></iconify-icon> Among Us</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:gamepad-variant" class="text-brand-500"></iconify-icon> PUBG Mobile</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:sword-cross" class="text-brand-500"></iconify-icon> Mobile Legends</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:car-sports" class="text-brand-500"></iconify-icon> Free Fire</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:gun" class="text-brand-500"></iconify-icon> Call of Duty</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:chess-knight" class="text-brand-500"></iconify-icon> Clash Royale</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:shield-sword" class="text-brand-500"></iconify-icon> Genshin Impact</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:ghost" class="text-brand-500"></iconify-icon> Phasmophobia</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:rocket-launch" class="text-brand-500"></iconify-icon> Fortnite</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:soccer" class="text-brand-500"></iconify-icon> eFootball</span>
-      <span class="mx-8 text-dark-500 text-sm font-medium flex items-center gap-2"><iconify-icon icon="mdi:puzzle" class="text-brand-500"></iconify-icon> Among Us</span>
-    </div>
-  </div>
-  <div class="max-w-7xl mx-auto px-6 py-24">
-    <div class="flex items-end justify-between mb-12">
-      <div><span class="tag uppercase text-brand-400 tracking-widest">Özel Seçim</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Popüler Oyunlar</h2><p class="mt-2 text-dark-400">En çok satılan ve oynanan oyunlar</p></div>
-      <button onclick="showSection('games')" class="hidden md:flex items-center gap-2 text-brand-400 hover:text-brand-300 text-sm font-medium transition-colors">Tümünü Gör <iconify-icon icon="mdi:arrow-right"></iconify-icon></button>
-    </div>
-    <div id="featuredGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
-  </div>
-  <div class="border-y border-white/5 bg-dark-900/30">
-    <div class="max-w-7xl mx-auto px-6 py-24">
-      <div class="text-center mb-14"><span class="tag uppercase text-brand-400 tracking-widest">Kategoriler</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Sevdiğin Türü Bul</h2></div>
-      <div class="grid grid-cols-2 md:grid-cols-4 gap-5">
-        <div onclick="showSection('games');filterCategory('fps')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-red-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:crosshairs-gps" class="text-red-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">FPS</h3><p class="text-xs text-dark-500 mt-1">42 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('moba')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-blue-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:sword-cross" class="text-blue-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">MOBA</h3><p class="text-xs text-dark-500 mt-1">28 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('battle-royale')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-orange-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:account-group" class="text-orange-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Battle Royale</h3><p class="text-xs text-dark-500 mt-1">35 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('rpg')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-purple-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:shield-sword" class="text-purple-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">RPG</h3><p class="text-xs text-dark-500 mt-1">53 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('racing')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-cyan-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:car-sports" class="text-cyan-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Yarış</h3><p class="text-xs text-dark-500 mt-1">19 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('strategy')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-yellow-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:chess-knight" class="text-yellow-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Strateji</h3><p class="text-xs text-dark-500 mt-1">31 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('sports')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-green-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:soccer" class="text-green-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Spor</h3><p class="text-xs text-dark-500 mt-1">22 oyun</p></div>
-        <div onclick="showSection('games');filterCategory('horror')" class="stat-card glass rounded-2xl p-6 text-center cursor-pointer border border-white/5 hover:border-brand-500/30"><div class="w-14 h-14 mx-auto rounded-2xl bg-gray-500/10 flex items-center justify-center mb-4"><iconify-icon icon="mdi:ghost" class="text-gray-400 text-2xl"></iconify-icon></div><h3 class="font-semibold text-sm">Korku</h3><p class="text-xs text-dark-500 mt-1">17 oyun</p></div>
-      </div>
-    </div>
-  </div>
-  <div class="max-w-7xl mx-auto px-6 py-24">
-    <div class="text-center mb-14"><span class="tag uppercase text-brand-400 tracking-widest">Neden Randox?</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Öne Çıkan Özellikler</h2></div>
-    <div class="grid md:grid-cols-3 gap-8">
-      <div class="glass rounded-2xl p-8 border border-white/5 hover:border-brand-500/20 transition-all duration-500 hover:-translate-y-1"><div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:lightning-bolt" class="text-brand-400 text-2xl"></iconify-icon></div><h3 class="text-lg font-bold mb-3">Anında Teslimat</h3><p class="text-dark-400 text-sm leading-relaxed">Ödeme yaptığınız an puanlar hesabınıza yüklenir.</p></div>
-      <div class="glass rounded-2xl p-8 border border-white/5 hover:border-brand-500/20 transition-all duration-500 hover:-translate-y-1"><div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:shield-check" class="text-brand-400 text-2xl"></iconify-icon></div><h3 class="text-lg font-bold mb-3">%100 Güvenli</h3><p class="text-dark-400 text-sm leading-relaxed">Tüm işlemler SSL şifreleme ile korunur.</p></div>
-      <div class="glass rounded-2xl p-8 border border-white/5 hover:border-brand-500/20 transition-all duration-500 hover:-translate-y-1"><div class="w-14 h-14 rounded-2xl bg-brand-500/10 flex items-center justify-center mb-5"><iconify-icon icon="mdi:headset" class="text-brand-400 text-2xl"></iconify-icon></div><h3 class="text-lg font-bold mb-3">7/24 Destek</h3><p class="text-dark-400 text-sm leading-relaxed">Destek ekibimiz her zaman yanınızda.</p></div>
-    </div>
-  </div>
 </section>
 
-<section id="section-games" class="hidden pt-24 pb-20 min-h-screen">
+<section id="section-listings" class="hidden pt-24 pb-20 min-h-screen">
   <div class="max-w-7xl mx-auto px-6">
-    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">Oyun Kataloğu</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Tüm Oyunlar</h2><p class="mt-2 text-dark-400">Oyununu bul, puanını seç, al!</p></div>
-    <div class="flex flex-wrap gap-2 mb-8" id="categoryFilters">
-      <button onclick="filterCategory('all')" class="cat-btn active tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium" data-cat="all">Tümü</button>
-      <button onclick="filterCategory('fps')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="fps">FPS</button>
-      <button onclick="filterCategory('moba')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="moba">MOBA</button>
-      <button onclick="filterCategory('battle-royale')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="battle-royale">Battle Royale</button>
-      <button onclick="filterCategory('rpg')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="rpg">RPG</button>
-      <button onclick="filterCategory('racing')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="racing">Yarış</button>
-      <button onclick="filterCategory('strategy')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="strategy">Strateji</button>
-      <button onclick="filterCategory('sports')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="sports">Spor</button>
-      <button onclick="filterCategory('horror')" class="cat-btn tag uppercase px-4 py-2 rounded-full border border-white/10 text-sm font-medium text-dark-400" data-cat="horror">Korku</button>
-    </div>
-    <div id="gamesGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
-    <div id="noResults" class="hidden text-center py-20"><iconify-icon icon="mdi:magnify-close" class="text-5xl text-dark-600 mb-4"></iconify-icon><p class="text-dark-400 text-lg">Sonuç bulunamadı</p></div>
+    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">Bazar</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Aktiv İlanlar</h2><p class="mt-2 text-dark-400">Məhsulu seç, dərhal al və ya satıcı ilə əlaqə saxla.</p></div>
+    <div id="listingsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
+    <div id="noResults" class="hidden text-center py-20"><iconify-icon icon="mdi:magnify-close" class="text-5xl text-dark-600 mb-4"></iconify-icon><p class="text-dark-400 text-lg">Nəticə tapılmadı</p></div>
   </div>
 </section>
 
-<section id="section-apps" class="hidden pt-24 pb-20 min-h-screen">
-  <div class="max-w-7xl mx-auto px-6">
-    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">Uygulama Mağazası</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Popüler Uygulamalar</h2><p class="mt-2 text-dark-400">Uygulamaların ücretli özelliklerini uygun fiyata al</p></div>
-    <div id="appsGrid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5"></div>
-  </div>
-</section>
-
-<section id="section-topup" class="hidden pt-24 pb-20 min-h-screen">
+<section id="section-create" class="hidden pt-24 pb-20 min-h-screen">
   <div class="max-w-3xl mx-auto px-6">
-    <div class="text-center mb-12"><span class="tag uppercase text-brand-400 tracking-widest">Bakiye</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Puan Yükle</h2><p class="mt-2 text-dark-400">Hesabına puan yükle, özgürce alışveriş yap</p></div>
-    <div class="glass rounded-3xl p-8 border border-white/5">
-      <div class="text-center mb-8"><p class="text-dark-400 text-sm mb-1">Mevcut Bakiye</p><p class="text-5xl font-bold text-brand-400" id="currentBalance">0.00 ₼</p></div>
-      <div class="grid grid-cols-2 md:grid-cols-3 gap-4 mb-8" id="topUpGrid">
-        <div onclick="selectTopUp(this,5)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5"><iconify-icon icon="mdi:coin" class="text-yellow-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">5 ₼</p><p class="text-xs text-dark-500 mt-1">500 Puan</p></div>
-        <div onclick="selectTopUp(this,10)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5"><iconify-icon icon="mdi:coin" class="text-yellow-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">10 ₼</p><p class="text-xs text-dark-500 mt-1">1000 Puan</p></div>
-        <div onclick="selectTopUp(this,25)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5 relative overflow-hidden"><div class="absolute top-0 right-0 bg-brand-500 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">POPÜLER</div><iconify-icon icon="mdi:coins" class="text-yellow-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">25 ₼</p><p class="text-xs text-dark-500 mt-1">2500 Puan</p></div>
-        <div onclick="selectTopUp(this,50)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5"><iconify-icon icon="mdi:cash-multiple" class="text-yellow-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">50 ₼</p><p class="text-xs text-dark-500 mt-1">5000 Puan</p></div>
-        <div onclick="selectTopUp(this,100)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5 relative overflow-hidden"><div class="absolute top-0 right-0 bg-orange-500 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">BONUS +%10</div><iconify-icon icon="mdi:diamond-stone" class="text-cyan-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">100 ₼</p><p class="text-xs text-dark-500 mt-1">11000 Puan</p></div>
-        <div onclick="selectTopUp(this,200)" class="score-option glass-light rounded-2xl p-5 text-center border border-white/5 relative overflow-hidden"><div class="absolute top-0 right-0 bg-purple-500 text-[9px] font-bold px-2 py-0.5 rounded-bl-lg">BONUS +%15</div><iconify-icon icon="mdi:crown" class="text-purple-400 text-2xl mb-2"></iconify-icon><p class="text-xl font-bold">200 ₼</p><p class="text-xs text-dark-500 mt-1">23000 Puan</p></div>
+    <div class="text-center mb-12"><span class="tag uppercase text-brand-400 tracking-widest">Yeni İlan</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">İlanını Yüklə</h2><p class="mt-2 text-dark-400">Məhsul məlumatlarını dəqiq və açıq şəkildə daxil et.</p></div>
+    <div class="glass rounded-3xl p-8 border border-white/5 shadow-2xl">
+      <div class="space-y-6">
+        <div class="text-center mb-4 p-4 glass-light rounded-xl"><p class="text-dark-400 text-sm mb-1">Cari Balans</p><p class="text-3xl font-bold text-brand-400" id="currentBalance">0.00 ₼</p><p class="text-xs text-dark-500 mt-1">Məhsul satıldığında komissiya (20%) kəsilir, qalan məbləğ sizə keçir.</p></div>
+        <div><label class="text-xs text-dark-400 mb-1.5 block">Məhsul Adı</label><input type="text" id="createTitle" class="input-field" placeholder="Məsələn: Valorant Hesab v1"></div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div><label class="text-xs text-dark-400 mb-1.5 block">Kateqoriya</label>
+            <select id="createCategory" class="input-field">
+              <option value="Hesab">Oyun Hesabı</option>
+              <option value="Epin">Epin / Köd</option>
+              <option value="Script">Skript / Mod</option>
+              <option value="Item">Oyun İtemi</option>
+              <option value="Service">Xidmət / Boost</option>
+              <option value="Other">Digər</option>
+            </select>
+          </div>
+          <div><label class="text-xs text-dark-400 mb-1.5 block">Qiymət (AZN)</label><input type="number" id="createPrice" class="input-field" min="0.5" step="0.1" placeholder="5.00"></div>
+        </div>
+        <div><label class="text-xs text-dark-400 mb-1.5 block">Açıqlama</label><textarea id="createDesc" class="input-field h-24 resize-none" placeholder="Məhsul haqqında bütün detalları yaz. Səviyyə, rütbə, skinlər və s."></textarea></div>
+        <div><label class="text-xs text-dark-400 mb-1.5 block">Şəkil (URL və ya Yüklə)</label>
+          <div class="pp-upload-zone border-2 border-dashed border-white/10 rounded-xl p-5 text-center cursor-pointer hover:border-brand-500/40 transition-colors" onclick="document.getElementById('createImgFile').click()">
+            <iconify-icon icon="mdi:cloud-upload" class="text-dark-400 text-3xl mb-2 block"></iconify-icon>
+            <p class="text-sm text-dark-400">Şəkil yükləmək üçün tıklayın</p>
+            <p id="createImgName" class="text-xs text-brand-400 mt-2"></p>
+          </div>
+          <input type="file" id="createImgFile" accept="image/*" class="hidden" onchange="handleImgUpload(this)">
+          <input type="hidden" id="createImg">
+        </div>
+        <div class="border border-white/10 rounded-xl p-5">
+          <label class="text-xs text-dark-400 mb-2 block font-semibold">Çatdırılma Metodu</label>
+          <div class="grid grid-cols-2 gap-3">
+            <div onclick="selectDelivery('link')" id="deliveryLink" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer transition-all hover:border-brand-500/40">
+              <iconify-icon icon="mdi:link-variant" class="text-lg mb-1 text-brand-400 block"></iconify-icon>
+              <span class="text-xs font-medium">Avtomatik Link</span>
+              <p class="text-[10px] text-dark-500 mt-1">Alıcı alınca avtomatik göndərilir</p>
+            </div>
+            <div onclick="selectDelivery('manual')" id="deliveryManual" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer transition-all hover:border-brand-500/40">
+              <iconify-icon icon="mdi:handshake" class="text-lg mb-1 text-brand-400 block"></iconify-icon>
+              <span class="text-xs font-medium">Manuel Əlaqə</span>
+              <p class="text-[10px] text-dark-500 mt-1">Söhbət vasitəsilə əlaqə</p>
+            </div>
+          </div>
+        </div>
+        <div id="linkStockArea" class="hidden">
+          <label class="text-xs text-dark-400 mb-1.5 block">Stok Linkləri (Hər sətirdə bir link)</label>
+          <textarea id="createLinks" class="input-field h-32 resize-none font-mono text-xs" placeholder="https://link1.com/abc&#10;https://link2.com/def&#10;https://link3.com/ghi"></textarea>
+          <p class="text-xs text-dark-500 mt-1">Boş sətirlər avtomatik silinir. Hər alışda 1-ci link göndərilir.</p>
+        </div>
+        <div id="manualStockArea" class="hidden">
+          <label class="text-xs text-dark-400 mb-1.5 block">Stok Sayı</label>
+          <input type="number" id="createManualStock" class="input-field" min="1" placeholder="Məsələn: 5">
+          <p class="text-xs text-dark-500 mt-1">Hər alışda stok sayı 1 azalır.</p>
+        </div>
+        <div class="border border-white/10 rounded-xl p-5">
+          <div class="flex justify-between items-center mb-3">
+            <label class="text-sm font-semibold">Xüsusiyyətlər (Opsional)</label>
+            <button onclick="addFeature()" class="text-brand-400 text-xs font-medium flex items-center gap-1 hover:text-brand-300"><iconify-icon icon="mdi:plus"></iconify-icon> Əlavə Et</button>
+          </div>
+          <div id="featuresContainer" class="space-y-2"></div>
+        </div>
+        <button onclick="submitListing()" id="submitListingBtn" class="btn-primary text-base" style="padding:16px;">İlanı Yayınla</button>
       </div>
-      <div class="mb-6">
-        <label class="text-sm text-dark-400 mb-2 block">Ödeme Yöntemi</label>
-        <div class="grid grid-cols-3 gap-3" id="paymentGrid">
-          <div onclick="selectPayment(this)" class="score-option selected glass-light rounded-xl p-3 text-center border border-white/5 text-xs font-medium"><iconify-icon icon="mdi:credit-card" class="text-lg mb-1 text-brand-400 block"></iconify-icon>Kart</div>
-          <div onclick="selectPayment(this)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 text-xs font-medium text-dark-400"><iconify-icon icon="mdi:cellphone" class="text-lg mb-1 block"></iconify-icon>Telefon</div>
-          <div onclick="selectPayment(this)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 text-xs font-medium text-dark-400"><iconify-icon icon="mdi:bitcoin" class="text-lg mb-1 block"></iconify-icon>Kripto</div>
+    </div>
+  </div>
+</section>
+
+<section id="section-messages" class="hidden pt-24 pb-20 min-h-screen">
+  <div class="max-w-6xl mx-auto px-6">
+    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">Mesajlar</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Söhbətlər</h2></div>
+    <div class="glass rounded-2xl border border-white/5 overflow-hidden flex shadow-2xl" style="height: 70vh;">
+      <div id="chatList" class="w-1/3 border-r border-white/5 overflow-y-auto"></div>
+      <div id="chatWindow" class="w-2/3 flex flex-col bg-dark-950/20">
+        <div id="chatHeader" class="p-4 border-b border-white/5 hidden glass"></div>
+        <div id="chatMessages" class="flex-1 overflow-y-auto p-6 space-y-4 flex flex-col"></div>
+        <div id="chatInputArea" class="p-4 border-t border-white/5 hidden">
+          <div class="flex gap-2">
+            <input type="text" id="msgInput" class="input-field flex-1" placeholder="Mesajınızı yazın..." onkeydown="if(event.key==='Enter')sendMessage()">
+            <button onclick="sendMessage()" class="btn-primary" style="width:auto;padding:12px 20px"><iconify-icon icon="mdi:send"></iconify-icon></button>
+          </div>
         </div>
       </div>
-      <button onclick="processTopUp()" id="topUpBtn" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-4 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-40 disabled:cursor-not-allowed" disabled>Puan Yükle</button>
     </div>
   </div>
 </section>
@@ -393,433 +397,672 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
   <div class="max-w-3xl mx-auto px-6" id="profileContent"></div>
 </section>
 
+<section id="section-topup" class="hidden pt-24 pb-20 min-h-screen">
+  <div class="max-w-3xl mx-auto px-6">
+    <div class="text-center mb-12"><span class="tag uppercase text-brand-400 tracking-widest">Balans</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Balans Yüklə</h2><p class="mt-2 text-dark-400">Məhsul almaq üçün balans yüklə</p></div>
+    <div class="glass rounded-3xl p-8 border border-white/5 shadow-2xl">
+      <div class="text-center mb-8"><p class="text-dark-400 text-sm mb-1">Cari Balans</p><p class="text-5xl font-bold text-brand-400" id="currentBalanceTop">0.00 ₼</p></div>
+      <div class="mb-8">
+        <label class="text-sm text-dark-400 mb-2 block">Məbləği seçin və ya daxil edin (AZN)</label>
+        <input type="number" id="customAmountInput" min="1" step="0.01" placeholder="Məsələn: 5.50" class="input-field text-center text-2xl font-bold mb-4">
+        <div class="grid grid-cols-3 md:grid-cols-6 gap-2">
+          <div onclick="setCustomAmount(5)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">5 ₼</p></div>
+          <div onclick="setCustomAmount(10)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">10 ₼</p></div>
+          <div onclick="setCustomAmount(25)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">25 ₼</p></div>
+          <div onclick="setCustomAmount(50)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">50 ₼</p></div>
+          <div onclick="setCustomAmount(100)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">100 ₼</p></div>
+          <div onclick="setCustomAmount(200)" class="score-option glass-light rounded-xl p-3 text-center border border-white/5 cursor-pointer"><p class="font-bold text-sm">200 ₼</p></div>
+        </div>
+      </div>
+      <button onclick="processTopUp()" id="topUpBtn" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-4 rounded-xl transition-all shadow-lg shadow-brand-500/20 hover:shadow-brand-500/40 disabled:opacity-40 disabled:cursor-not-allowed" disabled>Ödəniş Sorğusu Göndər</button>
+    </div>
+  </div>
+</section>
+
+<section id="section-admin" class="hidden pt-24 pb-20 min-h-screen">
+  <div class="max-w-7xl mx-auto px-6">
+    <div class="mb-10"><span class="tag uppercase text-brand-400 tracking-widest">İdarəetmə</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">God Mode Admin Panel</h2></div>
+    
+    <div class="flex gap-2 mb-6 border-b border-white/10 pb-2 overflow-x-auto">
+      <button onclick="switchAdminTab('users')" class="admin-tab-btn active text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors">İstifadəçilər</button>
+      <button onclick="switchAdminTab('disputes')" class="admin-tab-btn text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors text-dark-400">Disputelar</button>
+      <button onclick="switchAdminTab('reports')" class="admin-tab-btn text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors text-dark-400">Şikayətlər</button>
+      <button onclick="switchAdminTab('support')" class="admin-tab-btn text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors text-dark-400">Live Dəstək</button>
+      <button onclick="switchAdminTab('spy')" class="admin-tab-btn text-sm px-4 py-2 rounded-lg hover:bg-white/5 transition-colors text-dark-400">Mesaj İnspeksiyası</button>
+    </div>
+
+    <div id="adminContent"></div>
+  </div>
+</section>
+
 </main>
 
-<footer class="border-t border-white/5 bg-dark-950">
+<footer class="border-t border-white/5 bg-dark-950 mt-20">
   <div class="max-w-7xl mx-auto px-6 py-16">
     <div class="grid md:grid-cols-4 gap-12">
       <div>
-        <div class="flex items-center gap-3 mb-5"><div class="brand-logo-sm"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div><span class="text-xl font-bold">Randox</span></div>
-        <p class="text-dark-400 text-sm leading-relaxed">En büyük oyun puanı platforması.</p>
-        <div class="flex gap-3 mt-5">
-          <a href="#" class="w-9 h-9 glass rounded-lg flex items-center justify-center hover:border-brand-500/30 transition-all"><iconify-icon icon="mdi:instagram" class="text-dark-400 hover:text-brand-400"></iconify-icon></a>
-          <a href="#" class="w-9 h-9 glass rounded-lg flex items-center justify-center hover:border-brand-500/30 transition-all"><iconify-icon icon="mdi:facebook" class="text-dark-400 hover:text-brand-400"></iconify-icon></a>
-          <a href="#" class="w-9 h-9 glass rounded-lg flex items-center justify-center hover:border-brand-500/30 transition-all"><iconify-icon icon="mdi:youtube" class="text-dark-400 hover:text-brand-400"></iconify-icon></a>
-          <a href="#" class="w-9 h-9 glass rounded-lg flex items-center justify-center hover:border-brand-500/30 transition-all"><iconify-icon icon="mdi:telegram" class="text-dark-400 hover:text-brand-400"></iconify-icon></a>
-        </div>
+        <div class="flex items-center gap-3 mb-5"><div class="brand-logo-sm w-10 h-10 rounded-xl overflow-hidden"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div><span class="text-xl font-bold">Randox</span></div>
+        <p class="text-dark-400 text-sm leading-relaxed">Real rəqəmsal məhsul bazarı.</p>
       </div>
-      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Platforma</h4><ul class="space-y-3"><li><a href="#" onclick="showSection('games')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Oyunlar</a></li><li><a href="#" onclick="showSection('apps')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Uygulamalar</a></li><li><a href="#" onclick="showSection('topup')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Puan Yükle</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İndirimler</a></li></ul></div>
-      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Destek</h4><ul class="space-y-3"><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">SSS</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İletişim</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İade</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Canlı Destek</a></li></ul></div>
-      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Bülten</h4><p class="text-sm text-dark-400 mb-4">Yeni oyunlar ve indirimlerden haberdar ol</p><div class="flex gap-2"><input type="email" placeholder="E-posta" class="flex-1 bg-dark-800 border border-white/5 rounded-xl px-4 py-2.5 text-sm outline-none focus:border-brand-500/50 transition-colors"><button class="bg-brand-500 hover:bg-brand-400 text-white px-4 py-2.5 rounded-xl transition-colors"><iconify-icon icon="mdi:send" class="text-lg"></iconify-icon></button></div></div>
+      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Platforma</h4><ul class="space-y-3"><li><a href="#" onclick="showSection('listings')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İlanlar</a></li><li><a href="#" onclick="showSection('create')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">İlan Paylaş</a></li><li><a href="#" onclick="showSection('messages')" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Mesajlar</a></li></ul></div>
+      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Dəstək</h4><ul class="space-y-3"><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">FAQ</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Əlaqə</a></li></ul></div>
+      <div><h4 class="font-semibold text-sm mb-4 uppercase tracking-wider text-dark-300">Qanun</h4><ul class="space-y-3"><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Məxfilik</a></li><li><a href="#" class="text-sm text-dark-400 hover:text-brand-400 transition-colors">Şərtlər</a></li></ul></div>
     </div>
     <div class="border-t border-white/5 mt-12 pt-8 flex flex-col md:flex-row justify-between items-center gap-4">
-      <p class="text-xs text-dark-500">© 2025 Randox. Tüm hakları saklıdır.</p>
-      <div class="flex gap-6"><a href="#" class="text-xs text-dark-500 hover:text-dark-300 transition-colors">Gizlilik Politikası</a><a href="#" class="text-xs text-dark-500 hover:text-dark-300 transition-colors">Kullanım Koşulları</a></div>
+      <p class="text-xs text-dark-500">© 2025 Randox. Bütün hüquqlar qorunur.</p>
     </div>
   </div>
 </footer>
 
 <script>
-/* ===== EMAILJS ===== */
+/* ===== AYARLAR ===== */
 emailjs.init('ZaLCBng5Gicqv539R');
-
-/* ===== GOOGLE SIGN-IN ===== */
-/* 
-   NOT: Google girişi çalışması için:
-   1. https://console.cloud.google.com/ gir
-   2. Yeni proje oluştur → APIs & Services → OAuth consent screen ayarla
-   3. Credentials → Create OAuth client ID → Web application
-   4. Authorized JavaScript origins: https://senin-kullanici-adin.github.io ekle
-   5. Aşağıdaki CLIENT_ID'yi kendi client ID'n ile değiştir
-*/
-const GOOGLE_CLIENT_ID = '523650358471-6m440tl0o89eq6balm1pe4uermmbiv88.apps.googleusercontent.com.apps.googleusercontent.com';
-let googleInitialized = false;
-
-function initGoogleSignIn() {
-  if (googleInitialized || typeof google === 'undefined' || !google.accounts) return;
-  if (GOOGLE_CLIENT_ID.startsWith('BURAYA')) return; // placeholder varsa başlatma
-  google.accounts.id.initialize({
-    client_id: GOOGLE_CLIENT_ID,
-    callback: handleGoogleResponse,
-    auto_select: false,
-    cancel_on_tap_outside: true,
-  });
-  googleInitialized = true;
-}
-
-function handleGoogleLogin() {
-  if (!googleInitialized) {
-    if (typeof google !== 'undefined' && google.accounts) {
-      initGoogleSignIn();
-      if (!googleInitialized) {
-        showToast('Google girişi henüz yapılandırılmamış. Client ID gerekli.', 'error');
-        return;
-      }
-    } else {
-      showToast('Google girişi yüklenemedi. Sayfayı yenileyin.', 'error');
-      return;
-    }
-  }
-  google.accounts.id.prompt((notification) => {
-    if (notification.isNotDisplayed() || notification.isSkippedMoment()) {
-      showToast('Google girişi iptal edildi.', 'info');
-    }
-  });
-}
-
-function handleGoogleResponse(response) {
-  try {
-    const payload = JSON.parse(atob(response.credential.split('.')[1]));
-    const email = payload.email;
-    const name = payload.name || email.split('@')[0];
-    const picture = payload.picture || '';
-    
-    let user = users.find(u => u.email === email);
-    if (!user) {
-      user = { username: name, email: email, password: 'google_' + Date.now(), balance: 0, avatar: picture, createdAt: new Date().toISOString() };
-      users.push(user);
-      localStorage.setItem('randox_users', JSON.stringify(users));
-    } else if (picture && !user.avatar) {
-      user.avatar = picture;
-      localStorage.setItem('randox_users', JSON.stringify(users));
-    }
-    
-    currentUser = { ...user };
-    localStorage.setItem('randox_user', JSON.stringify(currentUser));
-    closeAuthModal();
-    updateUserArea();
-    showToast('Hoş geldin, ' + currentUser.username + '!', 'success');
-  } catch (e) {
-    showToast('Google girişi başarısız oldu.', 'error');
-  }
-}
-
-// Google SDK yüklendiğinde başlat
-window.addEventListener('load', () => { setTimeout(initGoogleSignIn, 500); });
+const GOOGLE_CLIENT_ID = '523650358471-6m440tl0o89eq6balm1pe4uermmbiv88.apps.googleusercontent.com';
+const ADMIN_EMAILS = ['senin@email.com', 'admin2@gmail.com']; // ÖZ GMAİL ADRESLERİNİ ƏLAVƏ ET
+const COMMISSION_RATE = 0.20; // 20% Komissiya
+const ESCROW_HOURS = 24;
 
 /* ===== STATE ===== */
 let currentUser = JSON.parse(localStorage.getItem('randox_user')) || null;
-let cart = JSON.parse(localStorage.getItem('randox_cart')) || [];
-let users = JSON.parse(localStorage.getItem('randox_users')) || [];
-let currentSection = 'home';
-let selectedTopUpAmount = 0;
-let selectedPayment = 'card';
-let mobileMenuOpen = false;
-let cartOpen = false;
-let dropdownOpen = false;
-let currentFilter = 'all';
-let searchQuery = '';
-let vCode='',vEmail='',vAction='',vTempData={},resendCd=0,resendIv=null;
+let users = JSON.parse(localStorage.getItem('randox_users') || '[]');
+let listings = JSON.parse(localStorage.getItem('randox_listings') || '[]');
+let chats = JSON.parse(localStorage.getItem('randox_chats') || '{}');
+let transactions = JSON.parse(localStorage.getItem('randox_transactions') || '[]');
+let userReports = JSON.parse(localStorage.getItem('randox_reports') || '[]');
+let supportChats = JSON.parse(localStorage.getItem('randox_support') || '{}');
+let currentSection = 'home', selectedTopUpAmount = 0, selectedDeliveryMethod = null, featuresList = [], currentChatId = null, currentAdminTab = 'users', activeSupportChat = null, currentDisputeTx = null;
+let mobileMenuOpen = false, dropdownOpen = false, searchQuery = '';
+let vCode='',vEmail='',vAction='',vTempData={},resendCd=0,resendIv=null,googleInitialized=false;
 
-/* ===== AVATAR YARDIMCI ===== */
-function getAvatarHTML(user, size, cls) {
-  if (!user) return '';
-  if (user.avatar) return `<img src="${user.avatar}" alt="">`;
-  const c = (user.username || 'K').charAt(0).toUpperCase();
-  const col = `hsl(${(user.username || 'K').charCodeAt(0) * 37 % 360},60%,45%)`;
-  return c;
+/* ===== GOOGLE & AVATAR ===== */
+function initGoogleSignIn(){if(googleInitialized||typeof google==='undefined'||!google.accounts)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleResponse,auto_select:false,cancel_on_tap_outside:true});googleInitialized=true;}
+function handleGoogleLogin(){if(!googleInitialized&&typeof google!=='undefined'&&google.accounts)initGoogleSignIn();if(googleInitialized)google.accounts.id.prompt();}
+function handleGoogleResponse(r){try{const p=JSON.parse(atob(r.credential.split('.')[1]));const email=p.email;const name=p.name||email.split('@')[0];let u=users.find(x=>x.email===email);if(!u){u={username:name,email,password:'g_'+Date.now(),balance:0,avatar:p.picture,createdAt:new Date().toISOString(),banned:false};users.push(u);localStorage.setItem('randox_users',JSON.stringify(users));}currentUser={...u};localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();checkBanAndInit();}catch(e){showToast('Google xətası','error');}}
+window.addEventListener('load',()=>setTimeout(initGoogleSignIn,500));
+function getAvatarColor(u){return u?`hsl(${(u.username||'K').charCodeAt(0)*37%360},60%,45%)`:'#22c55e';}
+
+/* ===== BAN CHECK ===== */
+function checkBanAndInit() {
+  const u = users.find(x => x.email === currentUser.email);
+  if (u && u.banned) {
+    document.getElementById('banScreen').classList.add('active');
+  } else {
+    document.getElementById('banScreen').classList.remove('active');
+    updateUserArea();
+    showToast('Xoş gəldin, ' + currentUser.username + '!', 'success');
+  }
 }
-
-function getAvatarColor(user) {
-  if (!user) return '#22c55e';
-  return `hsl(${(user.username || 'K').charCodeAt(0) * 37 % 360},60%,45%)`;
-}
-
-/* ===== IMG ===== */
-const IMG={
-  pubg:"https://z-cdn-media.chatglm.cn/files/a6111907-9687-4215-93b6-d440fa4d20d2.jpg?auth_key=1882175679-42e4d8f3bf15441f9334db1f4d5bce75-0-a8809e366cfa07eadf304b059c3113b7",
-  genshin:"https://z-cdn-media.chatglm.cn/files/22360c39-d4ba-40e5-b74d-2a5a7dd20601.jpg?auth_key=1882175679-d446480650bf471c8b27e36ec83c1d28-0-192250e878113eabae567ff743733996",
-  fortnite:"https://z-cdn-media.chatglm.cn/files/47d8abc2-18b0-4fed-a277-adf27dfbce7a.jpg?auth_key=1882175679-912e9344b8284119887e018d151d83a2-0-bff14fd4307294247ccd2117e0b9525d",
-  efootball:"https://z-cdn-media.chatglm.cn/files/e4396117-8faf-4cca-a02d-7e435ab69e33.jpg?auth_key=1882175679-1b88fefa925840e493d53a76e22c02aa-0-62f9267b4fd2bc31a6e195404aaf362f",
-  coc:"https://z-cdn-media.chatglm.cn/files/4202ac37-fd30-48c1-b9d0-fee3f58ecd1c.jpg?auth_key=1882175679-230aad24ca6940d5b4edf90e3607ce25-0-ea86d626caf97ec04f8cbe87498914ed",
-  asphalt:"https://z-cdn-media.chatglm.cn/files/e00044dd-fffd-49ab-8ccd-19044b5fec35.png?auth_key=1882220405-fd6b684f4d4f467588a4048244dcf9ce-0-81954c4d2ce3978eeb665d3c392f4698",
-  freefire:"https://z-cdn-media.chatglm.cn/files/119f20d2-a3f2-42d4-8338-4f419a3387b3.png?auth_key=1882220405-e59f24a4d7674b9396b2b47ef1bdb240-0-11d8eb2e99240872f9efa8db0701c0bc",
-  apex:"https://z-cdn-media.chatglm.cn/files/2ea8abd9-d27e-45d2-ae29-bcd3ec9d4730.png?auth_key=1882220405-b2fd055e02f54393bf41718f62038f2a-0-b83c94611b672bb8133a6c4b93fb1b80",
-  codm:"https://z-cdn-media.chatglm.cn/files/2897eab8-e3c4-47fa-8e26-fc1f978983c3.png?auth_key=1882220405-dde894e87e73412fa39e2885635bfc79-0-ce9669c72550432e49227eca72a3d909",
-  netflix:"https://z-cdn-media.chatglm.cn/files/0a9f3d93-2512-4f39-892b-ddc87dd6219c.png?auth_key=1882220405-c7d8774ff7d94dd6a087778505b03674-0-fe62bfcf214ca6285d02073b9155546c",
-  tiktok:"https://z-cdn-media.chatglm.cn/files/b6ec53be-717d-4722-98e5-90a7add95d35.png?auth_key=1882220405-94a27c6b0da74ea59df963b5901899a7-0-3fe1f7a7546ba169b41886d26c6e75a5",
-  discord:"https://z-cdn-media.chatglm.cn/files/6ea1d159-023c-4170-96a6-f97fc744e043.png?auth_key=1882220405-edaeb05e60474d968b43bf743a1c684c-0-c2f257dd94ecd2b892aa169ba0b82e3d",
-  ytpremium:"https://z-cdn-media.chatglm.cn/files/0627406e-f530-4061-a7db-d477df7e048f.png?auth_key=1882220405-bf3aa1f36a1144d8b71bd678c2cc7517-0-316e6fcf841f0b14c7ad0459c86875b3",
-  spotify:"https://z-cdn-media.chatglm.cn/files/598ed5f2-95e4-4cae-8a7a-1ec12f044f8d.png?auth_key=1882220405-145a16ee39154d99a31e86ac012c29c2-0-d7654de8bc8a9b337f6fd41ccaea118d",
-  mlbb:"https://z-cdn-media.chatglm.cn/files/18c0a57e-cf36-4d9e-92b6-73824813a8d4.jpg?auth_key=1882174122-f3a380cceeb946a4b8fd0229d45ec76d-0-b019c71141767e262c9689f4d927f7ec",
-  cr:"https://picsum.photos/seed/clashroyale2025/400/500"
-};
-
-/* ===== VERİ ===== */
-const GAMES=[
-  {id:'pubg',name:'PUBG Mobile',cat:'battle-royale',img:IMG.pubg,rating:4.7,desc:'Dünyanın en popüler battle royale oyunu.',scores:[{n:'60 UC',a:60,p:1},{n:'325 UC',a:325,p:5},{n:'660 UC',a:660,p:10},{n:'1800 UC',a:1800,p:25},{n:'3850 UC',a:3850,p:50},{n:'8100 UC',a:8100,p:100}]},
-  {id:'genshin',name:'Genshin Impact',cat:'rpg',img:IMG.genshin,rating:4.8,desc:'Teyvat dünyasını keşfet.',scores:[{n:'60 Genesis',a:60,p:1},{n:'300+30 Genesis',a:330,p:5},{n:'980+110 Genesis',a:1090,p:15},{n:'1980+260 Genesis',a:2240,p:30},{n:'3280+600 Genesis',a:3880,p:50},{n:'6480+1600 Genesis',a:8080,p:100}]},
-  {id:'fortnite',name:'Fortnite',cat:'battle-royale',img:IMG.fortnite,rating:4.5,desc:'Build, shoot, survive.',scores:[{n:'1000 V-Bucks',a:1000,p:8},{n:'2800 V-Bucks',a:2800,p:20},{n:'5000 V-Bucks',a:5000,p:35},{n:'13500 V-Bucks',a:13500,p:90}]},
-  {id:'efootball',name:'eFootball 2025',cat:'sports',img:IMG.efootball,rating:4.2,desc:'Realistik futbol simülasyonu.',scores:[{n:'105 eFootball Coins',a:105,p:1},{n:'560 eFootball Coins',a:560,p:5},{n:'1150 eFootball Coins',a:1150,p:10},{n:'2400 eFootball Coins',a:2400,p:20},{n:'5700 eFootball Coins',a:5700,p:45}]},
-  {id:'coc',name:'Clash of Clans',cat:'strategy',img:IMG.coc,rating:4.6,desc:'Köyünü kur, ordunu hazırla.',scores:[{n:'80 Gems',a:80,p:1},{n:'500 Gems',a:500,p:5},{n:'1200 Gems',a:1200,p:12},{n:'2500 Gems',a:2500,p:25},{n:'6500 Gems',a:6500,p:60},{n:'14000 Gems',a:14000,p:120}]},
-  {id:'asphalt',name:'Asphalt 9: Legends',cat:'racing',img:IMG.asphalt,rating:4.4,desc:'En hızlı arabalar, en muhteşem yollar.',scores:[{n:'3000 Tokens',a:3000,p:3},{n:'8000 Tokens',a:8000,p:7},{n:'18000 Tokens',a:18000,p:15},{n:'40000 Tokens',a:40000,p:30}]},
-  {id:'freefire',name:'Free Fire',cat:'battle-royale',img:IMG.freefire,rating:4.3,desc:'10 dakikalık hızlı battle royale.',scores:[{n:'100 Diamonds',a:100,p:1},{n:'310 Diamonds',a:310,p:3},{n:'520 Diamonds',a:520,p:5},{n:'1060 Diamonds',a:1060,p:10},{n:'2180 Diamonds',a:2180,p:20},{n:'5600 Diamonds',a:5600,p:50}]},
-  {id:'apex',name:'Apex Legends Mobile',cat:'fps',img:IMG.apex,rating:4.6,desc:'FPS battle royale mobilde.',scores:[{n:'1000 Coins',a:1000,p:3},{n:'2500 Coins',a:2500,p:7},{n:'5000 Coins',a:5000,p:13},{n:'10500 Coins',a:10500,p:25}]},
-  {id:'codm',name:'Call of Duty: Mobile',cat:'fps',img:IMG.codm,rating:4.7,desc:'İkonik CoD deneyimi mobilde.',scores:[{n:'60 CP',a:60,p:1},{n:'325 CP',a:325,p:5},{n:'660 CP',a:660,p:10},{n:'1800 CP',a:1800,p:25},{n:'3850 CP',a:3850,p:50},{n:'8100 CP',a:8100,p:100}]},
-  {id:'mlbb',name:'Mobile Legends',cat:'moba',img:IMG.mlbb,rating:4.5,desc:'5v5 MOBA macerası.',scores:[{n:'86 Diamonds',a:86,p:1},{n:'172 Diamonds',a:172,p:2},{n:'257 Diamonds',a:257,p:3},{n:'514 Diamonds',a:514,p:6},{n:'1296 Diamonds',a:1296,p:15},{n:'2196 Diamonds',a:2196,p:25}]},
-  {id:'cr',name:'Clash Royale',cat:'strategy',img:IMG.cr,rating:4.4,desc:'Kartları beceriyle kullan.',scores:[{n:'80 Gems',a:80,p:1},{n:'500 Gems',a:500,p:5},{n:'1200 Gems',a:1200,p:12},{n:'2500 Gems',a:2500,p:25},{n:'6500 Gems',a:6500,p:60}]}
-];
-const APPS=[
-  {id:'netflix',name:'Netflix Premium',cat:'app',img:IMG.netflix,rating:4.8,desc:'Dünyanın en büyük streaming platforması.',scores:[{n:'1 Aylık Premium',a:1,p:12},{n:'3 Aylık Premium',a:3,p:33},{n:'6 Aylık Premium',a:6,p:60},{n:'12 Aylık Premium',a:12,p:108}]},
-  {id:'tiktok',name:'TikTok Coins',cat:'app',img:IMG.tiktok,rating:4.3,desc:'Sevdiğin yaratıcılara destek ol.',scores:[{n:'65 Coins',a:65,p:1},{n:'330 Coins',a:330,p:5},{n:'660 Coins',a:660,p:10},{n:'1321 Coins',a:1321,p:20},{n:'3305 Coins',a:3305,p:45},{n:'6643 Coins',a:6643,p:85}]},
-  {id:'discord',name:'Discord Nitro',cat:'app',img:IMG.discord,rating:4.6,desc:'Discord Nitro ile daha fazla özellik.',scores:[{n:'1 Aylık Nitro',a:1,p:8},{n:'3 Aylık Nitro',a:3,p:22},{n:'12 Aylık Nitro',a:12,p:75}]},
-  {id:'ytpremium',name:'YouTube Premium',cat:'app',img:IMG.ytpremium,rating:4.7,desc:'Reklamsız video, arka plan çalma.',scores:[{n:'1 Aylık Premium',a:1,p:10},{n:'3 Aylık Premium',a:3,p:27},{n:'6 Aylık Premium',a:6,p:50},{n:'12 Aylık Premium',a:12,p:90}]},
-  {id:'spotify',name:'Spotify Premium',cat:'app',img:IMG.spotify,rating:4.7,desc:'Reklamsız müzik, offline dinleme.',scores:[{n:'1 Aylık Premium',a:1,p:6},{n:'3 Aylık Premium',a:3,p:16},{n:'6 Aylık Premium',a:6,p:30},{n:'12 Aylık Premium',a:12,p:55}]}
-];
 
 /* ===== NAVİGASYON ===== */
 function showSection(s){
   document.querySelectorAll('main > section').forEach(el=>el.classList.add('hidden'));
   const sec=document.getElementById('section-'+s);if(sec){sec.classList.remove('hidden');sec.classList.add('animate-fade')}
   currentSection=s;window.scrollTo({top:0,behavior:'smooth'});
-  if(s==='profile'&&!currentUser){openAuthModal();showSection('home');return}
+  if((s==='profile'||s==='create'||s==='messages')&&!currentUser){openAuthModal();showSection('home');return}
   if(s==='profile')renderProfile();
-  if(s==='topup')document.getElementById('currentBalance').textContent=(currentUser?.balance||0).toFixed(2)+' ₼';
+  if(s==='create'){document.getElementById('currentBalance').textContent=(currentUser?.balance||0).toFixed(2)+' ₼';renderFeatures();}
+  if(s==='topup')document.getElementById('currentBalanceTop').textContent=(currentUser?.balance||0).toFixed(2)+' ₼';
+  if(s==='messages')renderChatList();
+  if(s==='admin'&&ADMIN_EMAILS.includes(currentUser.email)){renderAdminPanel();}
 }
 function toggleMobileMenu(){const m=document.getElementById('mobileMenu');mobileMenuOpen=!mobileMenuOpen;m.classList.toggle('hidden',!mobileMenuOpen);m.classList.toggle('flex',mobileMenuOpen)}
-function handleSearch(q){searchQuery=q.toLowerCase();if(currentSection==='games')renderGames();else if(q.length>0){showSection('games');renderGames()}}
-function filterCategory(c){currentFilter=c;document.querySelectorAll('#categoryFilters .cat-btn').forEach(b=>{b.classList.toggle('active',b.dataset.cat===c);b.classList.toggle('text-dark-400',b.dataset.cat!==c)});renderGames()}
+function handleSearch(q){searchQuery=q.toLowerCase().trim();if(currentSection!=='listings'&&searchQuery.length>0)showSection('listings');if(currentSection==='listings')renderListings();const i=document.getElementById('searchInput');if(i&&document.activeElement===i){const v=i.value;i.value='';i.value=v;}}
 
-/* ===== KART ===== */
-function gameCard(g){const minP=Math.min(...g.scores.map(s=>s.p));return `<div class="game-card cursor-pointer" onclick="openGameModal('${g.id}')"><div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all"><div class="relative h-44 overflow-hidden"><img src="${g.img}" class="game-img w-full h-full object-cover" alt="${g.name}"><div class="game-overlay absolute inset-0 bg-gradient-to-t from-dark-950/90 via-dark-950/20 to-transparent opacity-0 flex items-end p-4"><span class="text-xs font-medium text-brand-400 bg-brand-500/20 px-3 py-1 rounded-full border border-brand-500/30">Detaylara Bak</span></div></div><div class="p-4"><h3 class="font-semibold text-sm truncate">${g.name}</h3><div class="flex items-center justify-between mt-2"><div class="flex items-center gap-1"><iconify-icon icon="mdi:star" class="text-yellow-400 text-xs"></iconify-icon><span class="text-xs text-dark-400">${g.rating}</span></div><span class="text-brand-400 font-bold text-sm">${minP.toFixed(2)} ₼</span></div></div></div></div>`}
-function renderFeaturedGames(){document.getElementById('featuredGrid').innerHTML=GAMES.slice(0,8).map(gameCard).join('')}
-function renderGames(){let list=[...GAMES];if(currentFilter!=='all')list=list.filter(g=>g.cat===currentFilter);if(searchQuery)list=list.filter(g=>g.name.toLowerCase().includes(searchQuery));document.getElementById('noResults').classList.toggle('hidden',list.length>0);document.getElementById('gamesGrid').innerHTML=list.map(gameCard).join('')}
-function renderApps(){document.getElementById('appsGrid').innerHTML=APPS.map(gameCard).join('')}
-
-function openGameModal(id){
-  const g=[...GAMES,...APPS].find(x=>x.id===id);if(!g)return;
-  const stars='★'.repeat(Math.floor(g.rating))+'☆'.repeat(5-Math.floor(g.rating));
-  document.getElementById('modalBody').innerHTML=`<div class="relative h-64 md:h-80 overflow-hidden"><img src="${g.img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t from-dark-900 via-dark-900/40 to-transparent"></div><button onclick="closeGameModal()" class="absolute top-4 right-4 w-10 h-10 glass rounded-full flex items-center justify-center hover:bg-white/10 transition-colors"><iconify-icon icon="mdi:close" class="text-xl"></iconify-icon></button><div class="absolute bottom-6 left-6 right-6"><h2 class="text-3xl font-bold">${g.name}</h2><div class="flex items-center gap-3 mt-2"><span class="text-yellow-400 text-sm tracking-wider">${stars}</span><span class="text-dark-400 text-sm">${g.rating}</span><span class="tag uppercase text-brand-400 bg-brand-500/10 px-2 py-0.5 rounded-full border border-brand-500/20">${g.cat}</span></div></div></div><div class="p-6 md:p-8"><p class="text-dark-400 leading-relaxed mb-8">${g.desc}</p><h3 class="font-bold text-lg mb-4">Puan Seçin</h3><div class="grid grid-cols-2 md:grid-cols-3 gap-3 mb-6">${g.scores.map((s,i)=>`<div onclick="selectScore(this,'${g.id}',${i})" class="score-option glass-light rounded-xl p-4 text-center border border-white/5"><p class="font-semibold text-sm">${s.n}</p><p class="text-brand-400 font-bold mt-1">${s.p.toFixed(2)} ₼</p></div>`).join('')}</div><button onclick="addSelectedToCart('${g.id}')" id="modalAddBtn" class="w-full bg-gradient-to-r from-brand-600 to-brand-500 hover:from-brand-500 hover:to-brand-400 text-white font-semibold py-4 rounded-xl transition-all shadow-lg shadow-brand-500/20 disabled:opacity-40 disabled:cursor-not-allowed" disabled>Sepete Ekle</button></div>`;
-  document.getElementById('gameModal').classList.remove('hidden');document.body.style.overflow='hidden';
+/* ===== İLANLAR ===== */
+function selectDelivery(t){selectedDeliveryMethod=t;document.getElementById('linkStockArea').classList.toggle('hidden',t!=='link');document.getElementById('manualStockArea').classList.toggle('hidden',t!=='manual');document.getElementById('deliveryLink').classList.toggle('border-brand-500/40',t==='link');document.getElementById('deliveryManual').classList.toggle('border-brand-500/40',t==='manual');}
+function handleImgUpload(input){if(!input.files[0])return;const r=new FileReader();r.onload=e=>{document.getElementById('createImg').value=e.target.result;document.getElementById('createImgName').textContent='Şəkil yükləndi';};r.readAsDataURL(input.files[0]);}
+function addFeature(){featuresList.push({key:'',value:''});renderFeatures();}
+function renderFeatures(){const c=document.getElementById('featuresContainer');c.innerHTML=featuresList.map((f,i)=>`<div class="flex gap-2"><input type="text" class="input-field flex-1" placeholder="Ad (Məs: Səviyyə)" value="${f.key}" oninput="featuresList[${i}].key=this.value"><input type="text" class="input-field flex-1" placeholder="Dəyər (Məs: 75)" value="${f.value}" oninput="featuresList[${i}].value=this.value"><button onclick="featuresList.splice(${i},1);renderFeatures()" class="text-red-400 px-2"><iconify-icon icon="mdi:close"></iconify-icon></button></div>`).join('');}
+function submitListing(){
+  if(!currentUser)return;
+  if(currentUser.restrictList){showToast('İlan paylaşmaq sizə qadağan edilib','error');return;}
+  const title=document.getElementById('createTitle').value.trim();
+  const cat=document.getElementById('createCategory').value;
+  const price=parseFloat(document.getElementById('createPrice').value);
+  const desc=document.getElementById('createDesc').value.trim();
+  const img=document.getElementById('createImg').value||`https://picsum.photos/seed/${Math.random()}/400/500`;
+  if(!title||!price||!desc){showToast('Bütün sahələri doldurun','error');return;}
+  if(!selectedDeliveryMethod){showToast('Çatdırılma metodunu seçin','error');return;}
+  let stockLinks=[], manualStock=0;
+  if(selectedDeliveryMethod==='link'){
+    const raw=document.getElementById('createLinks').value.trim().split('\n').filter(l=>l.trim()!=='');
+    if(raw.length===0){showToast('Ən azı 1 stok linki əlavə edin','error');return;}
+    stockLinks=raw;
+  }else{
+    manualStock=parseInt(document.getElementById('createManualStock').value)||0;
+    if(manualStock<1){showToast('Stok sayı 1-dən az ola bilməz','error');return;}
+  }
+  const newListing={id:'l_'+Date.now(), title, cat, price, desc, img, sellerEmail:currentUser.email, sellerName:currentUser.username, sellerAvatar:currentUser.avatar||'', deliveryMethod:selectedDeliveryMethod, stockLinks, manualStock, features:featuresList.filter(f=>f.key&&f.value), soldCount:0, createdAt:new Date().toISOString()};
+  listings.unshift(newListing);
+  localStorage.setItem('randox_listings',JSON.stringify(listings));
+  showToast('İlan uğurla yayımlandı!','success');
+  document.getElementById('createTitle').value='';document.getElementById('createPrice').value='';document.getElementById('createDesc').value='';
+  document.getElementById('createImg').value='';document.getElementById('createImgName').textContent='';
+  featuresList=[];renderFeatures();selectedDeliveryMethod=null;selectDelivery('none');
+  showSection('listings');
 }
-let modalSelected={gameId:null,scoreIdx:null};
-function selectScore(el,gid,idx){el.parentElement.querySelectorAll('.score-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');modalSelected={gameId:gid,scoreIdx:idx};document.getElementById('modalAddBtn').disabled=false}
-function addSelectedToCart(gid){if(!modalSelected.gameId)return;const g=[...GAMES,...APPS].find(x=>x.id===gid);const s=g.scores[modalSelected.scoreIdx];cart.push({gameId:gid,gameName:g.name,gameImg:g.img,scoreName:s.n,price:s.p});localStorage.setItem('randox_cart',JSON.stringify(cart));updateCartUI();closeGameModal();showToast(s.n+' sepete eklendi','success')}
-function closeGameModal(){document.getElementById('gameModal').classList.add('hidden');document.body.style.overflow='';modalSelected={gameId:null,scoreIdx:null}}
+
+function listingCard(l){
+  const stock = l.deliveryMethod==='link' ? l.stockLinks.length : l.manualStock;
+  const stockHtml = stock>0 ? `<span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md font-medium">Stok: ${stock}</span>` : `<span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded-md font-medium">Bitdi</span>`;
+  return `<div class="game-card cursor-pointer" onclick="openListingModal('${l.id}')">
+    <div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all h-full flex flex-col">
+      <div class="relative h-44 overflow-hidden">
+        <img src="${l.img}" class="game-img w-full h-full object-cover" alt="${l.title}">
+        <div class="absolute top-2 left-2 tag uppercase text-dark-900 bg-white/90 px-2 py-0.5 rounded-md backdrop-blur-sm">${l.cat}</div>
+      </div>
+      <div class="p-4 flex flex-col flex-1">
+        <h3 class="font-semibold text-sm truncate">${l.title}</h3>
+        <p class="text-xs text-dark-500 mt-1 line-clamp-2 flex-1">${l.desc}</p>
+        <div class="flex items-center justify-between mt-3">
+          <span class="text-brand-400 font-bold text-base">${l.price.toFixed(2)} ₼</span>
+          ${stockHtml}
+        </div>
+      </div>
+    </div>
+  </div>`;
+}
+function renderListings(){
+  let list=listings.filter(l=>l.deliveryMethod==='link'?l.stockLinks.length>0:l.manualStock>0);
+  if(searchQuery)list=list.filter(l=>l.title.toLowerCase().includes(searchQuery)||l.desc.toLowerCase().includes(searchQuery));
+  document.getElementById('noResults').classList.toggle('hidden',list.length>0);
+  document.getElementById('listingsGrid').innerHTML=list.map(listingCard).join('');
+}
+function openListingModal(id){
+  const l=listings.find(x=>x.id===id);if(!l)return;
+  const stock=l.deliveryMethod==='link'?l.stockLinks.length:l.manualStock;
+  const featuresHtml=l.features.length>0?`<div class="mt-6"><h4 class="font-bold mb-3 text-sm uppercase tracking-wider text-dark-400">Xüsusiyyətlər</h4><div class="grid grid-cols-2 gap-3">${l.features.map(f=>`<div class="glass-light p-3 rounded-lg border border-white/5"><p class="text-[10px] uppercase tracking-wider text-dark-500">${f.key}</p><p class="text-sm font-semibold mt-0.5">${f.value}</p></div>`).join('')}</div></div>`:'';
+  document.getElementById('modalBody').innerHTML=`
+    <div class="flex flex-col md:flex-row h-full">
+      <div class="md:w-1/2 h-64 md:h-full relative overflow-hidden bg-dark-950">
+        <img src="${l.img}" class="w-full h-full object-cover">
+        <div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-dark-900 to-transparent"></div>
+      </div>
+      <div class="md:w-1/2 p-6 md:p-10 overflow-y-auto flex flex-col">
+        <div class="flex-1">
+          <span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">${l.cat}</span>
+          <h2 class="text-3xl md:text-4xl font-bold mt-4">${l.title}</h2>
+          <div class="flex items-center gap-3 mt-4 p-3 glass-light rounded-xl">
+            <div class="avatar-sm text-white" style="background:${getAvatarColor({username:l.sellerName})}">${l.sellerName.charAt(0).toUpperCase()}</div>
+            <div><p class="font-semibold text-sm">${l.sellerName}</p><p class="text-xs text-dark-400">${l.soldCount} Satış</p></div>
+          </div>
+          <div class="mt-6 p-5 glass rounded-xl flex justify-between items-center border border-white/5">
+            <div><p class="text-xs uppercase tracking-wider text-dark-500">Qiymət</p><p class="text-3xl font-bold text-brand-400">${l.price.toFixed(2)} ₼</p></div>
+            <div class="text-right"><p class="text-xs uppercase tracking-wider text-dark-500">Stokda</p><p class="text-2xl font-bold ${stock>0?'text-white':'text-red-400'}">${stock>0?stock:'Bitdi'}</p></div>
+          </div>
+          <div class="mt-6"><h4 class="font-bold mb-2 text-sm uppercase tracking-wider text-dark-400">Açıqlama</h4><p class="text-dark-300 text-sm leading-relaxed whitespace-pre-wrap">${l.desc}</p></div>
+          ${featuresHtml}
+        </div>
+        <div class="mt-8 flex gap-3 sticky bottom-0 bg-dark-900/80 backdrop-blur-sm pt-4 -mx-6 md:-mx-10 px-6 md:px-10 pb-1">
+          <button onclick="buyListing('${l.id}')" class="btn-primary flex-1 text-base ${stock===0?'opacity-40 pointer-events-none':''}">${stock>0?'Təhlükəsiz Satın Al (Escrow)':'Stok Bitdi'}</button>
+          <button onclick="contactSeller('${l.id}')" class="glass hover:border-brand-500/30 px-6 py-3 rounded-xl text-sm font-medium transition-all flex items-center gap-2"><iconify-icon icon="mdi:chat-processing-outline" class="text-lg"></iconify-icon></button>
+        </div>
+      </div>
+    </div>`;
+  document.getElementById('listingModal').classList.remove('hidden');document.body.style.overflow='hidden';
+}
+function closeListingModal(){document.getElementById('listingModal').classList.add('hidden');document.body.style.overflow='';}
+
+/* ===== ESCROW & SATIN ALMA ===== */
+function buyListing(id){
+  if(currentUser.restrictBuy){showToast('Satın almaq sizə qadağan edilib','error');return;}
+  const l=listings.find(x=>x.id===id);if(!l)return;
+  const stock=l.deliveryMethod==='link'?l.stockLinks.length:l.manualStock;
+  if(stock===0){showToast('Stok bitib','error');return;}
+  if(currentUser.balance<l.price){showToast('Balansınız çatışmır. Zəhmət olmasa balans yükləyin.','error');showSection('topup');return;}
+
+  currentUser.balance-=l.price;
+  const tx={id:'tx_'+Date.now(),listingId:l.id,title:l.title,buyerEmail:currentUser.email,sellerEmail:l.sellerEmail,amount:l.price,status:'escrow',createdAt:Date.now()};
+  transactions.push(tx);
+
+  let deliveredItem='';
+  if(l.deliveryMethod==='link'){
+    deliveredItem=l.stockLinks.shift();
+    l.soldCount++;
+  }else{
+    l.manualStock--;
+    l.soldCount++;
+    deliveredItem='Manuel təhvil. Satıcı ilə əlaqə saxlayın.';
+  }
+  localStorage.setItem('randox_listings',JSON.stringify(listings));
+  localStorage.setItem('randox_user',JSON.stringify(currentUser));
+  const seller=users.find(u=>u.email===l.sellerEmail);
+  if(seller){seller.balance=seller.balance||0;} // balansı sonra update edirik escrow bitende
+  localStorage.setItem('randox_users',JSON.stringify(users));
+
+  const chatId=`${currentUser.email}_${l.sellerEmail}_${l.id}`;
+  if(!chats[chatId]){chats[chatId]={id:chatId,listingId:l.id,listingTitle:l.title,buyerEmail:currentUser.email,sellerEmail:l.sellerEmail,txId:tx.id,messages:[]};}
+  chats[chatId].messages.push({sender:'system',text:`Sifariş tamamlandı! Ödəniş Escrow'da (Təhlükəsiz trade) saxlanılır. 24 saat ərzində təsdiqləsəniz və ya vaxt bitərsə, vəsait satıcıya keçəcək.`,time:new Date().toISOString(),txAction:'escrow_pending'});
+  if(deliveredItem){chats[chatId].messages.push({sender:'system',text:`Avtomatik Çatdırılma:\n${deliveredItem}`,time:new Date().toISOString()});}
+  localStorage.setItem('randox_chats',JSON.stringify(chats));
+  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
+
+  updateUserArea();closeListingModal();showSection('messages');openChat(chatId);
+  showToast('Satın alma uğurlu! Vəsait Escrow'da donduruldu.','success');
+}
+
+function confirmEscrow(txId){
+  let tx=transactions.find(t=>t.id===txId);if(!tx)return;
+  tx.status='completed';tx.resolvedAt=Date.now();
+  const seller=users.find(u=>u.email===tx.sellerEmail);
+  if(seller){seller.balance=(seller.balance||0)+(tx.amount*(1-COMMISSION_RATE));}
+  localStorage.setItem('randox_users',JSON.stringify(users));
+  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
+  // add system msg
+  const chat=Object.values(chats).find(c=>c.txId===txId);
+  if(chat){
+    chat.messages.push({sender:'system',text:'Alıcı təhveri təsdiqlədi! Vəsait satıcının balansına keçdi.',time:new Date().toISOString()});
+    localStorage.setItem('randox_chats',JSON.stringify(chats));
+    if(currentChatId===chat.id)openChat(chat.id);
+  }
+}
+function openDisputeModal(txId){
+  currentDisputeTx=txId;
+  document.getElementById('disputeModal').classList.remove('hidden');
+}
+function closeDisputeModal(){document.getElementById('disputeModal').classList.add('hidden');}
+function submitDispute(){
+  const reason=document.getElementById('disputeReason').value.trim();
+  if(!reason){showToast('Səbəbi daxil edin','error');return;}
+  let tx=transactions.find(t=>t.id===currentDisputeTx);if(!tx)return;
+  tx.status='disputed_buyer';tx.reason=reason;
+  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
+  const chat=Object.values(chats).find(c=>c.txId===tx.id);
+  if(chat){
+    chat.messages.push({sender:'system',text:`Alıcı problemi bildirdi (Dispute): ${reason}. Vəsait donduruldu. Satıcı cavab verməlidir.`,time:new Date().toISOString()});
+    localStorage.setItem('randox_chats',JSON.stringify(chats));
+    if(currentChatId===chat.id)openChat(chat.id);
+  }
+  closeDisputeModal();showToast('Dispute açıldı. Adminə yönləndirildi.','info');
+}
+function counterDispute(txId){
+  let tx=transactions.find(t=>t.id===txId);if(!tx)return;
+  tx.status='admin_review';tx.sellerCounter=true;
+  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
+  const chat=Object.values(chats).find(c=>c.txId===txId);
+  if(chat){
+    chat.messages.push({sender:'system',text:'Satıcı iddia etdi ki, məhsulu düzgün verib. Adminə yönləndirildi.',time:new Date().toISOString()});
+    localStorage.setItem('randox_chats',JSON.stringify(chats));
+    if(currentChatId===chat.id)openChat(chat.id);
+  }
+}
+
+/* ===== MESAJLAŞMA ===== */
+function renderChatList(){
+  const listEl=document.getElementById('chatList');
+  const myChats=Object.values(chats).filter(c=>c.buyerEmail===currentUser.email||c.sellerEmail===currentUser.email);
+  if(myChats.length===0){listEl.innerHTML='<div class="p-8 text-center text-dark-400 text-sm flex flex-col items-center"><iconify-icon icon="mdi:message-off-outline" class="text-4xl mb-2"></iconify-icon>Mesaj yoxdur.</div>';return;}
+  listEl.innerHTML=myChats.map(c=>{
+    const lastMsg=c.messages[c.messages.length-1];
+    const otherEmail=c.buyerEmail===currentUser.email?c.sellerEmail:c.buyerEmail;
+    const otherUser=users.find(u=>u.email===otherEmail);
+    return `<div onclick="openChat('${c.id}')" class="p-4 border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors ${currentChatId===c.id?'bg-white/5 border-l-4 border-l-brand-500':''}">
+      <div class="flex items-center gap-3">
+        <div class="avatar-sm text-white" style="background:${getAvatarColor({username:otherUser?.username||otherEmail})}">${(otherUser?.username||otherEmail).charAt(0).toUpperCase()}</div>
+        <div class="flex-1 min-w-0">
+          <p class="font-semibold text-sm truncate">${otherUser?.username||otherEmail}</p>
+          <p class="text-xs text-dark-500 truncate">${lastMsg?.text||'Söhbət başladı'}</p>
+        </div>
+      </div>
+    </div>`;
+  }).join('');
+}
+function openChat(chatId){
+  currentChatId=chatId;renderChatList();
+  const c=chats[chatId];if(!c)return;
+  const otherEmail=c.buyerEmail===currentUser.email?c.sellerEmail:c.buyerEmail;
+  const otherUser=users.find(u=>u.email===otherEmail);
+  document.getElementById('chatHeader').classList.remove('hidden');
+  document.getElementById('chatHeader').innerHTML=`<div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:otherUser?.username||otherEmail})}">${(otherUser?.username||otherEmail).charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${otherUser?.username||otherEmail}</p><p class="text-xs text-brand-400">${c.listingTitle}</p></div></div>`;
+  document.getElementById('chatInputArea').classList.remove('hidden');
+  
+  let escrowActionsHtml='';
+  if(c.txId){
+    const tx=transactions.find(t=>t.id===c.txId);
+    if(tx){
+      if(tx.status==='escrow' && currentUser.email===tx.buyerEmail){
+        escrowActionsHtml=`<div class="flex gap-2 p-3 glass-light rounded-xl mb-4 border border-brand-500/20"><button onclick="confirmEscrow('${tx.id}')" class="btn-primary text-xs" style="padding:8px 16px">✔ Təhveri Təsdiqlə</button><button onclick="openDisputeModal('${tx.id}')" class="btn-primary text-xs" style="padding:8px 16px;background:linear-gradient(135deg,#dc2626,#ef4444)">❌ Problem Var (Dispute)</button></div>`;
+      } else if(tx.status==='disputed_buyer' && currentUser.email===tx.sellerEmail){
+        escrowActionsHtml=`<div class="flex gap-2 p-3 glass-light rounded-xl mb-4 border border-red-500/30"><p class="text-xs text-red-400 self-center">Alıcı disputedi. Öz tərəfinizi müdafiə edin:</p><button onclick="counterDispute('${tx.id}')" class="btn-primary text-xs" style="padding:8px 16px;background:linear-gradient(135deg,#3b82f6,#2563eb)">Mənim haqqım var (Cavab ver)</button></div>`;
+      } else if(tx.status==='admin_review'){
+        escrowActionsHtml=`<div class="p-3 glass-light rounded-xl mb-4 border border-yellow-500/30"><p class="text-xs text-yellow-400">Bu sifariş admin tərəfindən incələnir.</p></div>`;
+      } else if(tx.status==='completed'){
+        escrowActionsHtml=`<div class="p-3 glass-light rounded-xl mb-4 border border-brand-500/30"><p class="text-xs text-brand-400">Təhveri təsdiqləndi. Ticarət tamamlandı.</p></div>`;
+      }
+    }
+  }
+
+  const msgEl=document.getElementById('chatMessages');
+  msgEl.innerHTML=escrowActionsHtml+c.messages.map((m,idx)=>{
+    if(m.sender==='system')return `<div class="chat-bubble sys">${m.text.replace(/\n/g,'<br>')}</div>`;
+    const isMe=m.sender===currentUser.email;
+    return `<div class="flex ${isMe?'justify-end':'justify-start'} relative group">
+      <div class="chat-bubble ${isMe?'me':'them'}">${m.text.replace(/\n/g,'<br>')}</div>
+      ${!isMe?`<div class="msg-report-btn" onclick="openReportModal('${idx}','${m.sender}')"><iconify-icon icon="mdi:flag"></iconify-icon></div>`:''}
+    </div>`;
+  }).join('');
+  msgEl.scrollTop=msgEl.scrollHeight;
+}
+function sendMessage(){
+  if(currentUser.restrictMsg){showToast('Mesaj göndərmək sizə qadağan edilib','error');return;}
+  if(!currentChatId)return;
+  const inp=document.getElementById('msgInput');
+  const text=inp.value.trim();if(!text)return;
+  chats[currentChatId].messages.push({sender:currentUser.email,text,time:new Date().toISOString()});
+  localStorage.setItem('randox_chats',JSON.stringify(chats));
+  inp.value='';openChat(currentChatId);
+}
+setInterval(()=>{if(currentSection==='messages'&&currentChatId)openChat(currentChatId);if(currentSection==='messages')renderChatList();},3000);
+
+/* ===== REPORT MESAJ ===== */
+function openReportModal(msgId,senderId){
+  document.getElementById('reportedMsgId').value=msgId;
+  document.getElementById('reportedSenderId').value=senderId;
+  document.getElementById('reportModal').classList.remove('hidden');
+}
+function closeReportModal(){document.getElementById('reportModal').classList.add('hidden');}
+function submitReport(){
+  const msgId=document.getElementById('reportedMsgId').value;
+  const senderId=document.getElementById('reportedSenderId').value;
+  const reason=document.getElementById('reportReason').value.trim();
+  if(!reason){showToast('Səbəb daxil edin','error');return;}
+  userReports.push({id:'r_'+Date.now(),reporterEmail:currentUser.email,senderId,msgId,reason,date:new Date().toISOString(),chatId:currentChatId});
+  localStorage.setItem('randox_reports',JSON.stringify(userReports));
+  closeReportModal();showToast('Şikayət göndərildi','success');
+}
+
+/* ===== LIVE SUPPORT ===== */
+function openSupportModal(){
+  document.getElementById('supportModal').classList.remove('hidden');
+  renderSupportMessages();
+}
+function closeSupportModal(){document.getElementById('supportModal').classList.add('hidden');}
+function renderSupportMessages(){
+  const el=document.getElementById('supportMessages');
+  const mySupport=supportChats[currentUser.email]||{messages:[]};
+  el.innerHTML=mySupport.messages.map(m=>{
+    if(m.sender==='admin')return `<div class="flex justify-start"><div class="chat-bubble them">${m.text}</div></div>`;
+    if(m.sender==='system')return `<div class="chat-bubble sys">${m.text}</div>`;
+    return `<div class="flex justify-end"><div class="chat-bubble me">${m.text}</div></div>`;
+  }).join('');
+  el.scrollTop=el.scrollHeight;
+}
+function sendSupportMsg(){
+  if(currentUser.restrictMsg){showToast('Mesaj göndərmək sizə qadağan edilib','error');return;}
+  const inp=document.getElementById('supportInput');
+  const text=inp.value.trim();if(!text)return;
+  if(!supportChats[currentUser.email])supportChats[currentUser.email]={messages:[]};
+  supportChats[currentUser.email].messages.push({sender:'user',text,time:new Date().toISOString()});
+  localStorage.setItem('randox_support',JSON.stringify(supportChats));
+  inp.value='';renderSupportMessages();
+}
 
 /* ===== DOĞRULAMA ===== */
 function genCode(){return Math.floor(100000+Math.random()*900000).toString()}
-function createCodeInputs(){const c=document.getElementById('codeInputs');c.innerHTML='';for(let i=0;i<6;i++){const inp=document.createElement('input');inp.type='text';inp.maxLength=1;inp.className='code-input';inp.inputMode='numeric';inp.autocomplete='one-time-code';inp.addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v;if(v&&i<5)document.querySelectorAll('.code-input')[i+1].focus();e.target.classList.toggle('filled',!!v);checkCodeFull()});inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!e.target.value&&i>0){const p=document.querySelectorAll('.code-input')[i-1];p.focus();p.value='';p.classList.remove('filled')}});inp.addEventListener('paste',e=>{e.preventDefault();const txt=e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6);const inps=document.querySelectorAll('.code-input');txt.split('').forEach((ch,j)=>{if(inps[j]){inps[j].value=ch;inps[j].classList.add('filled')}});if(txt.length>0)inps[Math.min(txt.length,5)].focus();checkCodeFull()});inp.addEventListener('focus',()=>inp.select());c.appendChild(inp)}}
+function createCodeInputs(){const c=document.getElementById('codeInputs');c.innerHTML='';for(let i=0;i<6;i++){const inp=document.createElement('input');inp.type='text';inp.maxLength=1;inp.className='code-input';inp.inputMode='numeric';inp.addEventListener('input',e=>{const v=e.target.value.replace(/\D/g,'');e.target.value=v;if(v&&i<5)document.querySelectorAll('.code-input')[i+1].focus();e.target.classList.toggle('filled',!!v);checkCodeFull()});inp.addEventListener('keydown',e=>{if(e.key==='Backspace'&&!e.target.value&&i>0){const p=document.querySelectorAll('.code-input')[i-1];p.focus();p.value='';p.classList.remove('filled')}});inp.addEventListener('paste',e=>{e.preventDefault();const txt=e.clipboardData.getData('text').replace(/\D/g,'').slice(0,6);const inps=document.querySelectorAll('.code-input');txt.split('').forEach((ch,j)=>{if(inps[j]){inps[j].value=ch;inps[j].classList.add('filled')}});if(txt.length>0)inps[Math.min(txt.length,5)].focus();checkCodeFull()});inp.addEventListener('focus',()=>inp.select());c.appendChild(inp)}}
 function checkCodeFull(){if(getEnteredCode().length===6)setTimeout(verifyCode,200)}
 function getEnteredCode(){return Array.from(document.querySelectorAll('.code-input')).map(i=>i.value).join('')}
-
 async function sendVCode(email,action,tempData){
   vCode=genCode();vEmail=email;vAction=action;vTempData=tempData||{};
-  const btnId=action==='forgot'?'forgotBtn':(action==='login'?'loginBtn':'regBtn');
-  const btn=document.getElementById(btnId);const origHTML=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Gönderiliyor...';
-  try{await emailjs.send('service_wts3xud','template_oc1lsin',{to_email:email,from_name:'Randox',verification_code:vCode,message:vCode});showVerifyStep();startResendCd();showToast('Doğrulama kodu gönderildi','success')}
-  catch(err){showToast('Kod gönderilemedi. Yeniden deneyin.','error');console.error(err)}
+  const btnId=action==='login'?'loginBtn':'regBtn';
+  const btn=document.getElementById(btnId);const origHTML=btn.innerHTML;btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Göndərilir...';
+  try{await emailjs.send('service_wts3xud','template_oc1lsin',{to_email:email,from_name:'Randox',verification_code:vCode,message:vCode});showVerifyStep();startResendCd();showToast('Kod göndərildi','success')}
+  catch(err){showToast('Kod göndərilə bilmədi.','error')}
   btn.disabled=false;btn.innerHTML=origHTML;
 }
-
 function showVerifyStep(){
-  ['loginForm','registerForm','forgotForm','authTabs'].forEach(id=>document.getElementById(id).classList.add('hidden'));
+  ['loginForm','registerForm','authTabs'].forEach(id=>document.getElementById(id).classList.add('hidden'));
   document.getElementById('verifyForm').classList.remove('hidden');
-  document.getElementById('authTitle').textContent='Doğrulama Kodu';
-  document.getElementById('authSubtitle').textContent='E-postaınıza gönderilen kodu girin';
-  document.getElementById('verifyEmailText').textContent='Kod gönderildi: '+vEmail;
+  document.getElementById('authTitle').textContent='Təsdiqləmə Kodu';
+  document.getElementById('authSubtitle').textContent='E-poçtunuza göndərilən kodu daxil edin';
+  document.getElementById('verifyEmailText').textContent='Kod göndərildi: '+vEmail;
   document.getElementById('verifyError').classList.add('hidden');document.getElementById('verifySuccess').classList.add('hidden');
-  document.getElementById('verifyBtn').disabled=false;document.getElementById('verifyBtn').textContent='Doğrula';
+  document.getElementById('verifyBtn').disabled=false;document.getElementById('verifyBtn').textContent='Təsdiqlə';
   createCodeInputs();setTimeout(()=>{const f=document.querySelector('.code-input');if(f)f.focus()},100);
 }
-
 function verifyCode(){
   const entered=getEnteredCode();if(entered.length!==6)return;
-  const btn=document.getElementById('verifyBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Kontrol ediliyor...';
+  const btn=document.getElementById('verifyBtn');btn.disabled=true;btn.innerHTML='<span class="spinner"></span> Yoxlanılır...';
   setTimeout(()=>{
     if(entered===vCode){
-      document.getElementById('verifySuccess').textContent='Doğrulama başarılı!';document.getElementById('verifySuccess').classList.remove('hidden');document.getElementById('verifyError').classList.add('hidden');btn.innerHTML='<iconify-icon icon="mdi:check" class="mr-1"></iconify-icon> Başarılı';
+      document.getElementById('verifySuccess').textContent='Təsdiqləmə uğurlu!';document.getElementById('verifySuccess').classList.remove('hidden');document.getElementById('verifyError').classList.add('hidden');btn.innerHTML='<iconify-icon icon="mdi:check"></iconify-icon> Uğurlu';
       setTimeout(()=>completeAuth(),600);
     }else{
-      document.getElementById('verifyError').textContent='Kod yanlış. Yeniden deneyin.';document.getElementById('verifyError').classList.remove('hidden');
-      document.querySelectorAll('.code-input').forEach(i=>{i.classList.add('error');setTimeout(()=>i.classList.remove('error'),600)});btn.disabled=false;btn.textContent='Doğrula';
+      document.getElementById('verifyError').textContent='Kod yanlış.';document.getElementById('verifyError').classList.remove('hidden');
+      document.querySelectorAll('.code-input').forEach(i=>{i.classList.add('error');setTimeout(()=>i.classList.remove('error'),600)});btn.disabled=false;btn.textContent='Təsdiqlə';
       document.querySelectorAll('.code-input').forEach(i=>{i.value='';i.classList.remove('filled')});document.querySelector('.code-input').focus();
     }
   },800);
 }
-
 function completeAuth(){
   if(vAction==='register'){
-    users.push({username:vTempData.username,email:vTempData.email,password:vTempData.password,balance:0,avatar:'',createdAt:new Date().toISOString()});
+    users.push({username:vTempData.username,email:vTempData.email,password:vTempData.password,balance:0,avatar:'',createdAt:new Date().toISOString(),banned:false,restrictMsg:false,restrictList:false,restrictBuy:false});
     localStorage.setItem('randox_users',JSON.stringify(users));
     currentUser={username:vTempData.username,email:vTempData.email,balance:0,avatar:'',createdAt:new Date().toISOString()};
   }else{
     currentUser={username:vTempData.username,email:vTempData.email,balance:vTempData.balance||0,avatar:vTempData.avatar||'',createdAt:vTempData.createdAt||new Date().toISOString()};
   }
-  localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();showToast('Hoş geldin, '+currentUser.username+'!','success');clearResendCd();
+  localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();checkBanAndInit();clearResendCd();
 }
-
 function resendCode(){if(resendCd>0)return;sendVCode(vEmail,vAction,vTempData)}
-function startResendCd(){clearResendCd();resendCd=120;const btn=document.getElementById('resendBtn');btn.disabled=true;const timer=document.getElementById('resendTimer');resendIv=setInterval(()=>{resendCd--;const m=Math.floor(resendCd/60);const s=resendCd%60;timer.textContent=m+':'+(s<10?'0':'')+s;if(resendCd<=0){clearResendCd();btn.disabled=false;btn.innerHTML='Kodu yeniden gönder'}},1000);btn.innerHTML='Kodu yeniden gönder (<span id="resendTimer">2:00</span>)'}
+function startResendCd(){clearResendCd();resendCd=120;const btn=document.getElementById('resendBtn');btn.disabled=true;const timer=document.getElementById('resendTimer');resendIv=setInterval(()=>{resendCd--;const m=Math.floor(resendCd/60);const s=resendCd%60;timer.textContent=m+':'+(s<10?'0':'')+s;if(resendCd<=0){clearResendCd();btn.disabled=false}},1000)}
 function clearResendCd(){if(resendIv){clearInterval(resendIv);resendIv=null}resendCd=0}
-function backToAuth(){clearResendCd();document.getElementById('verifyForm').classList.add('hidden');document.getElementById('authTabs').classList.remove('hidden');if(vAction==='login')switchAuthTab('login');else if(vAction==='register')switchAuthTab('register');else switchAuthTab('login')}
+function backToAuth(){clearResendCd();document.getElementById('verifyForm').classList.add('hidden');document.getElementById('authTabs').classList.remove('hidden');if(vAction==='login')switchAuthTab('login');else switchAuthTab('register')}
 
-/* ===== ŞİFREMİ UNUTTUM ===== */
-function showForgotPassword(){
-  document.getElementById('loginForm').classList.add('hidden');document.getElementById('registerForm').classList.add('hidden');document.getElementById('authTabs').classList.add('hidden');document.getElementById('verifyForm').classList.add('hidden');
-  document.getElementById('forgotForm').classList.remove('hidden');
-  document.getElementById('authTitle').textContent='Şifremi Unuttum';
-  document.getElementById('authSubtitle').textContent='Lütfen Gmail adresinizi yazınız';
-  hideErrors();
-}
-function backToAuthFromForgot(){document.getElementById('forgotForm').classList.add('hidden');document.getElementById('authTabs').classList.remove('hidden');switchAuthTab('login')}
-
-function handleForgotPassword(){
-  hideErrors();
-  const email=document.getElementById('forgotEmail').value.trim();
-  if(!email){showErr('forgotError','Lütfen e-posta adresinizi girin');return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('forgotError','Geçerli bir e-posta girin');return}
-  const user=users.find(u=>u.email===email);
-  if(!user){showErr('forgotError','Bu e-posta ile kayıtlı hesap bulunamadı');return}
-  sendVCode(email,'forgot',{username:user.username,email:user.email,balance:user.balance,avatar:user.avatar||'',createdAt:user.createdAt});
-}
-
-/* ===== AUTH: GİRİŞ / KAYIT ===== */
 function switchAuthTab(tab){
-  document.getElementById('authTabs').classList.remove('hidden');document.getElementById('verifyForm').classList.add('hidden');document.getElementById('forgotForm').classList.add('hidden');clearResendCd();hideErrors();
+  document.getElementById('authTabs').classList.remove('hidden');document.getElementById('verifyForm').classList.add('hidden');clearResendCd();hideErrors();
   document.getElementById('loginForm').classList.toggle('hidden',tab!=='login');document.getElementById('registerForm').classList.toggle('hidden',tab!=='register');
   document.getElementById('tabLogin').classList.toggle('active',tab==='login');document.getElementById('tabRegister').classList.toggle('active',tab==='register');
   document.getElementById('tabLogin').classList.toggle('text-dark-400',tab!=='login');document.getElementById('tabRegister').classList.toggle('text-dark-400',tab!=='register');
-  document.getElementById('authTitle').textContent=tab==='login'?'Hesabınıza Giriş Yapın':'Yeni Hesap Oluşturun';
-  document.getElementById('authSubtitle').textContent=tab==='login'?'Devam etmek için giriş yapın':'Kayıt ol, oynamaya başla';
+  document.getElementById('authTitle').textContent=tab==='login'?'Hesabınıza Daxil Olun':'Yeni Hesab Yaradın';
+  document.getElementById('authSubtitle').textContent=tab==='login'?'Davam etmək üçün daxil olun':'Qeydiyyatdan keç';
 }
-function hideErrors(){['loginError','regError','forgotError','verifyError','verifySuccess'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
+function hideErrors(){['loginError','regError','verifyError','verifySuccess'].forEach(id=>document.getElementById(id).classList.add('hidden'))}
 function showErr(id,msg){const el=document.getElementById(id);el.textContent=msg;el.classList.remove('hidden')}
 function openAuthModal(){document.getElementById('authModal').classList.remove('hidden');document.body.style.overflow='hidden';switchAuthTab('login');hideErrors();setTimeout(()=>{const f=document.getElementById('loginEmail');if(f)f.focus()},200)}
 function closeAuthModal(){document.getElementById('authModal').classList.add('hidden');document.body.style.overflow='';clearResendCd();hideErrors()}
 
 function handleLogin(){
   hideErrors();const email=document.getElementById('loginEmail').value.trim();const pwd=document.getElementById('loginPassword').value;
-  if(!email||!pwd){showErr('loginError','Tüm alanları doldurun');return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('loginError','Geçerli bir e-posta girin');return}
-  const user=users.find(u=>u.email===email);if(!user){showErr('loginError','Bu e-posta ile hesap bulunamadı');return}
-  if(user.password!==pwd){showErr('loginError','Şifre yanlış');return}
+  if(!email||!pwd){showErr('loginError','Bütün sahələri doldurun');return}
+  const user=users.find(u=>u.email===email);if(!user){showErr('loginError','Hesab tapılmadı');return}
+  if(user.password!==pwd){showErr('loginError','Şifrə yanlış');return}
   sendVCode(email,'login',{username:user.username,email:user.email,balance:user.balance,avatar:user.avatar||'',createdAt:user.createdAt});
 }
-
 function handleRegister(){
   hideErrors();const uname=document.getElementById('regUsername').value.trim();const email=document.getElementById('regEmail').value.trim();const pwd=document.getElementById('regPassword').value;const pwd2=document.getElementById('regPassword2').value;
-  if(!uname||!email||!pwd||!pwd2){showErr('regError','Tüm alanları doldurun');return}
-  if(uname.length<3){showErr('regError','Kullanıcı adı minimum 3 karakter olmalıdır');return}
-  if(!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)){showErr('regError','Geçerli bir e-posta girin');return}
-  if(pwd.length<6){showErr('regError','Şifre minimum 6 karakter olmalıdır');return}
-  if(pwd!==pwd2){showErr('regError','Şifreler uyuşmuyor');return}
-  if(users.find(u=>u.email===email)){showErr('regError','Bu e-posta zaten kayıtlı');return}
+  if(!uname||!email||!pwd||!pwd2){showErr('regError','Bütün sahələri doldurun');return}
+  if(uname.length<3){showErr('regError','Min 3 simvol');return}
+  if(pwd.length<6){showErr('regError','Min 6 simvol');return}
+  if(pwd!==pwd2){showErr('regError','Şifrələr uyğun deyil');return}
+  if(users.find(u=>u.email===email)){showErr('regError','Bu e-poçt artıq qeydiyyatlı');return}
   sendVCode(email,'register',{username:uname,email,password:pwd});
 }
-
 function togglePwd(id,el){const inp=document.getElementById(id);const isP=inp.type==='password';inp.type=isP?'text':'password';el.innerHTML=`<iconify-icon icon="mdi:eye-${isP?'outline':'off-outline'}" class="text-lg"></iconify-icon>`}
 
-/* ===== ÇIKIŞ ONAY ===== */
+/* ===== ÇIKIŞ & USER AREA ===== */
 function openLogoutModal(){document.getElementById('logoutModal').classList.remove('hidden')}
 function closeLogoutModal(){document.getElementById('logoutModal').classList.add('hidden')}
-function confirmLogout(){closeLogoutModal();currentUser=null;localStorage.removeItem('randox_user');updateUserArea();showToast('Hesaptan çıkış yapıldı','info');if(currentSection==='profile')showSection('home')}
+function confirmLogout(){closeLogoutModal();currentUser=null;localStorage.removeItem('randox_user');updateUserArea();showToast('Çıxış edildi','info');if(currentSection==='profile'||currentSection==='admin'||currentSection==='create'||currentSection==='messages')showSection('home')}
 
-/* ===== KULLANICI ALANI ===== */
 function updateUserArea(){
   const area=document.getElementById('userArea');const mobile=document.getElementById('mobileAuthBtns');
   if(currentUser){
     const avatarInner=currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase();
     const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
     area.innerHTML=`<div class="avatar-sm text-white" style="${bgStyle}" onclick="toggleUserDropdown()">${avatarInner}</div>`;
-    mobile.innerHTML=`<button onclick="showSection('profile');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium">Profilim</button><button onclick="openLogoutModal();toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm text-red-400">Çıkış</button>`;
+    mobile.innerHTML=`<button onclick="showSection('profile');toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm font-medium">Profilim</button><button onclick="openLogoutModal();toggleMobileMenu()" class="glass rounded-xl px-6 py-3 text-sm text-red-400">Çıxış</button>`;
   }else{
-    area.innerHTML=`<button onclick="openAuthModal()" class="glass hover:border-brand-500/30 px-4 py-2 rounded-xl text-sm font-medium transition-all">Giriş Yap</button>`;
-    mobile.innerHTML=`<button onclick="openAuthModal();toggleMobileMenu()" class="bg-brand-500 hover:bg-brand-400 text-white rounded-xl px-8 py-3 text-sm font-semibold transition-all">Giriş Yap</button>`;
+    area.innerHTML=`<button onclick="openAuthModal()" class="glass hover:border-brand-500/30 px-4 py-2 rounded-xl text-sm font-medium transition-all">Daxil ol</button>`;
+    mobile.innerHTML=`<button onclick="openAuthModal();toggleMobileMenu()" class="bg-brand-500 hover:bg-brand-400 text-white rounded-xl px-8 py-3 text-sm font-semibold transition-all">Daxil ol</button>`;
   }
   const avatarInner2=currentUser?(currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase()):'';
   const bgStyle2=currentUser&&!currentUser.avatar?`background:${getAvatarColor(currentUser)}`:'';
-  document.getElementById('dropdownContent').innerHTML=currentUser?`<div class="p-4 border-b border-white/5 flex items-center gap-3"><div class="avatar-sm text-white" style="${bgStyle2}">${avatarInner2}</div><div><p class="font-semibold text-sm">${currentUser.username}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div></div><div class="p-2"><a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a><a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Bakiye: ${(currentUser.balance||0).toFixed(2)} ₼</a><button onclick="openLogoutModal();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıkış</button></div>`:'';
+  let adminLink = (currentUser && ADMIN_EMAILS.includes(currentUser.email)) ? `<a href="#" onclick="showSection('admin');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:shield-account" class="text-lg"></iconify-icon>Admin Paneli</a>` : '';
+  document.getElementById('dropdownContent').innerHTML=currentUser?`<div class="p-4 border-b border-white/5 flex items-center gap-3"><div class="avatar-sm text-white" style="${bgStyle2}">${avatarInner2}</div><div><p class="font-semibold text-sm">${currentUser.username}</p><p class="text-xs text-dark-400">${currentUser.email}</p></div></div><div class="p-2"><a href="#" onclick="showSection('profile');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:account" class="text-lg"></iconify-icon>Profilim</a><a href="#" onclick="showSection('messages');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:chat" class="text-lg"></iconify-icon>Mesajlar</a><a href="#" onclick="showSection('topup');toggleUserDropdown()" class="flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-white/5 transition-colors text-sm text-dark-300 hover:text-white"><iconify-icon icon="mdi:wallet" class="text-lg"></iconify-icon>Balans: ${(currentUser.balance||0).toFixed(2)} ₼</a>${adminLink}<button onclick="openLogoutModal();toggleUserDropdown()" class="w-full flex items-center gap-3 px-3 py-2.5 rounded-lg hover:bg-red-500/10 transition-colors text-sm text-red-400"><iconify-icon icon="mdi:logout" class="text-lg"></iconify-icon>Çıxış</button></div>`:'';
 }
 function toggleUserDropdown(){dropdownOpen=!dropdownOpen;document.getElementById('userDropdown').classList.toggle('hidden',!dropdownOpen)}
 document.addEventListener('click',e=>{if(dropdownOpen&&!e.target.closest('#userArea')&&!e.target.closest('#userDropdown')){dropdownOpen=false;document.getElementById('userDropdown').classList.add('hidden')}});
 
-/* ===== SEPET ===== */
-function toggleCart(){cartOpen=!cartOpen;document.getElementById('cartOverlay').classList.toggle('hidden',!cartOpen);document.getElementById('cartSidebar').style.transform=cartOpen?'translateX(0)':'translateX(100%)';document.body.style.overflow=cartOpen?'hidden':'';if(cartOpen)updateCartUI()}
-function updateCartUI(){const countEl=document.getElementById('cartCount');const itemsEl=document.getElementById('cartItems');const footerEl=document.getElementById('cartFooter');const totalEl=document.getElementById('cartTotal');countEl.classList.toggle('hidden',cart.length===0);countEl.textContent=cart.length;if(cart.length===0){itemsEl.innerHTML='<div class="text-center py-16"><iconify-icon icon="mdi:cart-off" class="text-5xl text-dark-600 mb-4"></iconify-icon><p class="text-dark-400">Sepetiniz boş</p></div>';footerEl.classList.add('hidden');return}footerEl.classList.remove('hidden');const total=cart.reduce((s,i)=>s+i.price,0);totalEl.textContent=total.toFixed(2)+' ₼';itemsEl.innerHTML=cart.map((item,i)=>`<div class="glass-light rounded-xl p-4 flex items-center gap-4 border border-white/5"><div class="w-12 h-12 rounded-lg overflow-hidden flex-shrink-0"><img src="${item.gameImg}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">${item.gameName}</p><p class="text-xs text-dark-400">${item.scoreName}</p></div><div class="text-right flex-shrink-0"><p class="text-brand-400 font-bold text-sm">${item.price.toFixed(2)} ₼</p><button onclick="removeFromCart(${i})" class="text-xs text-red-400 hover:text-red-300 mt-1">Sil</button></div></div>`).join('')}
-function removeFromCart(i){cart.splice(i,1);localStorage.setItem('randox_cart',JSON.stringify(cart));updateCartUI();showToast('Ürün sepetten silindi','info')}
-function checkout(){if(!currentUser){closeCart();openAuthModal();return}const total=cart.reduce((s,i)=>s+i.price,0);if((currentUser.balance||0)<total){showToast('Bakiyeniz yetersiz. Lütfen puan yükleyin.','error');return}currentUser.balance-=total;localStorage.setItem('randox_user',JSON.stringify(currentUser));const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;localStorage.setItem('randox_users',JSON.stringify(users));const orders=JSON.parse(localStorage.getItem('randox_orders_'+currentUser.email)||'[]');cart.forEach(it=>orders.push({name:it.gameName,score:it.scoreName,total:it.price,img:it.gameImg,date:new Date().toISOString()}));localStorage.setItem('randox_orders_'+currentUser.email,JSON.stringify(orders));cart=[];localStorage.setItem('randox_cart',JSON.stringify(cart));updateCartUI();updateUserArea();closeCart();showToast('Sipariş başarıyla tamamlandı!','success')}
-function closeCart(){cartOpen=false;document.getElementById('cartOverlay').classList.add('hidden');document.getElementById('cartSidebar').style.transform='translateX(100%)';document.body.style.overflow=''}
+/* ===== BALANS YÜKLE ===== */
+function setCustomAmount(amt){document.getElementById('customAmountInput').value=amt;selectedTopUpAmount=amt;document.getElementById('topUpBtn').disabled=false;}
+document.addEventListener('input',e=>{if(e.target.id==='customAmountInput'){selectedTopUpAmount=parseFloat(e.target.value)||0;document.getElementById('topUpBtn').disabled=selectedTopUpAmount<=0;}});
+function processTopUp(){
+  if(!currentUser){openAuthModal();return}
+  if(!selectedTopUpAmount||selectedTopUpAmount<=0)return;
+  currentUser.balance=(currentUser.balance||0)+selectedTopUpAmount;
+  localStorage.setItem('randox_user',JSON.stringify(currentUser));
+  const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;
+  localStorage.setItem('randox_users',JSON.stringify(users));
+  document.getElementById('currentBalanceTop').textContent=currentUser.balance.toFixed(2)+' ₼';
+  document.getElementById('customAmountInput').value='';selectedTopUpAmount=0;document.getElementById('topUpBtn').disabled=true;
+  updateUserArea();showToast(selectedTopUpAmount+' AZN balansınıza əlavə edildi (Demo).','success');
+}
 
-/* ===== PUAN YÜKLE ===== */
-function selectTopUp(el,amt){document.querySelectorAll('#topUpGrid .score-option').forEach(o=>o.classList.remove('selected'));el.classList.add('selected');selectedTopUpAmount=amt;document.getElementById('topUpBtn').disabled=false}
-function selectPayment(el){document.querySelectorAll('#paymentGrid .score-option').forEach(o=>{o.classList.remove('selected');o.classList.add('text-dark-400')});el.classList.add('selected');el.classList.remove('text-dark-400')}
-function processTopUp(){if(!currentUser){openAuthModal();return}if(!selectedTopUpAmount)return;currentUser.balance=(currentUser.balance||0)+selectedTopUpAmount;localStorage.setItem('randox_user',JSON.stringify(currentUser));const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;localStorage.setItem('randox_users',JSON.stringify(users));document.getElementById('currentBalance').textContent=currentUser.balance.toFixed(2)+' ₼';document.querySelectorAll('#topUpGrid .score-option').forEach(o=>o.classList.remove('selected'));document.getElementById('topUpBtn').disabled=true;selectedTopUpAmount=0;updateUserArea();showToast(selectedTopUpAmount+' ₼ bakiyenize yüklendi','success')}
+/* ===== ADMİN PANEL ===== */
+function switchAdminTab(tab){
+  currentAdminTab=tab;
+  document.querySelectorAll('.admin-tab-btn').forEach(b=>{b.classList.toggle('text-dark-400',b.textContent.trim()!==tab.charAt(0).toUpperCase()+tab.slice(1));b.classList.toggle('active',b.textContent.trim()===tab.charAt(0).toUpperCase()+tab.slice(1))});
+  // simple visual fix for active
+  document.querySelectorAll('.admin-tab-btn').forEach(b=>{b.classList.remove('active','text-brand-400');b.classList.add('text-dark-400')});
+  event.target.classList.add('active','text-brand-400');event.target.classList.remove('text-dark-400');
+  renderAdminPanel();
+}
+function renderAdminPanel(){
+  const el=document.getElementById('adminContent');
+  if(currentAdminTab==='users')return renderAdminUsers(el);
+  if(currentAdminTab==='disputes')return renderAdminDisputes(el);
+  if(currentAdminTab==='reports')return renderAdminReports(el);
+  if(currentAdminTab==='support')return renderAdminSupport(el);
+  if(currentAdminTab==='spy')return renderAdminSpy(el);
+}
+function renderAdminUsers(el){
+  el.innerHTML=`<div class="glass rounded-2xl p-6 border border-white/5 shadow-2xl"><h3 class="font-bold text-lg mb-4">God Mode: İstifadəçilər</h3><input type="text" id="adminUserSearch" class="input-field mb-4" placeholder="Email və ya ad axtar..." oninput="renderAdminUserList()"><div id="adminUserList" class="space-y-3"></div></div>`;
+  renderAdminUserList();
+}
+function renderAdminUserList(){
+  const q=(document.getElementById('adminUserSearch')?.value||'').toLowerCase();
+  const list=users.filter(u=>u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q));
+  document.getElementById('adminUserList').innerHTML=list.map(u=>`
+    <div class="glass-light p-4 rounded-xl border border-white/5 flex flex-col md:flex-row md:items-center gap-4">
+      <div class="flex-1">
+        <p class="font-semibold text-sm">${u.username} ${u.banned?'<span class="text-xs text-red-400">(Banlı)</span>':''}</p>
+        <p class="text-xs text-dark-400">${u.email}</p>
+        <p class="text-xs text-brand-400 mt-1">Balans: ${u.balance.toFixed(2)} ₼</p>
+      </div>
+      <div class="flex flex-wrap gap-2">
+        <input type="number" id="admin_bal_${u.email}" placeholder="Məbləğ" class="input-field w-32" style="padding:8px 12px">
+        <button onclick="adminModifyBalance('${u.email}', 1)" class="px-3 py-1.5 bg-brand-500 hover:bg-brand-400 rounded-lg text-xs font-medium text-white">Əlavə Et</button>
+        <button onclick="adminModifyBalance('${u.email}', -1)" class="px-3 py-1.5 bg-red-500 hover:bg-red-400 rounded-lg text-xs font-medium text-white">Çıxar</button>
+        <button onclick="adminToggleBan('${u.email}')" class="px-3 py-1.5 ${u.banned?'bg-yellow-500':'bg-red-500'} hover:opacity-80 rounded-lg text-xs font-medium text-white">${u.banned?'Banı Aç':'Banla'}</button>
+        <div class="flex gap-1 mt-1 md:mt-0">
+          <button onclick="adminToggleRestrict('${u.email}','restrictMsg')" class="px-2 py-1.5 ${u.restrictMsg?'bg-red-500':'bg-dark-700'} rounded-lg text-xs" title="Mesaj Ban">Msg</button>
+          <button onclick="adminToggleRestrict('${u.email}','restrictList')" class="px-2 py-1.5 ${u.restrictList?'bg-red-500':'bg-dark-700'} rounded-lg text-xs" title="İlan Ban">List</button>
+          <button onclick="adminToggleRestrict('${u.email}','restrictBuy')" class="px-2 py-1.5 ${u.restrictBuy?'bg-red-500':'bg-dark-700'} rounded-lg text-xs" title="Satınalma Ban">Buy</button>
+        </div>
+      </div>
+    </div>`).join('');
+}
+function adminModifyBalance(email, mult){
+  const amt=parseFloat(document.getElementById(`admin_bal_${email}`).value)||0;
+  if(amt<=0)return;
+  const u=users.find(x=>x.email===email);if(!u)return;
+  u.balance=(u.balance||0)+(amt*mult);
+  if(u.balance<0)u.balance=0;
+  localStorage.setItem('randox_users',JSON.stringify(users));
+  if(currentUser.email===email){currentUser.balance=u.balance;localStorage.setItem('randox_user',JSON.stringify(currentUser));updateUserArea();}
+  renderAdminUserList();showToast('Balans dəyişdirildi','success');
+}
+function adminToggleBan(email){
+  const u=users.find(x=>x.email===email);if(!u)return;
+  u.banned=!u.banned;localStorage.setItem('randox_users',JSON.stringify(users));
+  renderAdminUserList();showToast(u.banned?'İstifadəçi banlandı':'Ban açıldı','success');
+}
+function adminToggleRestrict(email,key){
+  const u=users.find(x=>x.email===email);if(!u)return;
+  u[key]=!u[key];localStorage.setItem('randox_users',JSON.stringify(users));
+  renderAdminUserList();showToast('Restrict dəyişdirildi','success');
+}
+function renderAdminDisputes(el){
+  const disp=transactions.filter(t=>t.status==='admin_review');
+  el.innerHTML=`<div class="glass rounded-2xl p-6 border border-white/5 shadow-2xl"><h3 class="font-bold text-lg mb-4">Dispute İncələmə</h3><div class="space-y-3">${disp.map(t=>`<div class="glass-light p-4 rounded-xl border border-yellow-500/30"><div class="flex justify-between mb-2"><div><p class="text-sm font-bold">${t.title}</p><p class="text-xs text-dark-400">Alıcı: ${t.buyerEmail} | Satıcı: ${t.sellerEmail}</p><p class="text-xs text-yellow-400 mt-1">Səbəb: ${t.reason}</p></div><div class="text-right"><p class="text-lg font-bold text-brand-400">${t.amount.toFixed(2)} ₼</p></div></div><div class="flex gap-2 mt-3"><button onclick="adminResolveDispute('${t.id}','refund')" class="px-4 py-2 bg-red-500 rounded-lg text-xs font-medium text-white">Alıcıya Qaytar</button><button onclick="adminResolveDispute('${t.id}','pay')" class="px-4 py-2 bg-brand-500 rounded-lg text-xs font-medium text-white">Satıcıya Ödə</button></div></div>`).join('')||'<p class="text-dark-400 text-sm text-center py-4">Aktiv dispute yoxdur.</p>'}</div></div>`;
+}
+function adminResolveDispute(txId,action){
+  let t=transactions.find(x=>x.id===txId);if(!t)return;
+  if(action==='refund'){
+    const buyer=users.find(u=>u.email===t.buyerEmail);if(buyer)buyer.balance=(buyer.balance||0)+t.amount;
+  }else{
+    const seller=users.find(u=>u.email===t.sellerEmail);if(seller)seller.balance=(seller.balance||0)+(t.amount*(1-COMMISSION_RATE));
+  }
+  t.status='resolved_'+action;t.resolvedAt=Date.now();
+  localStorage.setItem('randox_users',JSON.stringify(users));
+  localStorage.setItem('randox_transactions',JSON.stringify(transactions));
+  const chat=Object.values(chats).find(c=>c.txId===txId);
+  if(chat){chat.messages.push({sender:'system',text:`Admin qərarı: ${action==='refund'?'Ödəniş alıcıya qaytarıldı':'Vəsait satıcıya ödənildi'}.`,time:new Date().toISOString()});localStorage.setItem('randox_chats',JSON.stringify(chats));}
+  renderAdminPanel();showToast('Dispute həll edildi','success');
+}
+function renderAdminReports(el){
+  el.innerHTML=`<div class="glass rounded-2xl p-6 border border-white/5 shadow-2xl"><h3 class="font-bold text-lg mb-4">Mesaj Şikayətləri</h3><div class="space-y-3">${userReports.map(r=>`<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between"><div><p class="text-sm">Şikayət edən: <span class="text-brand-400">${r.reporterEmail}</span></p><p class="text-sm">Şikayət edilən: <span class="text-red-400">${r.senderId}</span></p></div></div><p class="text-xs text-dark-400 mt-2">Səbəb: ${r.reason}</p></div>`).join('')||'<p class="text-dark-400 text-sm text-center py-4">Şikayət yoxdur.</p>'}</div></div>`;
+}
+function renderAdminSupport(el){
+  const supUsers=Object.keys(supportChats);
+  el.innerHTML=`<div class="glass rounded-2xl border border-white/5 shadow-2xl overflow-hidden flex" style="height:60vh;"><div class="w-1/3 border-r border-white/5 overflow-y-auto">${supUsers.map(e=>`<div onclick="adminOpenSupport('${e}')" class="p-4 border-b border-white/5 cursor-pointer hover:bg-white/5 ${activeSupportChat===e?'bg-white/5':''}"><p class="font-semibold text-sm">${e}</p><p class="text-xs text-dark-500 truncate">${supportChats[e].messages[supportChats[e].messages.length-1]?.text||''}</p></div>`).join('')||'<div class="p-4 text-center text-dark-400 text-sm">Support yok</div>'}</div><div class="w-2/3 flex flex-col"><div id="adminSupportWindow" class="flex-1 overflow-y-auto p-6 space-y-3 flex flex-col"><p class="self-center text-dark-400 m-auto">Söhbət seçin</p></div><div class="p-4 border-t border-white/5 hidden" id="adminSupportInput"><div class="flex gap-2"><input type="text" id="adminSupportMsg" class="input-field flex-1" placeholder="Cavab yazın..." onkeydown="if(event.key==='Enter')adminSendSupport()"><button onclick="adminSendSupport()" class="btn-primary" style="width:auto;padding:12px 20px"><iconify-icon icon="mdi:send"></iconify-icon></button></div></div></div></div>`;
+}
+function adminOpenSupport(email){
+  activeSupportChat=email;renderAdminSupport();
+  const w=document.getElementById('adminSupportWindow');
+  document.getElementById('adminSupportInput').classList.remove('hidden');
+  const c=supportChats[email];
+  w.innerHTML=c.messages.map(m=>{if(m.sender==='user')return `<div class="flex justify-start"><div class="chat-bubble them">${m.text}</div></div>`;return `<div class="flex justify-end"><div class="chat-bubble me">${m.text}</div></div>`}).join('');
+  w.scrollTop=w.scrollHeight;
+}
+function adminSendSupport(){
+  if(!activeSupportChat)return;
+  const inp=document.getElementById('adminSupportMsg');const txt=inp.value.trim();if(!txt)return;
+  supportChats[activeSupportChat].messages.push({sender:'admin',text:txt,time:new Date().toISOString()});
+  localStorage.setItem('randox_support',JSON.stringify(supportChats));
+  inp.value='';adminOpenSupport(activeSupportChat);
+}
+function renderAdminSpy(el){
+  el.innerHTML=`<div class="glass rounded-2xl p-6 border border-white/5 shadow-2xl"><h3 class="font-bold text-lg mb-4">Mesaj İnspeksiyası (Spy Mode)</h3><input type="text" id="adminSpySearch" class="input-field mb-4" placeholder="Email və ya ilan adı axtar..." oninput="renderSpyList()"><div id="spyList" class="space-y-3"></div></div>`;
+  renderSpyList();
+}
+function renderSpyList(){
+  const q=(document.getElementById('adminSpySearch')?.value||'').toLowerCase();
+  const list=Object.values(chats).filter(c=>c.buyerEmail.toLowerCase().includes(q)||c.sellerEmail.toLowerCase().includes(q)||c.listingTitle.toLowerCase().includes(q));
+  document.getElementById('spyList').innerHTML=list.map(c=>`<div onclick="adminSpyOpen('${c.id}')" class="glass-light p-4 rounded-xl border border-white/5 cursor-pointer hover:bg-white/5"><p class="text-sm font-medium">${c.listingTitle}</p><p class="text-xs text-dark-400">${c.buyerEmail} ↔ ${c.sellerEmail}</p></div>`).join('')||'<p class="text-dark-400 text-sm text-center py-4">Söhbət tapılmadı.</p>';
+}
+function adminSpyOpen(id){
+  const c=chats[id];
+  const w=document.getElementById('spyList');
+  w.innerHTML=`<button onclick="renderSpyList()" class="text-sm text-brand-400 mb-4 flex items-center gap-1"><iconify-icon icon="mdi:arrow-left"></iconify-icon> Geri</button><div class="space-y-3">${c.messages.map(m=>{if(m.sender==='system')return `<div class="chat-bubble sys">${m.text}</div>`;const isBuyer=m.sender===c.buyerEmail;return `<div class="flex ${isBuyer?'justify-start':'justify-end'}"><div class="chat-bubble ${isBuyer?'them':'me'}">${m.text}</div></div>`}).join('')}</div>`;
+}
 
 /* ===== PROFİL ===== */
 function renderProfile(){
   if(!currentUser)return;
   const avatarInner=currentUser.avatar?`<img src="${currentUser.avatar}" alt="" class="w-full h-full object-cover">`:(currentUser.username||'K').charAt(0).toUpperCase();
   const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
-  const orders=JSON.parse(localStorage.getItem('randox_orders_'+currentUser.email)||'[]');
+  const myListings=listings.filter(l=>l.sellerEmail===currentUser.email);
   document.getElementById('profileContent').innerHTML=`
     <div class="text-center mb-10 animate-up">
-      <div class="avatar-lg text-white mx-auto mb-4 cursor-pointer relative group" style="${bgStyle}" onclick="document.getElementById('ppInput').click()">
-        ${avatarInner}
-        <div class="absolute inset-0 bg-black/50 rounded-full opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center"><iconify-icon icon="mdi:camera" class="text-white text-2xl"></iconify-icon></div>
-      </div>
-      <input type="file" id="ppInput" accept="image/*" class="hidden" onchange="uploadPP(this)">
+      <div class="avatar-lg text-white mx-auto mb-4" style="${bgStyle}">${avatarInner}</div>
       <h2 class="text-2xl font-bold">${currentUser.username}</h2>
       <p class="text-dark-400 text-sm mt-1">${currentUser.email}</p>
     </div>
     <div class="grid grid-cols-3 gap-4 mb-10 animate-up delay-1">
-      <div class="profile-stat glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold text-brand-400">${(currentUser.balance||0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Bakiye</p></div>
-      <div class="profile-stat glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${orders.length}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Sipariş</p></div>
-      <div class="profile-stat glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${orders.reduce((s,o)=>s+o.total,0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Harcama</p></div>
+      <div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold text-brand-400">${(currentUser.balance||0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Balans</p></div>
+      <div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.length}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İlan</p></div>
+      <div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.reduce((s,l)=>s+l.soldCount,0)}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Satış</p></div>
     </div>
     <div class="glass rounded-2xl border border-white/5 overflow-hidden mb-6 animate-up delay-2">
-      <div class="p-5 border-b border-white/5"><h3 class="font-bold">Son Siparişler</h3></div>
-      <div class="p-5">${orders.length===0?'<p class="text-dark-500 text-center py-8">Henüz sipariş yok</p>':orders.slice(-5).reverse().map(o=>`<div class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${o.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${o.name}</p><p class="text-xs text-dark-500">${o.score}</p></div><div class="text-right"><p class="text-sm font-semibold text-brand-400">${o.total.toFixed(2)} ₼</p><p class="text-xs text-dark-500">${new Date(o.date).toLocaleDateString('tr')}</p></div></div>`).join('')}</div>
+      <div class="p-5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold">İlanlarım</h3><button onclick="showSection('create')" class="text-brand-400 text-sm hover:text-brand-300">Yeni İlan</button></div>
+      <div class="p-5">${myListings.length===0?'<p class="text-dark-500 text-center py-8">İlan yoxdur</p>':myListings.map(l=>`<div onclick="openListingModal('${l.id}')" class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0 cursor-pointer hover:bg-white/5 rounded-xl px-2 transition-colors"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${l.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${l.title}</p><p class="text-xs text-dark-500">${l.price.toFixed(2)} ₼ • Satıldı: ${l.soldCount}</p></div></div>`).join('')}</div>
     </div>
-    <div class="space-y-4 animate-up delay-3">
-      <div class="glass rounded-2xl border border-white/5 p-6 setting-card">
-        <h3 class="font-bold mb-4 flex items-center gap-2"><iconify-icon icon="mdi:cog" class="text-brand-400"></iconify-icon> Kullanıcı Ayarları</h3>
-        <div class="space-y-5">
-          <div>
-            <label class="text-xs text-dark-400 mb-1.5 block">Profil Fotoğrafı</label>
-            <div class="pp-upload-zone" onclick="document.getElementById('ppInput2').click()">
-              <iconify-icon icon="mdi:cloud-upload" class="text-dark-400 text-3xl mb-2"></iconify-icon>
-              <p class="text-sm text-dark-400">Fotoğraf yüklemek için tıklayın</p>
-              <p class="text-xs text-dark-500 mt-1">JPG, PNG - Maks. 2MB</p>
-            </div>
-            <input type="file" id="ppInput2" accept="image/*" class="hidden" onchange="uploadPP(this)">
-          </div>
-          <div>
-            <label class="text-xs text-dark-400 mb-1.5 block">Kullanıcı Adı</label>
-            <div class="flex gap-3">
-              <input type="text" id="changeNameInput" class="input-field flex-1" value="${currentUser.username}" placeholder="Yeni kullanıcı adı">
-              <button onclick="changeUsername()" class="btn-primary" style="width:auto;padding:12px 20px">Kaydet</button>
-            </div>
-          </div>
-        </div>
-      </div>
-      <button onclick="openLogoutModal()" class="w-full glass rounded-2xl border border-red-500/20 p-4 flex items-center justify-center gap-3 text-red-400 hover:bg-red-500/5 transition-all">
-        <iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon>
-        <span class="font-medium text-sm">Hesaptan Çık</span>
-      </button>
-    </div>`;
-}
-
-function uploadPP(input){
-  if(!input.files||!input.files[0])return;
-  const file=input.files[0];
-  if(file.size>2*1024*1024){showToast('Dosya boyutu 2MB\'dan küçük olmalıdır','error');return}
-  if(!file.type.startsWith('image/')){showToast('Sadece resim dosyası yükleyin','error');return}
-  const reader=new FileReader();
-  reader.onload=function(e){
-    currentUser.avatar=e.target.result;
-    localStorage.setItem('randox_user',JSON.stringify(currentUser));
-    const u=users.find(x=>x.email===currentUser.email);if(u)u.avatar=currentUser.avatar;localStorage.setItem('randox_users',JSON.stringify(users));
-    updateUserArea();renderProfile();showToast('Profil fotoğrafı güncellendi','success');
-  };reader.readAsDataURL(file);
-}
-
-function changeUsername(){
-  const newName=document.getElementById('changeNameInput').value.trim();
-  if(!newName||newName.length<3){showToast('Kullanıcı adı minimum 3 karakter olmalıdır','error');return}
-  currentUser.username=newName;localStorage.setItem('randox_user',JSON.stringify(currentUser));
-  const u=users.find(x=>x.email===currentUser.email);if(u)u.username=newName;localStorage.setItem('randox_users',JSON.stringify(users));
-  updateUserArea();renderProfile();showToast('Kullanıcı adı güncellendi','success');
+    <button onclick="openLogoutModal()" class="w-full glass rounded-2xl border border-red-500/20 p-4 flex items-center justify-center gap-3 text-red-400 hover:bg-red-500/5 transition-all">
+      <iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon>
+      <span class="font-medium text-sm">Hesabdan Çıx</span>
+    </button>`;
 }
 
 /* ===== TOAST ===== */
@@ -828,16 +1071,18 @@ function showToast(msg,type='info'){
   const colors={success:'border-brand-500/30 bg-brand-500/10',error:'border-red-500/30 bg-red-500/10',info:'border-blue-500/30 bg-blue-500/10'};
   const icons={success:'mdi:check-circle',error:'mdi:alert-circle',info:'mdi:information'};
   const icolors={success:'text-brand-400',error:'text-red-400',info:'text-blue-400'};
-  const t=document.createElement('div');t.className=`toast glass ${colors[type]} rounded-xl px-4 py-3 flex items-center gap-3 border max-w-sm`;
+  const t=document.createElement('div');t.className=`toast glass ${colors[type]} rounded-xl px-4 py-3 flex items-center gap-3 border max-w-sm shadow-2xl`;
   t.innerHTML=`<iconify-icon icon="${icons[type]}" class="${icolors[type]} text-xl flex-shrink-0"></iconify-icon><span class="text-sm">${msg}</span>`;
   c.appendChild(t);setTimeout(()=>{t.style.opacity='0';t.style.transform='translateX(100px)';t.style.transition='all .3s ease';setTimeout(()=>t.remove(),300)},3500);
 }
 
-/* ===== NAVBAR SCROLL ===== */
-window.addEventListener('scroll',()=>{const n=document.getElementById('navbar');if(window.scrollY>50){n.classList.add('glass');n.style.borderBottom='1px solid rgba(255,255,255,0.05)'}else{n.classList.remove('glass');n.style.borderBottom='none'}});
+window.addEventListener('scroll',()=>{const n=document.getElementById('navbar');if(window.scrollY>50){n.classList.add('glass');n.style.borderBottom='1px solid rgba(255,255,255,0.05)';n.style.boxShadow='0 4px 20px rgba(0,0,0,0.3)'}else{n.classList.remove('glass');n.style.borderBottom='none';n.style.boxShadow='none'}});
 
-/* ===== INIT ===== */
-renderFeaturedGames();renderGames();renderApps();updateUserArea();updateCartUI();
+// BOOTSTRAP
+if(currentUser && users.find(u=>u.email===currentUser.email)?.banned){
+  document.getElementById('banScreen').classList.add('active');
+}
+renderListings();updateUserArea();
 </script>
 </body>
 </html>
