@@ -166,7 +166,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
         <input type="text" id="searchInput" name="randox_search_random" autocomplete="off" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
       </div>
       
-      <!-- DÜZƏLİŞ: Flex sıralama düzəldildi -->
       <div class="relative flex items-center gap-2">
           <div id="userArea" class="flex items-center gap-2"></div>
           <div id="userDropdown" class="dropdown-menu hidden absolute top-full right-0 mt-2 w-56 glass rounded-2xl border border-white/10 overflow-hidden z-[105] shadow-2xl"><div id="dropdownContent"></div></div>
@@ -253,7 +252,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 
 <main>
 
-<!-- DÜZƏLİŞ: ANA SƏHİFƏDƏ REAL İLANLAR -->
 <section id="section-home">
   <div class="hero-bg min-h-screen flex items-center relative">
     <div class="max-w-7xl mx-auto px-6 pt-32 pb-20 grid lg:grid-cols-2 gap-12 items-center relative z-10">
@@ -277,7 +275,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     </div>
   </div>
 
-  <!-- REAL İLANLAR BÖLMƏSİ -->
   <div class="max-w-7xl mx-auto px-6 py-24">
     <div class="flex items-end justify-between mb-12">
       <div><span class="tag uppercase text-brand-400 tracking-widest">Bazar</span><h2 class="mt-3 text-3xl md:text-4xl font-bold tracking-tight">Son İlanlar</h2><p class="mt-2 text-dark-400">Digər istifadəçilərin paylaşılan məhsulları.</p></div>
@@ -461,6 +458,27 @@ let currentSection = 'home', selectedTopUpAmount = 0, selectedDeliveryMethod = n
 let mobileMenuOpen = false, dropdownOpen = false, searchQuery = '';
 let vCode='',vEmail='',vAction='',vTempData={},resendCd=0,resendIv=null,googleInitialized=false;
 let reportingData = null;
+
+// "PUBLIC" SIMULYASİYA: Boş databezaya demo məlumatlar əlavə edirik
+if (listings.length === 0) {
+    listings = [
+        { id: 'mock1', title: 'PUBG Mobile - Conqueror Hesab', cat: 'Hesab', price: 45.00, desc: 'Conqueror rütbəsi, M416 Glacier skin, 80K UC var. Tam təhlükəsiz keçid.', img: 'https://images.unsplash.com/photo-1542751371-adc1794eaa34?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', sellerEmail: 'pubg_pro@randox.com', sellerName: 'ProGamer', sellerAvatar: '', deliveryMethod: 'manual', stockLinks: [], manualStock: 1, features: [{key: 'Rank', value: 'Conqueror'}, {key: 'UC', value: '80,000'}], soldCount: 12, createdAt: new Date().toISOString() },
+        { id: 'mock2', title: 'Valorant 1000 VP Pin', cat: 'Epin', price: 12.50, desc: 'Avtomatik link ötürmə. Anında VP kodu göndərilir.', img: 'https://images.unsplash.com/photo-1538481193919-5afef3620c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', sellerEmail: 'valorant_shop@randox.com', sellerName: 'VShop', sellerAvatar: '', deliveryMethod: 'link', stockLinks: ['https://link1.com/vp1', 'https://link1.com/vp2'], manualStock: 0, features: [{key: 'Miqtar', value: '1000 VP'}], soldCount: 34, createdAt: new Date().toISOString() },
+        { id: 'mock3', title: 'Netflix Premium 1 Aylıq', cat: 'Service', price: 8.00, desc: 'Özəl Netflix Premium hesabı. 4K keyfiyyət, 4 eyni anda istifadə.', img: 'https://images.unsplash.com/photo-1574267432553-4b4628081c31?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', sellerEmail: 'media_servis@randox.com', sellerName: 'MediaHub', sellerAvatar: '', deliveryMethod: 'link', stockLinks: ['https://netflix.com/account1', 'https://netflix.com/account2'], manualStock: 0, features: [{key: 'Keyfiyyət', value: '4K Ultra HD'}, {key: 'Müddət', value: '30 Gün'}], soldCount: 56, createdAt: new Date().toISOString() },
+        { id: 'mock4', title: 'Discord Nitro Boost', cat: 'Service', price: 15.00, desc: '1 Aylıq Discord Nitro Boost. Serverinə boost atılır.', img: 'https://images.unsplash.com/photo-1614642520041-9c0e65e93c83?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', sellerEmail: 'boost_king@randox.com', sellerName: 'BoostKing', sellerAvatar: '', deliveryMethod: 'manual', stockLinks: [], manualStock: 3, features: [{key: 'Tip', value: 'Nitro Boost'}], soldCount: 8, createdAt: new Date().toISOString() }
+    ];
+    localStorage.setItem('randox_listings', JSON.stringify(listings));
+}
+
+if (users.length === 0) {
+    users = [
+        { username: 'ProGamer', email: 'pubg_pro@randox.com', password: '123456', balance: 120.00, avatar: '', bio: 'PUBG Pro oyuncu və satıcı.', createdAt: new Date().toISOString(), banned: false, restrictions: {message:false,listing:false,purchase:false} },
+        { username: 'VShop', email: 'valorant_shop@randox.com', password: '123456', balance: 45.50, avatar: '', bio: 'Epin və VP kod satıcısı.', createdAt: new Date().toISOString(), banned: false, restrictions: {message:false,listing:false,purchase:false} },
+        { username: 'MediaHub', email: 'media_servis@randox.com', password: '123456', balance: 0, avatar: '', bio: 'Streaming xidmətləri.', createdAt: new Date().toISOString(), banned: false, restrictions: {message:false,listing:false,purchase:false} },
+        { username: 'Scammer123', email: 'scam@randox.com', password: '123456', balance: 0, avatar: '', bio: '', createdAt: new Date().toISOString(), banned: true, restrictions: {message:true,listing:true,purchase:true} }
+    ];
+    localStorage.setItem('randox_users', JSON.stringify(users));
+}
 
 window.addEventListener('load', () => {
     const searchInput = document.getElementById('searchInput');
@@ -978,7 +996,6 @@ function switchAdminTab(tab){
 }
 
 function renderAdminUsers(){
-  // DÜZƏLİŞ: users massivini məcburi yeniləyirik ki, admin sadə userləri də görsün
   users = JSON.parse(localStorage.getItem('randox_users') || '[]');
   let q=(document.getElementById('adminUserSearch')?.value||'').toLowerCase();
   let list=users.filter(u=>u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q));
