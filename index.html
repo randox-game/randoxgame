@@ -17,7 +17,6 @@ tailwind.config={theme:{extend:{fontFamily:{sans:['Inter','sans-serif'],serif:['
 body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:hidden}
 ::-webkit-scrollbar{width:8px}::-webkit-scrollbar-track{background:#020617}::-webkit-scrollbar-thumb{background:linear-gradient(to bottom, #22c55e, #16a34a);border-radius:4px}
 
-/* PREMIUM ANIMATIONS */
 @keyframes fadeIn{0%{opacity:0}100%{opacity:1}}
 @keyframes slideUp{0%{opacity:0;transform:translateY(40px)}100%{opacity:1;transform:translateY(0)}}
 @keyframes scaleIn{0%{opacity:0;transform:scale(0.9)}100%{opacity:1;transform:scale(1)}}
@@ -30,22 +29,18 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 @keyframes gridScroll{0%{background-position:0 0}100%{background-position:60px 60px}}
 @keyframes glowPulse{0%,100%{box-shadow:0 0 5px 1px rgba(239,68,68,0.8)}50%{box-shadow:0 0 15px 3px rgba(239,68,68,1)}}
 
-/* LAYOUTS */
 .animate-fade{animation:fadeIn .6s ease-out both}.animate-up{animation:slideUp .8s ease-out both}
 .animate-left{animation:slideLeft .8s ease-out both}.animate-scale{animation:scaleIn .6s ease-out both}
 .delay-1{animation-delay:.1s}.delay-2{animation-delay:.2s}.delay-3{animation-delay:.3s}.delay-4{animation-delay:.4s}
 
-/* PREMIUM GLASS */
 .glass{background:rgba(2,6,23,.6);backdrop-filter:blur(20px) saturate(180%);border:1px solid rgba(255,255,255,.05)}
 .glass-light{background:rgba(15,23,42,.4);backdrop-filter:blur(12px);border:1px solid rgba(255,255,255,.06)}
 .glass-green{background:rgba(34,197,94,.08);backdrop-filter:blur(12px);border:1px solid rgba(34,197,94,.2)}
 
-/* HERO & BG */
 .hero-bg{background:radial-gradient(circle at 20% 20%, rgba(34,197,94,0.1), transparent 40%), radial-gradient(circle at 80% 80%, rgba(22,163,74,0.1), transparent 40%), #020617;position:relative;overflow:hidden}
 .bg-grid{background-image:linear-gradient(rgba(34,197,94,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.04) 1px,transparent 1px);background-size:60px 60px;animation:gridScroll 8s linear infinite}
 .shimmer-text{background:linear-gradient(90deg,#22c55e,#4ade80,#86efac,#4ade80,#22c55e);background-size:200% auto;-webkit-background-clip:text;-webkit-text-fill-color:transparent;animation:shimmer 3s linear infinite}
 
-/* CARDS & BUTTONS */
 .game-card{transition:all .4s cubic-bezier(.16,1,.3,1);transform-style:preserve-3d}
 .game-card:hover{transform:translateY(-8px) scale(1.02)}
 .game-card:hover .game-img{transform:scale(1.1)}
@@ -60,11 +55,9 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .btn-google{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#f8fafc;font-weight:500;padding:12px 24px;border-radius:12px;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
 .btn-google:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
 
-/* INPUTS */
 .input-field{background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px;color:#f8fafc;font-size:14px;outline:none;transition:all .3s ease;width:100%}
 .input-field:focus{border-color:rgba(34,197,94,.6);box-shadow:0 0 0 3px rgba(34,197,94,.1), inset 0 0 10px rgba(34,197,94,.05)}
 
-/* MISC */
 .tag{font-size:10px;letter-spacing:.1em}
 .modal-overlay{transition:opacity .3s ease}.modal-content{transition:all .4s cubic-bezier(.16,1,.3,1)}
 .toast{animation:slideUp .4s ease-out,fadeIn .3s ease-out}
@@ -77,7 +70,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .avatar-sm img{width:100%;height:100%;object-fit:cover}
 .avatar-lg{width:96px;height:96px;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:32px;font-weight:700;flex-shrink:0;position:relative;overflow:hidden;border: 2px solid rgba(34,197,94,0.3);box-shadow: 0 0 30px rgba(34,197,94,0.2)}
 
-/* CHAT UI */
 .chat-bubble{max-width: 80%; padding: 12px 16px; border-radius: 18px; word-break: break-word; font-size: 14px; line-height: 1.4; position: relative;}
 .chat-bubble.me{background: linear-gradient(135deg, #16a34a, #22c55e); color: #fff; border-bottom-right-radius: 4px; margin-left: auto; box-shadow: 0 4px 15px rgba(34,197,94,0.2);}
 .chat-bubble.them{background: rgba(255,255,255,0.06); color: #f8fafc; border-bottom-left-radius: 4px;}
@@ -91,7 +83,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 </head>
 <body class="bg-grid">
 
-<!-- BAN SCREEN -->
 <div id="banScreen" class="fixed inset-0 z-[9999] hidden flex-col items-center justify-center bg-dark-950 text-center p-6">
   <div class="brand-logo mb-6" style="width:80px;height:80px"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div>
   <h1 class="text-4xl md:text-5xl font-bold text-red-500 mb-2 tracking-tight">Hesab Bloklanıb</h1>
@@ -100,7 +91,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 
 <div id="toastContainer" class="fixed top-24 right-6 z-[200] flex flex-col gap-3"></div>
 
-<!-- NOTIFICATION MODAL -->
 <div id="notifModal" class="fixed inset-0 z-[165] hidden">
   <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeNotifs()"></div>
   <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-2xl border border-white/5 p-6 shadow-2xl max-h-[80vh] flex flex-col">
@@ -112,7 +102,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
   </div>
 </div>
 
-<!-- REPORT MODAL -->
 <div id="reportModal" class="fixed inset-0 z-[180] hidden">
   <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeReportModal()"></div>
   <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900 rounded-2xl border border-white/5 p-8 shadow-2xl">
@@ -125,7 +114,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
   </div>
 </div>
 
-<!-- LIVE SUPPORT MODAL -->
 <div id="supportModal" class="fixed inset-0 z-[175] hidden">
   <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-md" onclick="closeSupport()"></div>
   <div class="modal-content absolute inset-2 md:inset-auto md:top-1/2 md:left-1/2 md:-translate-x-1/2 md:-translate-y-1/2 w-full md:max-w-2xl h-full md:h-[80vh] bg-dark-900 rounded-2xl border border-white/5 overflow-hidden flex flex-col shadow-2xl">
@@ -146,7 +134,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
   </div>
 </div>
 
-<!-- LOGOUT MODAL -->
 <div id="logoutModal" class="fixed inset-0 z-[170] hidden">
   <div class="modal-overlay absolute inset-0 bg-black/80 backdrop-blur-sm" onclick="closeLogoutModal()"></div>
   <div class="modal-content absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-sm bg-dark-900 rounded-2xl border border-white/5 p-8 text-center shadow-2xl">
@@ -176,7 +163,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
     <div class="flex items-center gap-3">
       <div class="search-box hidden md:flex items-center gap-2 glass rounded-xl px-4 py-2.5 border border-transparent transition-all w-56 focus-within:w-72 focus-within:border-brand-500/30">
         <iconify-icon icon="mdi:magnify" class="text-dark-400 text-lg"></iconify-icon>
-        <input type="search" id="searchInput" name="randox_search_query" autocomplete="new-password" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
+        <input type="text" id="searchInput" name="randox_search_random" autocomplete="off" placeholder="İlan axtar..." class="bg-transparent outline-none text-sm text-white placeholder:text-dark-500 w-full" oninput="handleSearch(this.value)">
       </div>
       
       <div class="relative flex items-center gap-2">
@@ -255,7 +242,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
   </div>
 </div>
 
-<!-- TAM EKRAN PREMIUM İLAN DETAL MODALI -->
 <div id="listingModal" class="fixed inset-0 z-[150] hidden">
   <div class="modal-overlay absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeListingModal()"></div>
   <div class="modal-content absolute inset-0 md:inset-4 lg:inset-8 bg-dark-900 rounded-3xl border border-white/5 overflow-hidden flex flex-col shadow-2xl">
@@ -278,27 +264,13 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
           <button onclick="showSection('create')" class="glass hover:border-brand-500/30 font-semibold px-8 py-4 rounded-xl transition-all flex items-center gap-2"><iconify-icon icon="mdi:plus-circle" class="text-brand-400"></iconify-icon> İlan Paylaş</button>
         </div>
         <div class="mt-12 flex gap-8 animate-up delay-4">
-          <div><span class="text-3xl font-bold text-brand-400">1000+</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İstifadəçi</p></div>
+          <div><span class="text-3xl font-bold text-brand-400" id="statListings">0</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Aktiv İlan</p></div>
           <div class="w-px bg-white/10"></div>
-          <div><span class="text-3xl font-bold text-brand-400">24/7</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Dəstək</p></div>
+          <div><span class="text-3xl font-bold text-brand-400" id="statUsers">0</span><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İstifadəçi</p></div>
         </div>
       </div>
       <div class="relative animate-left delay-3 hidden lg:block">
-        <div class="relative rounded-3xl overflow-hidden shadow-2xl shadow-brand-500/10 border border-white/10 animate-float">
-          <img src="https://z-cdn-media.chatglm.cn/files/a6111907-9687-4215-93b6-d440fa4d20d2.jpg?auth_key=1882175679-42e4d8f3bf15441f9334db1f4d5bce75-0-a8809e366cfa07eadf304b059c3113b7" class="w-full h-[600px] object-cover" alt="Market">
-          <div class="absolute inset-0 bg-gradient-to-t from-dark-950 via-transparent to-transparent"></div>
-          <div class="absolute bottom-6 left-6 right-6">
-            <div class="glass rounded-2xl p-5">
-              <div class="flex items-center gap-3 mb-3">
-                <div class="w-12 h-12 rounded-xl overflow-hidden bg-brand-500 flex items-center justify-center"><iconify-icon icon="mdi:sword-cross" class="text-white text-2xl"></iconify-icon></div>
-                <div><h4 class="font-semibold text-sm">Pubg Mobile Hesab</h4><div class="flex items-center gap-1 mt-0.5"><iconify-icon icon="mdi:star" class="text-yellow-400 text-xs"></iconify-icon><span class="text-xs text-dark-400">4.9 • 15 Satış</span></div></div>
-                <span class="ml-auto text-brand-400 font-bold">45.00 ₼</span>
-              </div>
-              <div class="flex gap-2"><span class="text-[10px] bg-white/5 px-2 py-1 rounded-md">Avtomatik</span><span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">Stok: 3</span></div>
-            </div>
-          </div>
-        </div>
-        <div class="absolute -top-4 -right-4 glass-green rounded-2xl p-4 animate-float" style="animation-delay:1s"><iconify-icon icon="mdi:lightning-bolt" class="text-brand-400 text-2xl"></iconify-icon><p class="text-xs font-semibold mt-1">Anında Ötürmə</p></div>
+        <div id="heroListings" class="grid grid-cols-2 gap-4"></div>
       </div>
     </div>
   </div>
@@ -333,7 +305,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
           <div><label class="text-xs text-dark-400 mb-1.5 block">Qiymət (AZN)</label><input type="number" id="createPrice" class="input-field" min="0.5" step="0.1" placeholder="5.00"></div>
         </div>
         <div><label class="text-xs text-dark-400 mb-1.5 block">Açıqlama</label><textarea id="createDesc" class="input-field h-24 resize-none" placeholder="Məhsul haqqında bütün detalları yaz. Səviyyə, rütbə, skinlər və s."></textarea></div>
-        <div><label class="text-xs text-dark-400 mb-1.5 block">Şəkil (Mütləqdir - Randox水印 əlavə olunacaq)</label>
+        <div><label class="text-xs text-dark-400 mb-1.5 block">Şəkil (Mütləqdir - Mərkəzdə Randox水印 əlavə olunacaq)</label>
           <div class="pp-upload-zone border-2 border-dashed border-white/10 rounded-xl p-5 text-center cursor-pointer hover:border-brand-500/40 transition-colors" onclick="document.getElementById('createImgFile').click()">
             <iconify-icon icon="mdi:cloud-upload" class="text-dark-400 text-3xl mb-2 block"></iconify-icon>
             <p class="text-sm text-dark-400">Şəkil yükləmək üçün tıklayın</p>
@@ -479,20 +451,20 @@ let mobileMenuOpen = false, dropdownOpen = false, searchQuery = '';
 let vCode='',vEmail='',vAction='',vTempData={},resendCd=0,resendIv=null,googleInitialized=false;
 let reportingData = null;
 
-// Sayta girişde axtarış yerini təmizlə və yaddaşı sil
 window.addEventListener('load', () => {
     const searchInput = document.getElementById('searchInput');
     if(searchInput) searchInput.value = '';
     setTimeout(initGoogleSignIn, 500);
+    renderHeroListings();
+    updateHomeStats();
 });
 
 /* ===== GOOGLE & AVATAR ===== */
 function initGoogleSignIn(){if(googleInitialized||typeof google==='undefined'||!google.accounts)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleResponse,auto_select:false,cancel_on_tap_outside:true});googleInitialized=true;}
 function handleGoogleLogin(){if(!googleInitialized&&typeof google!=='undefined'&&google.accounts)initGoogleSignIn();if(googleInitialized)google.accounts.id.prompt();}
-function handleGoogleResponse(r){try{const p=JSON.parse(atob(r.credential.split('.')[1]));const email=p.email;const name=p.name||email.split('@')[0];let u=users.find(x=>x.email===email);if(!u){u={username:name,email,password:'g_'+Date.now(),balance:0,avatar:p.picture,createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}};users.push(u);localStorage.setItem('randox_users',JSON.stringify(users));}currentUser={...u};localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();checkBanOnLogin();}catch(e){showToast('Google xətası','error');}}
+function handleGoogleResponse(r){try{const p=JSON.parse(atob(r.credential.split('.')[1]));const email=p.email;const name=p.name||email.split('@')[0];let u=users.find(x=>x.email===email);if(!u){u={username:name,email,password:'g_'+Date.now(),balance:0,avatar:p.picture,bio:'',createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}};users.push(u);localStorage.setItem('randox_users',JSON.stringify(users));}currentUser={...u};localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();checkBanOnLogin();}catch(e){showToast('Google xətası','error');}}
 function getAvatarColor(u){return u?`hsl(${(u.username||'K').charCodeAt(0)*37%360},60%,45%)`:'#22c55e';}
 
-/* ===== BAN & RESTRICTION CHECKS ===== */
 function checkBanOnLogin() {
   if(currentUser?.banned) {
     document.getElementById('banScreen').classList.remove('hidden');
@@ -520,10 +492,14 @@ function showSection(s){
 function toggleMobileMenu(){const m=document.getElementById('mobileMenu');mobileMenuOpen=!mobileMenuOpen;m.classList.toggle('hidden',!mobileMenuOpen);m.classList.toggle('flex',mobileMenuOpen)}
 function handleSearch(q){searchQuery=q.toLowerCase().trim();if(currentSection!=='listings'&&searchQuery.length>0)showSection('listings');if(currentSection==='listings')renderListings();const i=document.getElementById('searchInput');if(i&&document.activeElement===i){const v=i.value;i.value='';i.value=v;}}
 
+function updateHomeStats() {
+    document.getElementById('statListings').textContent = listings.filter(l => l.deliveryMethod==='link' ? l.stockLinks.length > 0 : l.manualStock > 0).length;
+    document.getElementById('statUsers').textContent = users.length;
+}
+
 /* ===== İLANLAR ===== */
 function selectDelivery(t){selectedDeliveryMethod=t;document.getElementById('linkStockArea').classList.toggle('hidden',t!=='link');document.getElementById('manualStockArea').classList.toggle('hidden',t!=='manual');document.getElementById('deliveryLink').classList.toggle('border-brand-500/40',t==='link');document.getElementById('deliveryManual').classList.toggle('border-brand-500/40',t==='manual');}
 
-// Şəkilə "Randox"水印 əlavə edən funksiya
 function handleImgUpload(input){
     if(!input.files[0])return;
     const file=input.files[0];
@@ -537,11 +513,12 @@ function handleImgUpload(input){
             if(w>800){h=h*(800/w);w=800;}
             canvas.width=w;canvas.height=h;
             ctx.drawImage(img,0,0,w,h);
-            // Randox Watermark
-            ctx.font="bold 24px Inter, sans-serif";
-            ctx.fillStyle="rgba(255, 255, 255, 0.6)";
-            ctx.textAlign="left";
-            ctx.fillText("Randox", 15, h - 15);
+            // Mərkəzdə Solğun RANDOX Su Nişanı
+            ctx.font="bold 60px Inter, sans-serif";
+            ctx.fillStyle="rgba(255, 255, 255, 0.15)";
+            ctx.textAlign="center";
+            ctx.textBaseline="middle";
+            ctx.fillText("RANDOX", w / 2, h / 2);
             const watermarkedDataUrl=canvas.toDataURL('image/jpeg',0.9);
             document.getElementById('createImg').value=watermarkedDataUrl;
             document.getElementById('createImgName').textContent='Şəkil yükləndi (Randox水印 əlavə edildi)';
@@ -563,7 +540,7 @@ function submitListing(){
   const img=document.getElementById('createImg').value;
   
   if(!title||!price||!desc){showToast('Bütün sahələri doldurun','error');return;}
-  if(!img){showToast('İlan üçün şəkil mütləqdir!','error');return;} // Şəkil məcburidir
+  if(!img){showToast('İlan üçün şəkil mütləqdir!','error');return;}
   if(!selectedDeliveryMethod){showToast('Çatdırılma metodunu seçin','error');return;}
   
   let stockLinks=[], manualStock=0;
@@ -572,13 +549,23 @@ function submitListing(){
   
   const newListing={id:'l_'+Date.now(), title, cat, price, desc, img, sellerEmail:currentUser.email, sellerName:currentUser.username, sellerAvatar:currentUser.avatar||'', deliveryMethod:selectedDeliveryMethod, stockLinks, manualStock, features:featuresList.filter(f=>f.key&&f.value), soldCount:0, createdAt:new Date().toISOString()};
   listings.unshift(newListing);localStorage.setItem('randox_listings',JSON.stringify(listings));showToast('İlan uğurla yayımlandı!','success');
-  document.getElementById('createTitle').value='';document.getElementById('createPrice').value='';document.getElementById('createDesc').value='';document.getElementById('createImg').value='';document.getElementById('createImgName').textContent='';featuresList=[];renderFeatures();selectedDeliveryMethod=null;selectDelivery('none');showSection('listings');
+  document.getElementById('createTitle').value='';document.getElementById('createPrice').value='';document.getElementById('createDesc').value='';document.getElementById('createImg').value='';document.getElementById('createImgName').textContent='';featuresList=[];renderFeatures();selectedDeliveryMethod=null;selectDelivery('none');
+  updateHomeStats(); renderHeroListings(); showSection('listings');
 }
 
 function listingCard(l){
   const stock = l.deliveryMethod==='link' ? l.stockLinks.length : l.manualStock;
   return `<div class="game-card cursor-pointer" onclick="openListingModal('${l.id}')"><div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all h-full flex flex-col"><div class="relative h-44 overflow-hidden"><img src="${l.img}" class="game-img w-full h-full object-cover" alt="${l.title}"><div class="absolute top-2 left-2 tag uppercase text-dark-900 bg-white/90 px-2 py-0.5 rounded-md">${l.cat}</div></div><div class="p-4 flex flex-col flex-1"><h3 class="font-semibold text-sm truncate">${l.title}</h3><p class="text-xs text-dark-500 mt-1 line-clamp-2 flex-1">${l.desc}</p><div class="flex items-center justify-between mt-3"><span class="text-brand-400 font-bold text-base">${l.price.toFixed(2)} ₼</span>${stock>0?`<span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">Stok: ${stock}</span>`:`<span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded-md">Bitdi</span>`}</div></div></div></div>`;
 }
+
+function renderHeroListings(){
+    const el = document.getElementById('heroListings');
+    if(!el) return;
+    let active = listings.filter(l => l.deliveryMethod==='link' ? l.stockLinks.length > 0 : l.manualStock > 0).slice(0, 4);
+    if(active.length === 0) { el.innerHTML = `<div class="glass rounded-2xl p-4 text-center text-dark-400 text-sm col-span-2">Hələ aktiv ilan yoxdur. İlk paylaşan siz olun!</div>`; return; }
+    el.innerHTML = active.map(listingCard).join('');
+}
+
 function renderListings(){
   let list=listings.filter(l=>l.deliveryMethod==='link'?l.stockLinks.length>0:l.manualStock>0);
   if(searchQuery)list=list.filter(l=>l.title.toLowerCase().includes(searchQuery)||l.desc.toLowerCase().includes(searchQuery));
@@ -589,15 +576,38 @@ function openListingModal(id){
   const l=listings.find(x=>x.id===id);if(!l)return;
   const stock=l.deliveryMethod==='link'?l.stockLinks.length:l.manualStock;
   const featuresHtml=l.features.length>0?`<div class="mt-6"><h4 class="font-bold mb-3 text-sm uppercase tracking-wider text-dark-400">Xüsusiyyətlər</h4><div class="grid grid-cols-2 gap-3">${l.features.map(f=>`<div class="glass-light p-3 rounded-lg border border-white/5"><p class="text-[10px] uppercase tracking-wider text-dark-500">${f.key}</p><p class="text-sm font-semibold mt-0.5">${f.value}</p></div>`).join('')}</div></div>`:'';
-  document.getElementById('modalBody').innerHTML=`<div class="flex flex-col md:flex-row h-full"><div class="md:w-1/2 h-64 md:h-full relative overflow-hidden bg-dark-950"><img src="${l.img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-dark-900 to-transparent"></div></div><div class="md:w-1/2 p-6 md:p-10 overflow-y-auto flex flex-col"><div class="flex-1"><span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">${l.cat}</span><h2 class="text-3xl md:text-4xl font-bold mt-4">${l.title}</h2><div class="flex items-center gap-3 mt-4 p-3 glass-light rounded-xl"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:l.sellerName})}">${l.sellerName.charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${l.sellerName}</p><p class="text-xs text-dark-400">${l.soldCount} Satış</p></div></div><div class="mt-6 p-5 glass rounded-xl flex justify-between items-center border border-white/5"><div><p class="text-xs uppercase tracking-wider text-dark-500">Qiymət</p><p class="text-3xl font-bold text-brand-400">${l.price.toFixed(2)} ₼</p></div><div class="text-right"><p class="text-xs uppercase tracking-wider text-dark-500">Stokda</p><p class="text-2xl font-bold ${stock>0?'text-white':'text-red-400'}">${stock>0?stock:'Bitdi'}</p></div></div><div class="mt-6"><h4 class="font-bold mb-2 text-sm uppercase tracking-wider text-dark-400">Açıqlama</h4><p class="text-dark-300 text-sm leading-relaxed whitespace-pre-wrap">${l.desc}</p></div>${featuresHtml}</div><div class="mt-8 flex gap-3 sticky bottom-0 bg-dark-900/80 backdrop-blur-sm pt-4 -mx-6 md:-mx-10 px-6 md:px-10 pb-1"><button onclick="buyListing('${l.id}')" class="btn-primary flex-1 text-base ${stock===0||currentUser?.restrictions?.purchase?'opacity-40 pointer-events-none':''}">${stock>0?'Təhlükəsiz Satın Al (Escrow)':'Stok Bitdi'}</button><button onclick="contactSeller('${l.id}')" class="glass hover:border-brand-500/30 px-6 py-3 rounded-xl text-sm font-medium transition-all flex items-center gap-2"><iconify-icon icon="mdi:chat-processing-outline" class="text-lg"></iconify-icon></button></div></div></div>`;
+  const isOwnListing = currentUser?.email === l.sellerEmail;
+  document.getElementById('modalBody').innerHTML=`<div class="flex flex-col md:flex-row h-full"><div class="md:w-1/2 h-64 md:h-full relative overflow-hidden bg-dark-950"><img src="${l.img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-dark-900 to-transparent"></div></div><div class="md:w-1/2 p-6 md:p-10 overflow-y-auto flex flex-col"><div class="flex-1"><span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">${l.cat}</span><h2 class="text-3xl md:text-4xl font-bold mt-4">${l.title}</h2><div class="flex items-center gap-3 mt-4 p-3 glass-light rounded-xl"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:l.sellerName})}">${l.sellerName.charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${l.sellerName}</p><p class="text-xs text-dark-400">${l.soldCount} Satış</p></div></div><div class="mt-6 p-5 glass rounded-xl flex justify-between items-center border border-white/5"><div><p class="text-xs uppercase tracking-wider text-dark-500">Qiymət</p><p class="text-3xl font-bold text-brand-400">${l.price.toFixed(2)} ₼</p></div><div class="text-right"><p class="text-xs uppercase tracking-wider text-dark-500">Stokda</p><p class="text-2xl font-bold ${stock>0?'text-white':'text-red-400'}">${stock>0?stock:'Bitdi'}</p></div></div><div class="mt-6"><h4 class="font-bold mb-2 text-sm uppercase tracking-wider text-dark-400">Açıqlama</h4><p class="text-dark-300 text-sm leading-relaxed whitespace-pre-wrap">${l.desc}</p></div>${featuresHtml}</div><div class="mt-8 flex gap-3 sticky bottom-0 bg-dark-900/80 backdrop-blur-sm pt-4 -mx-6 md:-mx-10 px-6 md:px-10 pb-1">${isOwnListing?`<button onclick="editListing('${l.id}')" class="btn-primary flex-1 text-base opacity-80" style="width:auto;padding:12px 24px">Qiyməti Dəyiş</button><button onclick="deleteListing('${l.id}')" class="btn-danger flex-1 text-base" style="width:auto;padding:12px 24px">İlanı Sil</button>`:`<button onclick="buyListing('${l.id}')" class="btn-primary flex-1 text-base ${stock===0||currentUser?.restrictions?.purchase?'opacity-40 pointer-events-none':''}">${stock>0?'Təhlükəsiz Satın Al (Escrow)':'Stok Bitdi'}</button><button onclick="contactSeller('${l.id}')" class="glass hover:border-brand-500/30 px-6 py-3 rounded-xl text-sm font-medium transition-all flex items-center gap-2"><iconify-icon icon="mdi:chat-processing-outline" class="text-lg"></iconify-icon></button>`}</div></div></div>`;
   document.getElementById('listingModal').classList.remove('hidden');document.body.style.overflow='hidden';
 }
 function closeListingModal(){document.getElementById('listingModal').classList.add('hidden');document.body.style.overflow='';}
+
+function editListing(id) {
+    const l = listings.find(x=>x.id===id); if(!l) return;
+    const newPrice = prompt('Yeni qiymət daxil edin (AZN):', l.price);
+    if(newPrice && !isNaN(newPrice) && parseFloat(newPrice) > 0) {
+        l.price = parseFloat(newPrice);
+        localStorage.setItem('randox_listings', JSON.stringify(listings));
+        showToast('Qiymət yeniləndi!', 'success');
+        openListingModal(id);
+        if(currentSection === 'profile') renderProfile();
+    }
+}
+function deleteListing(id) {
+    if(!confirm('Bu ilanı silmək istədiyinizə əminsiniz?')) return;
+    listings = listings.filter(l => l.id !== id);
+    localStorage.setItem('randox_listings', JSON.stringify(listings));
+    showToast('İlan silindi.', 'info');
+    closeListingModal();
+    if(currentSection === 'profile') renderProfile();
+    updateHomeStats(); renderHeroListings();
+}
 
 /* ===== ESCROW & SATIN ALMA ===== */
 function buyListing(id){
   if(currentUser?.restrictions?.purchase){showToast('Sizə satın almaq qadağan edilib.','error');return;}
   const l=listings.find(x=>x.id===id);if(!l)return;
+  if(l.sellerEmail === currentUser.email){ showToast('Öz ilanınızı ala bilməzsiniz!','error'); return; }
   const stock=l.deliveryMethod==='link'?l.stockLinks.length:l.manualStock;
   if(stock===0){showToast('Stok bitib','error');return;}
   if(currentUser.balance<l.price){showToast('Balansınız çatışmır.','error');showSection('topup');return;}
@@ -655,6 +665,7 @@ function counterDispute(orderId){
 /* ===== DM SİSTEMİ ===== */
 function contactSeller(id){
   const l=listings.find(x=>x.id===id);if(!l)return;
+  if(l.sellerEmail === currentUser.email){ showToast('Öz ilanınızda mesajlaşa bilməzsiniz!','error'); return; }
   const chatId=`${currentUser.email}_${l.sellerEmail}_${l.id}`;
   if(!chats[chatId]){chats[chatId]={id:chatId,listingId:l.id,listingTitle:l.title,buyerEmail:currentUser.email,sellerEmail:l.sellerEmail,messages:[]};chats[chatId].messages.push({sender:'system',text:`${l.title} haqqında sorğu başladı.`,time:new Date().toISOString()});localStorage.setItem('randox_chats',JSON.stringify(chats));}
   closeListingModal();showSection('messages');openChat(chatId);
@@ -754,7 +765,6 @@ function renderNotifs(){
       <p class="text-[10px] text-dark-500 mt-1">${new Date(n.time).toLocaleString('az')}</p>
     </div>
   `).join('');
-  // Mark as read
   notifications[currentUser.email].forEach(n => n.read = true);
   localStorage.setItem('randox_notifications', JSON.stringify(notifications));
   updateUserArea();
@@ -826,13 +836,13 @@ function verifyCode(){
 }
 function completeAuth(){
   if(vAction==='register'){
-    users.push({username:vTempData.username,email:vTempData.email,password:vTempData.password,balance:0,avatar:'',createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}});
+    users.push({username:vTempData.username,email:vTempData.email,password:vTempData.password,balance:0,avatar:'',bio:'',createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}});
     localStorage.setItem('randox_users',JSON.stringify(users));
-    currentUser={username:vTempData.username,email:vTempData.email,balance:0,avatar:'',createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}};
+    currentUser={username:vTempData.username,email:vTempData.email,balance:0,avatar:'',bio:'',createdAt:new Date().toISOString(),banned:false,restrictions:{message:false,listing:false,purchase:false}};
   }else{
     let u=users.find(x=>x.email===vTempData.email);currentUser={...u};
   }
-  localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();checkBanOnLogin();showToast('Xoş gəldin, '+currentUser.username+'!','success');clearResendCd();
+  localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();checkBanOnLogin();showToast('Xoş gəldin, '+currentUser.username+'!','success');clearResendCd(); updateHomeStats();
 }
 function resendCode(){if(resendCd>0)return;sendVCode(vEmail,vAction,vTempData)}
 function startResendCd(){clearResendCd();resendCd=120;const btn=document.getElementById('resendBtn');btn.disabled=true;const timer=document.getElementById('resendTimer');resendIv=setInterval(()=>{resendCd--;const m=Math.floor(resendCd/60);const s=resendCd%60;timer.textContent=m+':'+(s<10?'0':'')+s;if(resendCd<=0){clearResendCd();btn.disabled=false}},1000)}
@@ -906,7 +916,7 @@ function processTopUp(){
   updateUserArea();showToast(selectedTopUpAmount+' AZN balansınıza əlavə edildi.','success');
 }
 
-/* ===== ADMİN PANEL (GOD MODE) ===== */
+/* ===== ADMİN PANEL ===== */
 function switchAdminTab(tab){
   currentAdminTab=tab;
   document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
@@ -1031,7 +1041,6 @@ function renderAdminSpy(){
   }).join('')||'<p class="text-center text-dark-400 py-8">Söhbət tapılmadı.</p>';
 }
 
-// Admin Notification Sender
 function adminSendNotif(){
   const target = document.getElementById('adminNotifTarget').value;
   const text = document.getElementById('adminNotifText').value.trim();
@@ -1057,13 +1066,32 @@ function renderProfile(){
   const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
   const myListings=listings.filter(l=>l.sellerEmail===currentUser.email);
   document.getElementById('profileContent').innerHTML=`
-    <div class="text-center mb-10 animate-up"><div class="avatar-lg text-white mx-auto mb-4" style="${bgStyle}">${avatarInner}</div><h2 class="text-2xl font-bold">${currentUser.username}</h2><p class="text-dark-400 text-sm mt-1">${currentUser.email}</p></div>
+    <div class="text-center mb-10 animate-up"><div class="avatar-lg text-white mx-auto mb-4" style="${bgStyle}">${avatarInner}</div><h2 class="text-2xl font-bold">${currentUser.username}</h2><p class="text-dark-400 text-sm mt-1">${currentUser.email}</p><p class="text-dark-300 text-sm mt-3 max-w-md mx-auto italic">${currentUser.bio || 'Haqqında məlumat yoxdur.'}</p></div>
     <div class="grid grid-cols-3 gap-4 mb-10 animate-up delay-1"><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold text-brand-400">${(currentUser.balance||0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Balans</p></div><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.length}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İlan</p></div><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.reduce((s,l)=>s+l.soldCount,0)}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Satış</p></div></div>
-    <div class="glass rounded-2xl border border-white/5 overflow-hidden mb-6 animate-up delay-2"><div class="p-5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold">İlanlarım</h3><button onclick="showSection('create')" class="text-brand-400 text-sm hover:text-brand-300">Yeni İlan</button></div><div class="p-5">${myListings.length===0?'<p class="text-dark-500 text-center py-8">İlan yoxdur</p>':myListings.map(l=>`<div onclick="openListingModal('${l.id}')" class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0 cursor-pointer hover:bg-white/5 rounded-xl px-2 transition-colors"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${l.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${l.title}</p><p class="text-xs text-dark-500">${l.price.toFixed(2)} ₼ • Satıldı: ${l.soldCount}</p></div></div>`).join('')}</div></div>
+    <div class="glass rounded-2xl border border-white/5 p-6 mb-6 animate-up delay-2">
+        <h3 class="font-bold mb-4 text-lg">Profili Redakte Et</h3>
+        <div class="space-y-4">
+            <div><label class="text-xs text-dark-400 mb-1.5 block">İstifadəçi adı</label><input type="text" id="editUsername" class="input-field" value="${currentUser.username}"></div>
+            <div><label class="text-xs text-dark-400 mb-1.5 block">Haqqında (Bio)</label><textarea id="editBio" class="input-field h-20 resize-none" placeholder="Özünüz haqqında yazın...">${currentUser.bio || ''}</textarea></div>
+            <button onclick="saveProfile()" class="btn-primary" style="width:auto;padding:12px 24px">Yadda Saxla</button>
+        </div>
+    </div>
+    <div class="glass rounded-2xl border border-white/5 overflow-hidden mb-6 animate-up delay-2"><div class="p-5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold">İlanlarım</h3><button onclick="showSection('create')" class="text-brand-400 text-sm hover:text-brand-300">Yeni İlan</button></div><div class="p-5">${myListings.length===0?'<p class="text-dark-500 text-center py-8">İlan yoxdur</p>':myListings.map(l=>`<div class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0"><div onclick="openListingModal('${l.id}')" class="flex-1 flex items-center gap-4 cursor-pointer hover:bg-white/5 rounded-xl px-2 py-1 transition-colors"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${l.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${l.title}</p><p class="text-xs text-dark-500">${l.price.toFixed(2)} ₼ • Satıldı: ${l.soldCount}</p></div></div><div class="flex gap-1"><button onclick="editListing('${l.id}')" class="text-xs p-2 glass rounded-lg hover:text-brand-400"><iconify-icon icon="mdi:pencil"></iconify-icon></button><button onclick="deleteListing('${l.id}')" class="text-xs p-2 glass rounded-lg text-red-400"><iconify-icon icon="mdi:delete"></iconify-icon></button></div></div>`).join('')}</div></div>
     <button onclick="openLogoutModal()" class="w-full glass rounded-2xl border border-red-500/20 p-4 flex items-center justify-center gap-3 text-red-400 hover:bg-red-500/5 transition-all"><iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon><span class="font-medium text-sm">Hesabdan Çıx</span></button>`;
 }
+function saveProfile(){
+    const newUsername = document.getElementById('editUsername').value.trim();
+    const newBio = document.getElementById('editBio').value.trim();
+    if(newUsername.length < 3){ showToast('İstifadəçi adı minimum 3 simvol olmalıdır', 'error'); return; }
+    currentUser.username = newUsername;
+    currentUser.bio = newBio;
+    localStorage.setItem('randox_user', JSON.stringify(currentUser));
+    const u = users.find(x=>x.email===currentUser.email);
+    if(u){ u.username = newUsername; u.bio = newBio; }
+    localStorage.setItem('randox_users', JSON.stringify(users));
+    updateUserArea(); renderProfile(); showToast('Profil yeniləndi!', 'success');
+}
 
-/* ===== TOAST ===== */
 function showToast(msg,type='info'){
   const c=document.getElementById('toastContainer');
   const colors={success:'border-brand-500/30 bg-brand-500/10',error:'border-red-500/30 bg-red-500/10',info:'border-blue-500/30 bg-blue-500/10'};
@@ -1076,7 +1104,6 @@ function showToast(msg,type='info'){
 
 window.addEventListener('scroll',()=>{const n=document.getElementById('navbar');if(window.scrollY>50){n.classList.add('glass');n.style.borderBottom='1px solid rgba(255,255,255,0.05)';n.style.boxShadow='0 4px 20px rgba(0,0,0,0.3)'}else{n.classList.remove('glass');n.style.borderBottom='none';n.style.boxShadow='none'}});
 
-// BOOTSTRAP
 if(currentUser && !checkBanOnLogin()){ currentUser = null; localStorage.removeItem('randox_user'); }
 renderListings();updateUserArea();
 </script>
