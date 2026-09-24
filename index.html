@@ -3,6 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<!-- Tarayıcı İzinlerini Kapatmak İçin (Kamera, Mikrofon, Bildirim gibi şeyler istemeyecek) -->
+<meta http-equiv="Permissions-Policy" content="geolocation=(), microphone=(), camera=(), notifications=()">
 <title>Randox — Premium Bazar</title>
 <script src="https://cdn.tailwindcss.com"></script>
 <script src="https://code.iconify.design/iconify-icon/1.0.7/iconify-icon.min.js"></script>
@@ -57,7 +59,7 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .btn-primary:disabled{opacity:.4;cursor:not-allowed;transform:none;box-shadow:none}
 .btn-danger{background:linear-gradient(135deg,#dc2626,#ef4444);color:#fff;font-weight:600;padding:12px 24px;border-radius:12px;border:none;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%}
 .btn-danger:hover{box-shadow:0 0 20px rgba(239,68,68,.5);transform:translateY(-2px)}
-.btn-google{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#f8fafc;font-weight:500;padding:12px 24px;border-radius:12px;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px}
+.btn-google{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);color:#f8fafc;font-weight:500;padding:12px 24px;border-radius:12px;cursor:pointer;transition:all .3s ease;font-size:14px;width:100%;display:flex;align-items:center;justify-content:center;gap:10px;position:relative}
 .btn-google:hover{background:rgba(255,255,255,.1);border-color:rgba(255,255,255,.2)}
 
 .input-field{background:rgba(15,23,42,.6);border:1px solid rgba(255,255,255,.08);border-radius:12px;padding:12px 16px;color:#f8fafc;font-size:14px;outline:none;transition:all .3s ease;width:100%}
@@ -85,12 +87,12 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .admin-tab.active{background:rgba(34,197,94,.15);color:#22c55e;border-color:rgba(34,197,94,.4)}
 .notif-badge{animation: glowPulse 2s infinite}
 
-/* PUBG-style login */
-.pubg-bg{background:linear-gradient(135deg,#020617 0%,#0f172a 50%,#020617 100%);position:relative;overflow:hidden}
+/* PUBG-style login - Flexbox ile Tam Ortalı */
+.pubg-bg{background:linear-gradient(135deg,#020617 0%,#0f172a 50%,#020617 100%);position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;padding:1rem}
 .pubg-bg::before{content:'';position:absolute;inset:0;background-image:linear-gradient(rgba(34,197,94,.06) 1px,transparent 1px),linear-gradient(90deg,rgba(34,197,94,.06) 1px,transparent 1px);background-size:40px 40px;mask-image:radial-gradient(circle at center,black 30%,transparent 80%)}
 .pubg-scan{position:absolute;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,rgba(34,197,94,.8),transparent);animation:scanLine 4s linear infinite;pointer-events:none}
-.pubg-card{animation:pubgSlide .8s cubic-bezier(.16,1,.3,1) both}
-.pubg-corner{position:absolute;width:24px;height:24px;border-color:#22c55e}
+.pubg-card{animation:pubgSlide .8s cubic-bezier(.16,1,.3,1) both;position:relative;width:100%;max-width:28rem;max-height:90vh;overflow-y:auto;background:rgba(2,6,23,0.9);border-radius:16px;border:1px solid rgba(34,197,94,0.2);box-shadow:0 0 50px rgba(34,197,94,0.1)}
+.pubg-corner{position:absolute;width:24px;height:24px;border-color:#22c55e;pointer-events:none}
 .pubg-corner.tl{top:0;left:0;border-top:2px solid;border-left:2px solid}
 .pubg-corner.tr{top:0;right:0;border-top:2px solid;border-right:2px solid}
 .pubg-corner.bl{bottom:0;left:0;border-bottom:2px solid;border-left:2px solid}
@@ -101,12 +103,17 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 .code-input.filled{border-color:rgba(34,197,94,.6);background:rgba(34,197,94,.05)}
 .code-input.error{border-color:#ef4444;animation:shake .5s}
 .spinner{display:inline-block;width:16px;height:16px;border:2px solid rgba(255,255,255,.2);border-top-color:#fff;border-radius:50%;animation:spin .8s linear infinite;vertical-align:middle}
+
+/* Gizli Google Butonu Stilleri */
+.google-btn-wrapper{position:relative;width:100%}
+.google-btn-overlay{position:absolute;top:0;left:0;width:100%;height:100%;opacity:0;overflow:hidden;cursor:pointer}
+.google-btn-overlay > div{width:100% !important}
+.google-btn-overlay iframe{width:100% !important;height:100% !important;left:0 !important;top:0 !important}
 </style>
 </head>
 <body class="bg-grid">
 
 <!-- ===== PYTHON API AYARLARI ===== -->
-<!-- Eğer siteyi host edersen burayı host adresin yapmalısın. Şimdilik localhost yeterli. -->
 <script>
 const API_URL = 'http://127.0.0.1:5000';
 </script>
@@ -224,11 +231,11 @@ const API_URL = 'http://127.0.0.1:5000';
   <button onclick="toggleMobileMenu()" class="mt-4 glass rounded-xl px-6 py-3 text-sm">Bağla</button>
 </div>
 
-<!-- PUBG-style Auth Modal -->
+<!-- PUBG-style Auth Modal - Flex ile Tam Merkez -->
 <div id="authModal" class="fixed inset-0 z-[160] hidden pubg-bg">
   <div class="pubg-scan"></div>
   <div class="modal-overlay absolute inset-0 bg-black/85 backdrop-blur-md" onclick="closeAuthModal()"></div>
-  <div class="modal-content pubg-card absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-full max-w-md bg-dark-900/90 rounded-2xl border border-brand-500/20 overflow-hidden shadow-2xl">
+  <div class="modal-content pubg-card">
     <div class="pubg-corner tl"></div><div class="pubg-corner tr"></div><div class="pubg-corner bl"></div><div class="pubg-corner br"></div>
     <div class="p-8">
       <div class="text-center mb-6" id="authHeader">
@@ -247,10 +254,16 @@ const API_URL = 'http://127.0.0.1:5000';
           <div id="loginError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"></div>
           <button onclick="handleLogin()" id="loginBtn" class="btn-primary">Daxil ol</button>
           <div class="relative my-4"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div><div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">və ya</span></div></div>
-          <button onclick="handleGoogleLogin()" class="btn-google">
-            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Google ilə davam et
-          </button>
+          
+          <!-- GOOGLE BUTONU (GİZLİ OVERLAY İLE) -->
+          <div class="google-btn-wrapper">
+            <button class="btn-google">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              Google ilə davam et
+            </button>
+            <div id="googleBtnWrapper" class="google-btn-overlay"></div>
+          </div>
+
         </div>
       </div>
       <div id="registerForm" class="hidden">
@@ -261,10 +274,16 @@ const API_URL = 'http://127.0.0.1:5000';
           <div id="regError" class="hidden text-red-400 text-xs bg-red-500/10 border border-red-500/20 rounded-lg px-3 py-2"></div>
           <button onclick="handleRegister()" id="regBtn" class="btn-primary">Hesab Yarat</button>
           <div class="relative my-4"><div class="absolute inset-0 flex items-center"><div class="w-full border-t border-white/10"></div></div><div class="relative flex justify-center"><span class="bg-dark-900 px-3 text-xs text-dark-500">və ya</span></div></div>
-          <button onclick="handleGoogleLogin()" class="btn-google">
-            <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
-            Google ilə qeydiyyatdan keç
-          </button>
+          
+          <!-- GOOGLE BUTONU (GİZLİ OVERLAY İLE) -->
+          <div class="google-btn-wrapper">
+            <button class="btn-google">
+              <svg width="18" height="18" viewBox="0 0 24 24"><path fill="#4285F4" d="M22.56 12.25c0-.78-.07-1.53-.2-2.25H12v4.26h5.92a5.06 5.06 0 0 1-2.2 3.32v2.77h3.57c2.08-1.92 3.28-4.74 3.28-8.1z"/><path fill="#34A853" d="M12 23c2.97 0 5.46-.98 7.28-2.66l-3.57-2.77c-.98.66-2.23 1.06-3.71 1.06-2.86 0-5.29-1.93-6.16-4.53H2.18v2.84C3.99 20.53 7.7 23 12 23z"/><path fill="#FBBC05" d="M5.84 14.09c-.22-.66-.35-1.36-.35-2.09s.13-1.43.35-2.09V7.07H2.18C1.43 8.55 1 10.22 1 12s.43 3.45 1.18 4.93l2.85-2.22.81-.62z"/><path fill="#EA4335" d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"/></svg>
+              Google ilə qeydiyyatdan keç
+            </button>
+            <div id="googleBtnWrapper2" class="google-btn-overlay"></div>
+          </div>
+
         </div>
       </div>
       <div id="verifyForm" class="hidden">
@@ -565,8 +584,27 @@ function updateAdminSupportBadge() {
 }
 
 /* ===== GOOGLE & AVATAR ===== */
-function initGoogleSignIn(){if(googleInitialized||typeof google==='undefined'||!google.accounts)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleResponse,auto_select:false,cancel_on_tap_outside:true});googleInitialized=true;}
-function handleGoogleLogin(){if(!googleInitialized&&typeof google!=='undefined'&&google.accounts)initGoogleSignIn();if(googleInitialized)google.accounts.id.prompt();}
+function initGoogleSignIn(){
+    if(googleInitialized||typeof google==='undefined'||!google.accounts)return;
+    google.accounts.id.initialize({
+        client_id: GOOGLE_CLIENT_ID,
+        callback: handleGoogleResponse,
+        auto_select: false,
+        cancel_on_tap_outside: true
+    });
+    
+    // Gizli Google Butonunu Render Ediyoruz (Üstteki custom butona tıklanınca bu çalışacak)
+    const wrapper1 = document.getElementById('googleBtnWrapper');
+    const wrapper2 = document.getElementById('googleBtnWrapper2');
+    if(wrapper1) google.accounts.id.renderButton(wrapper1, { type: 'standard', shape: 'rectangular', width: 400 });
+    if(wrapper2) google.accounts.id.renderButton(wrapper2, { type: 'standard', shape: 'rectangular', width: 400 });
+    
+    googleInitialized=true;
+}
+function handleGoogleLogin(){
+    // Artık prompt() kullanmıyoruz, gizli buton tıklamayı yakalıyor.
+    if(!googleInitialized) initGoogleSignIn();
+}
 async function handleGoogleResponse(r){
     try{
         const token = r.credential;
@@ -849,7 +887,6 @@ function buyListing(id){
   }).then(res=>res.json()).then(data=>{
     if(data.success){
       const chatId=`${currentUser.email}_${l.sellerEmail}_${l.id}`;
-      // Mesajı Python'a bildir
       fetch(`${API_URL}/api/send_message`, {
         method:'POST', headers:{'Content-Type':'application/json'},
         body: JSON.stringify({
@@ -969,10 +1006,13 @@ function openReportModal(reportedEmail, msgText){
 function closeReportModal(){document.getElementById('reportModal').classList.add('hidden');}
 function submitReport(){
   const reason=document.getElementById('reportReason').value.trim();if(!reason){showToast('Səbəb qeyd edin','error');return;}
-  dbData.reports.push({ ...reportingData, reason, time:new Date().toISOString(), status:'pending' });
-  fetch(`${API_URL}/api/save_db`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({db: dbData}) });
-  closeReportModal();document.getElementById('reportReason').value='';
-  showToast('Şikayət adminə göndərildi.','success');
+  fetch(`${API_URL}/api/add_report`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({...reportingData, reason})
+  }).then(()=>{
+    closeReportModal();document.getElementById('reportReason').value='';
+    showToast('Şikayət adminə göndərildi.','success');
+  });
 }
 
 /* ===== NOTIFICATION SYSTEM ===== */
@@ -1001,8 +1041,7 @@ function renderNotifs(){
     </div>
   `).join('');
   // Okundu işarele
-  myNotifs.forEach(n => n.read = true);
-  fetch(`${API_URL}/api/save_db`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({db: dbData}) });
+  fetch(`${API_URL}/api/read_notifs`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({email: currentUser.email}) });
   updateUserArea();
 }
 
@@ -1196,7 +1235,6 @@ function switchAdminTab(tab){
     renderAdminUsers();
   }
   else if(tab==='disputes'){
-    // Basit gösterim
     c.innerHTML = `<div class="text-dark-400 py-8 text-center">Dispute sistemi bu versiyada sadələşdirilmişdir.</div>`;
   }
   else if(tab==='reports'){
@@ -1365,21 +1403,15 @@ function saveProfile(){
     const newBio = document.getElementById('editBio').value.trim();
     if(newUsername.length < 3){ showToast('İstifadəçi adı minimum 3 simvol olmalıdır', 'error'); return; }
     
-    // Basit güncelleme (Python backend admin_update_user ile yapılabilir)
-    currentUser.username = newUsername;
-    currentUser.bio = newBio;
-    localStorage.setItem('randox_user', JSON.stringify(currentUser));
-    
-    // DB'ye yaz
-    dbData.users.forEach(u => {
-      if(u.email === currentUser.email) {
-        u.username = newUsername;
-        u.bio = newBio;
-      }
+    fetch(`${API_URL}/api/update_profile`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email: currentUser.email, username: newUsername, bio: newBio})
+    }).then(()=>{
+      currentUser.username = newUsername;
+      currentUser.bio = newBio;
+      localStorage.setItem('randox_user', JSON.stringify(currentUser));
+      updateUserArea(); renderProfile(); showToast('Profil yeniləndi!', 'success');
     });
-    fetch(`${API_URL}/api/save_db`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({db: dbData}) });
-    
-    updateUserArea(); renderProfile(); showToast('Profil yeniləndi!', 'success');
 }
 
 function showToast(msg,type='info'){
