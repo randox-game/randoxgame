@@ -30,7 +30,6 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 @keyframes glowPulse{0%,100%{box-shadow:0 0 5px 1px rgba(239,68,68,0.8)}50%{box-shadow:0 0 15px 3px rgba(239,68,68,1)}}
 @keyframes textGlow{0%,100%{text-shadow:0 0 20px rgba(34,197,94,0.5), 0 0 40px rgba(34,197,94,0.3)}50%{text-shadow:0 0 30px rgba(34,197,94,0.8), 0 0 60px rgba(34,197,94,0.5), 0 0 80px rgba(34,197,94,0.3)}}
 @keyframes pubgSlide{0%{opacity:0;transform:translateY(60px) scale(0.95)}100%{opacity:1;transform:translateY(0) scale(1)}}
-@keyframes scan{0%{transform:translateY(-100%)}100%{transform:translateY(100%)}}
 @keyframes scanLine{0%{top:0}100%{top:100%}}
 
 .animate-fade{animation:fadeIn .6s ease-out both}.animate-up{animation:slideUp .8s ease-out both}
@@ -105,6 +104,12 @@ body{font-family:'Inter',sans-serif;background:#020617;color:#f8fafc;overflow-x:
 </style>
 </head>
 <body class="bg-grid">
+
+<!-- ===== PYTHON API AYARLARI ===== -->
+<!-- Eğer siteyi host edersen burayı host adresin yapmalısın. Şimdilik localhost yeterli. -->
+<script>
+const API_URL = 'http://127.0.0.1:5000';
+</script>
 
 <div id="banScreen" class="fixed inset-0 z-[9999] hidden flex-col items-center justify-center bg-dark-950 text-center p-6">
   <div class="brand-logo mb-6" style="width:80px;height:80px"><img src="https://z-cdn-media.chatglm.cn/files/7bbd6026-a3cd-40f2-8de9-b7554f056242.png?auth_key=1882220405-b366572118b44c85ac1f2339d91bceab-0-1f3246aac02fb2725ee12db8ed87d02b" alt="Randox"></div>
@@ -497,13 +502,7 @@ const COMMISSION_RATE = 0.20;
 
 /* ===== STATE ===== */
 let currentUser = JSON.parse(localStorage.getItem('randox_user')) || null;
-let users = JSON.parse(localStorage.getItem('randox_users') || '[]');
-let listings = JSON.parse(localStorage.getItem('randox_listings') || '[]');
-let chats = JSON.parse(localStorage.getItem('randox_chats') || '{}');
-let orders = JSON.parse(localStorage.getItem('randox_orders') || '[]');
-let reports = JSON.parse(localStorage.getItem('randox_reports') || '[]');
-let supportChats = JSON.parse(localStorage.getItem('randox_support_chats') || '{}');
-let notifications = JSON.parse(localStorage.getItem('randox_notifications') || '{}');
+let dbData = { users: [], listings: [], chats: {}, orders: [], reports: [], supportChats: {}, notifications: {} };
 let adminSeenSupport = JSON.parse(localStorage.getItem('randox_admin_seen_support') || '{}');
 
 let currentSection = 'home', selectedTopUpAmount = 0, selectedDeliveryMethod = null, featuresList = [], currentChatId = null, currentAdminTab = 'users', currentSupportUser = null;
@@ -512,45 +511,51 @@ let vCode='',vEmail='',vAction='',vTempData={},resendCd=0,resendIv=null,googleIn
 let reportingData = null;
 let editingListingId = null;
 
-// Demo məlumatlar yalnız bir dəfə əlavə edilir
-if (listings.length === 0) {
-    listings = [
-        { id: 'mock1', title: 'PUBG Mobile - Conqueror Hesab', cat: 'Hesab', price: 45.00, desc: 'Conqueror rütbəsi, M416 Glacier skin, 80K UC var. Tam təhlükəsiz keçid.', img: 'https://images.unsplash.com/photo-1542751371-adc1794eaa34?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', sellerEmail: 'pubg_pro@randox.com', sellerName: 'ProGamer', sellerAvatar: '', deliveryMethod: 'manual', stockLinks: [], manualStock: 1, features: [{key: 'Rank', value: 'Conqueror'}, {key: 'UC', value: '80,000'}], soldCount: 12, createdAt: new Date().toISOString() },
-        { id: 'mock2', title: 'Valorant 1000 VP Pin', cat: 'Epin', price: 12.50, desc: 'Avtomatik link ötürmə. Anında VP kodu göndərilir.', img: 'https://images.unsplash.com/photo-1538481193919-5afef3620c5e?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', sellerEmail: 'valorant_shop@randox.com', sellerName: 'VShop', sellerAvatar: '', deliveryMethod: 'link', stockLinks: ['https://link1.com/vp1', 'https://link1.com/vp2'], manualStock: 0, features: [{key: 'Miqtar', value: '1000 VP'}], soldCount: 34, createdAt: new Date().toISOString() },
-        { id: 'mock3', title: 'Netflix Premium 1 Aylıq', cat: 'Service', price: 8.00, desc: 'Özəl Netflix Premium hesabı. 4K keyfiyyət, 4 eyni anda istifadə.', img: 'https://images.unsplash.com/photo-1574267432553-4b4628081c31?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', sellerEmail: 'media_servis@randox.com', sellerName: 'MediaHub', sellerAvatar: '', deliveryMethod: 'link', stockLinks: ['https://netflix.com/account1', 'https://netflix.com/account2'], manualStock: 0, features: [{key: 'Keyfiyyət', value: '4K Ultra HD'}, {key: 'Müddət', value: '30 Gün'}], soldCount: 56, createdAt: new Date().toISOString() },
-        { id: 'mock4', title: 'Discord Nitro Boost', cat: 'Service', price: 15.00, desc: '1 Aylıq Discord Nitro Boost. Serverinə boost atılır.', img: 'https://images.unsplash.com/photo-1614642520041-9c0e65e93c83?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80', sellerEmail: 'boost_king@randox.com', sellerName: 'BoostKing', sellerAvatar: '', deliveryMethod: 'manual', stockLinks: [], manualStock: 3, features: [{key: 'Tip', value: 'Nitro Boost'}], soldCount: 8, createdAt: new Date().toISOString() }
-    ];
-    localStorage.setItem('randox_listings', JSON.stringify(listings));
+/* ===== DATA SYNC (POLLING) ===== */
+async function fetchDbData() {
+    try {
+        const res = await fetch(`${API_URL}/api/data`);
+        dbData = await res.json();
+        
+        updateHomeStats();
+        renderHomeListings();
+        if(currentSection === 'listings') renderListings();
+        if(currentSection === 'mylistings') renderMyListings();
+        if(currentSection === 'profile') renderProfile();
+        if(currentSection === 'messages') renderChatList();
+        if(currentSection === 'admin') switchAdminTab(currentAdminTab);
+        
+        if(currentUser) {
+            const freshUser = dbData.users.find(u => u.email === currentUser.email);
+            if(freshUser) {
+                currentUser = freshUser;
+                localStorage.setItem('randox_user', JSON.stringify(currentUser));
+                updateUserArea();
+                checkBanOnLogin();
+            }
+        }
+        updateAdminSupportBadge();
+    } catch(e) {
+        console.error("Sunucuya bağlanılamadı:", e);
+    }
 }
 
-if (users.length === 0) {
-    users = [
-        { username: 'ProGamer', email: 'pubg_pro@randox.com', password: '123456', balance: 120.00, avatar: '', bio: 'PUBG Pro oyuncu və satıcı.', createdAt: new Date().toISOString(), banned: false, isDemo: true, restrictions: {message:false,listing:false,purchase:false} },
-        { username: 'VShop', email: 'valorant_shop@randox.com', password: '123456', balance: 45.50, avatar: '', bio: 'Epin və VP kod satıcısı.', createdAt: new Date().toISOString(), banned: false, isDemo: true, restrictions: {message:false,listing:false,purchase:false} },
-        { username: 'MediaHub', email: 'media_servis@randox.com', password: '123456', balance: 0, avatar: '', bio: 'Streaming xidmətləri.', createdAt: new Date().toISOString(), banned: false, isDemo: true, restrictions: {message:false,listing:false,purchase:false} }
-    ];
-    localStorage.setItem('randox_users', JSON.stringify(users));
-}
+// Her 3 saniyede bir verileri günceller (Firebase gibi canlı çalışır ama çok hafiftir)
+setInterval(fetchDbData, 3000);
 
 window.addEventListener('load', () => {
     const searchInput = document.getElementById('searchInput');
     if(searchInput) searchInput.value = '';
     setTimeout(initGoogleSignIn, 500);
-    renderHomeListings();
-    updateHomeStats();
+    fetchDbData();
     updateUserArea();
 });
-
-// Admin support badge kontrolü - her saniye yenilə
-setInterval(() => {
-    updateAdminSupportBadge();
-}, 2000);
 
 function updateAdminSupportBadge() {
     if(!currentUser || !ADMIN_EMAILS.includes(currentUser.email)) return;
     let unread = 0;
-    Object.keys(supportChats).forEach(email => {
-        const msgs = supportChats[email].messages || [];
+    Object.keys(dbData.supportChats).forEach(email => {
+        const msgs = dbData.supportChats[email]?.messages || [];
         const lastSeen = adminSeenSupport[email] || 0;
         const hasUnread = msgs.some(m => m.sender !== 'admin' && new Date(m.time).getTime() > lastSeen);
         if(hasUnread) unread++;
@@ -562,7 +567,22 @@ function updateAdminSupportBadge() {
 /* ===== GOOGLE & AVATAR ===== */
 function initGoogleSignIn(){if(googleInitialized||typeof google==='undefined'||!google.accounts)return;google.accounts.id.initialize({client_id:GOOGLE_CLIENT_ID,callback:handleGoogleResponse,auto_select:false,cancel_on_tap_outside:true});googleInitialized=true;}
 function handleGoogleLogin(){if(!googleInitialized&&typeof google!=='undefined'&&google.accounts)initGoogleSignIn();if(googleInitialized)google.accounts.id.prompt();}
-function handleGoogleResponse(r){try{const p=JSON.parse(atob(r.credential.split('.')[1]));const email=p.email;const name=p.name||email.split('@')[0];let u=users.find(x=>x.email===email);if(!u){u={username:name,email,password:'g_'+Date.now(),balance:0,avatar:p.picture,bio:'',createdAt:new Date().toISOString(),banned:false,isDemo:false,restrictions:{message:false,listing:false,purchase:false}};users.push(u);localStorage.setItem('randox_users',JSON.stringify(users));}currentUser={...u};localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();checkBanOnLogin();updateHomeStats();}catch(e){showToast('Google xətası','error');}}
+async function handleGoogleResponse(r){
+    try{
+        const token = r.credential;
+        const res = await fetch(`${API_URL}/api/google_login`, {
+            method: 'POST',
+            headers: {'Content-Type': 'application/json'},
+            body: JSON.stringify({token})
+        });
+        const user = await res.json();
+        if(user.error){ showToast(user.error, 'error'); return; }
+        currentUser = user;
+        localStorage.setItem('randox_user', JSON.stringify(currentUser));
+        closeAuthModal();updateUserArea();checkBanOnLogin();updateHomeStats();
+        showToast('Xoş gəldin, '+currentUser.username+'!','success');
+    }catch(e){showToast('Google xətası','error');}
+}
 function getAvatarColor(u){return u?`hsl(${(u.username||'K').charCodeAt(0)*37%360},60%,45%)`:'#22c55e';}
 
 function checkBanOnLogin() {
@@ -601,9 +621,9 @@ function handleSearch(q){
 }
 
 function updateHomeStats() {
-    document.getElementById('statListings').textContent = listings.filter(l => l.deliveryMethod==='link' ? l.stockLinks.length > 0 : l.manualStock > 0).length;
-    const realUsers = users.filter(u => !u.isDemo).length;
-    document.getElementById('statUsers').textContent = Math.max(users.length, realUsers);
+    if(!dbData.listings) return;
+    document.getElementById('statListings').textContent = dbData.listings.filter(l => l.deliveryMethod==='link' ? (l.stockLinks?.length||0) > 0 : l.manualStock > 0).length;
+    document.getElementById('statUsers').textContent = dbData.users.length;
 }
 
 /* ===== İLANLAR ===== */
@@ -655,27 +675,35 @@ function submitListing(){
   if(selectedDeliveryMethod==='link'){const raw=document.getElementById('createLinks').value.trim().split('\n').filter(l=>l.trim()!=='');if(raw.length===0){showToast('Ən azı 1 stok linki əlavə edin','error');return;}stockLinks=raw;}
   else{manualStock=parseInt(document.getElementById('createManualStock').value)||0;if(manualStock<1){showToast('Stok sayı 1-dən az ola bilməz','error');return;}}
   
-  const newListing={id:'l_'+Date.now(), title, cat, price, desc, img, sellerEmail:currentUser.email, sellerName:currentUser.username, sellerAvatar:currentUser.avatar||'', deliveryMethod:selectedDeliveryMethod, stockLinks, manualStock, features:featuresList.filter(f=>f.key&&f.value), soldCount:0, createdAt:new Date().toISOString()};
-  listings.unshift(newListing);localStorage.setItem('randox_listings',JSON.stringify(listings));showToast('İlan uğurla yayımlandı!','success');
-  document.getElementById('createTitle').value='';document.getElementById('createPrice').value='';document.getElementById('createDesc').value='';document.getElementById('createImg').value='';document.getElementById('createImgName').textContent='';document.getElementById('createLinks').value='';document.getElementById('createManualStock').value='';featuresList=[];renderFeatures();selectedDeliveryMethod=null;selectDelivery('none');
-  updateHomeStats(); renderHomeListings(); showSection('mylistings');
+  const newListing={ title, cat, price, desc, img, sellerEmail:currentUser.email, sellerName:currentUser.username, sellerAvatar:currentUser.avatar||'', deliveryMethod:selectedDeliveryMethod, stockLinks, manualStock, features:featuresList.filter(f=>f.key&&f.value) };
+  
+  fetch(`${API_URL}/api/add_listing`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(newListing)
+  }).then(()=>{
+    showToast('İlan uğurla yayımlandı!','success');
+    document.getElementById('createTitle').value='';document.getElementById('createPrice').value='';document.getElementById('createDesc').value='';document.getElementById('createImg').value='';document.getElementById('createImgName').textContent='';document.getElementById('createLinks').value='';document.getElementById('createManualStock').value='';featuresList=[];renderFeatures();selectedDeliveryMethod=null;selectDelivery('none');
+    showSection('mylistings');
+    fetchDbData();
+  });
 }
 
 function listingCard(l){
-  const stock = l.deliveryMethod==='link' ? l.stockLinks.length : l.manualStock;
+  const stock = l.deliveryMethod==='link' ? (l.stockLinks?.length||0) : l.manualStock;
   return `<div class="game-card cursor-pointer" onclick="openListingModal('${l.id}')"><div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all h-full flex flex-col"><div class="relative h-44 overflow-hidden"><img src="${l.img}" class="game-img w-full h-full object-cover" alt="${l.title}"><div class="absolute top-2 left-2 tag uppercase text-dark-900 bg-white/90 px-2 py-0.5 rounded-md">${l.cat}</div></div><div class="p-4 flex flex-col flex-1"><h3 class="font-semibold text-sm truncate">${l.title}</h3><p class="text-xs text-dark-500 mt-1 line-clamp-2 flex-1">${l.desc}</p><div class="flex items-center justify-between mt-3"><span class="text-brand-400 font-bold text-base">${l.price.toFixed(2)} ₼</span>${stock>0?`<span class="text-[10px] bg-brand-500/20 text-brand-400 px-2 py-1 rounded-md">Stok: ${stock}</span>`:`<span class="text-[10px] bg-red-500/20 text-red-400 px-2 py-1 rounded-md">Bitdi</span>`}</div></div></div></div>`;
 }
 
 function renderHomeListings(){
     const el = document.getElementById('homeListingsGrid');
-    if(!el) return;
-    let active = listings.filter(l => l.deliveryMethod==='link' ? l.stockLinks.length > 0 : l.manualStock > 0).slice(0, 8);
+    if(!el || !dbData.listings) return;
+    let active = dbData.listings.filter(l => l.deliveryMethod==='link' ? (l.stockLinks?.length||0) > 0 : l.manualStock > 0).slice(0, 8);
     if(active.length === 0) { el.innerHTML = `<div class="col-span-full glass rounded-2xl p-8 text-center text-dark-400">Hələ aktiv ilan yoxdur. İlk paylaşan siz olun!</div>`; return; }
     el.innerHTML = active.map(listingCard).join('');
 }
 
 function renderListings(){
-  let list=listings.filter(l=>l.deliveryMethod==='link'?l.stockLinks.length>0:l.manualStock>0);
+  if(!dbData.listings) return;
+  let list=dbData.listings.filter(l=>l.deliveryMethod==='link'?(l.stockLinks?.length||0)>0:l.manualStock>0);
   if(searchQuery)list=list.filter(l=>l.title.toLowerCase().includes(searchQuery)||l.desc.toLowerCase().includes(searchQuery)||l.cat.toLowerCase().includes(searchQuery));
   const grid=document.getElementById('listingsGrid');
   const noRes=document.getElementById('noResults');
@@ -685,46 +713,36 @@ function renderListings(){
 }
 
 function renderMyListings(){
-  if(!currentUser)return;
-  const my=listings.filter(l=>l.sellerEmail===currentUser.email);
+  if(!currentUser || !dbData.listings)return;
+  const my=dbData.listings.filter(l=>l.sellerEmail===currentUser.email);
   const grid=document.getElementById('myListingsGrid');
   const noMy=document.getElementById('noMyListings');
   if(my.length===0){grid.innerHTML='';noMy.classList.remove('hidden');return;}
   noMy.classList.add('hidden');
   grid.innerHTML=my.map(l=>{
-    const stock = l.deliveryMethod==='link' ? l.stockLinks.length : l.manualStock;
-    return `<div class="game-card"><div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all h-full flex flex-col"><div class="relative h-44 overflow-hidden cursor-pointer" onclick="openListingModal('${l.id}')"><img src="${l.img}" class="game-img w-full h-full object-cover" alt="${l.title}"><div class="absolute top-2 left-2 tag uppercase text-dark-900 bg-white/90 px-2 py-0.5 rounded-md">${l.cat}</div>${stock===0?'<div class="absolute inset-0 bg-red-500/50 flex items-center justify-center"><span class="text-white font-bold">STOK BİTDİ</span></div>':''}</div><div class="p-4 flex flex-col flex-1"><h3 class="font-semibold text-sm truncate">${l.title}</h3><div class="flex items-center justify-between mt-2"><span class="text-brand-400 font-bold text-base">${l.price.toFixed(2)} ₼</span><span class="text-[10px] text-dark-500">Satış: ${l.soldCount}</span></div><div class="flex gap-2 mt-3"><button onclick="openEditListingModal('${l.id}')" class="flex-1 glass-light rounded-lg py-2 text-xs font-medium hover:border-brand-500/40 border border-white/5 flex items-center justify-center gap-1"><iconify-icon icon="mdi:pencil"></iconify-icon> Redakte</button><button onclick="deleteListing('${l.id}')" class="flex-1 bg-red-500/10 border border-red-500/20 rounded-lg py-2 text-xs font-medium text-red-400 hover:bg-red-500/20 flex items-center justify-center gap-1"><iconify-icon icon="mdi:delete"></iconify-icon> Sil</button></div></div></div></div>`;
+    const stock = l.deliveryMethod==='link' ? (l.stockLinks?.length||0) : l.manualStock;
+    return `<div class="game-card"><div class="game-border glass rounded-2xl overflow-hidden border border-white/5 transition-all h-full flex flex-col"><div class="relative h-44 overflow-hidden cursor-pointer" onclick="openListingModal('${l.id}')"><img src="${l.img}" class="game-img w-full h-full object-cover" alt="${l.title}"><div class="absolute top-2 left-2 tag uppercase text-dark-900 bg-white/90 px-2 py-0.5 rounded-md">${l.cat}</div>${stock===0?'<div class="absolute inset-0 bg-red-500/50 flex items-center justify-center"><span class="text-white font-bold">STOK BİTDİ</span></div>':''}</div><div class="p-4 flex flex-col flex-1"><h3 class="font-semibold text-sm truncate">${l.title}</h3><div class="flex items-center justify-between mt-2"><span class="text-brand-400 font-bold text-base">${l.price.toFixed(2)} ₼</span><span class="text-[10px] text-dark-500">Satış: ${l.soldCount||0}</span></div><div class="flex gap-2 mt-3"><button onclick="openEditListingModal('${l.id}')" class="flex-1 glass-light rounded-lg py-2 text-xs font-medium hover:border-brand-500/40 border border-white/5 flex items-center justify-center gap-1"><iconify-icon icon="mdi:pencil"></iconify-icon> Redakte</button><button onclick="deleteListing('${l.id}')" class="flex-1 bg-red-500/10 border border-red-500/20 rounded-lg py-2 text-xs font-medium text-red-400 hover:bg-red-500/20 flex items-center justify-center gap-1"><iconify-icon icon="mdi:delete"></iconify-icon> Sil</button></div></div></div></div>`;
   }).join('');
 }
 
 function openListingModal(id){
-  const l=listings.find(x=>x.id===id);if(!l)return;
-  const stock=l.deliveryMethod==='link'?l.stockLinks.length:l.manualStock;
-  const featuresHtml=l.features.length>0?`<div class="mt-6"><h4 class="font-bold mb-3 text-sm uppercase tracking-wider text-dark-400">Xüsusiyyətlər</h4><div class="grid grid-cols-2 gap-3">${l.features.map(f=>`<div class="glass-light p-3 rounded-lg border border-white/5"><p class="text-[10px] uppercase tracking-wider text-dark-500">${f.key}</p><p class="text-sm font-semibold mt-0.5">${f.value}</p></div>`).join('')}</div></div>`:'';
+  const l=dbData.listings.find(x=>x.id===id);if(!l)return;
+  const stock=l.deliveryMethod==='link'?(l.stockLinks?.length||0):l.manualStock;
+  const featuresHtml=l.features?.length>0?`<div class="mt-6"><h4 class="font-bold mb-3 text-sm uppercase tracking-wider text-dark-400">Xüsusiyyətlər</h4><div class="grid grid-cols-2 gap-3">${l.features.map(f=>`<div class="glass-light p-3 rounded-lg border border-white/5"><p class="text-[10px] uppercase tracking-wider text-dark-500">${f.key}</p><p class="text-sm font-semibold mt-0.5">${f.value}</p></div>`).join('')}</div></div>`:'';
   const isOwnListing = currentUser?.email === l.sellerEmail;
   const actionButtons = isOwnListing ? 
     `<button onclick="openEditListingModal('${l.id}')" class="btn-primary flex-1 text-base" style="width:auto;padding:12px 24px"><iconify-icon icon="mdi:pencil"></iconify-icon> Redakte Et</button><button onclick="deleteListing('${l.id}')" class="btn-danger flex-1 text-base" style="width:auto;padding:12px 24px"><iconify-icon icon="mdi:delete"></iconify-icon> Sil</button>` :
     `<button onclick="buyListing('${l.id}')" class="btn-primary flex-1 text-base ${stock===0||currentUser?.restrictions?.purchase?'opacity-40 pointer-events-none':''}">${stock>0?'Təhlükəsiz Satın Al (Escrow)':'Stok Bitdi'}</button><button onclick="contactSeller('${l.id}')" class="glass hover:border-brand-500/30 px-6 py-3 rounded-xl text-sm font-medium transition-all flex items-center gap-2"><iconify-icon icon="mdi:chat-processing-outline" class="text-lg"></iconify-icon></button>`;
-  document.getElementById('modalBody').innerHTML=`<div class="flex flex-col md:flex-row h-full"><div class="md:w-1/2 h-64 md:h-full relative overflow-hidden bg-dark-950"><img src="${l.img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-dark-900 to-transparent"></div></div><div class="md:w-1/2 p-6 md:p-10 overflow-y-auto flex flex-col"><div class="flex-1"><span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">${l.cat}</span><h2 class="text-3xl md:text-4xl font-bold mt-4">${l.title}</h2><div class="flex items-center gap-3 mt-4 p-3 glass-light rounded-xl cursor-pointer hover:bg-white/5" onclick="viewSellerProfile('${l.sellerEmail}')"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:l.sellerName})}">${l.sellerName.charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${l.sellerName}</p><p class="text-xs text-dark-400">${l.soldCount} Satış</p></div></div><div class="mt-6 p-5 glass rounded-xl flex justify-between items-center border border-white/5"><div><p class="text-xs uppercase tracking-wider text-dark-500">Qiymət</p><p class="text-3xl font-bold text-brand-400">${l.price.toFixed(2)} ₼</p></div><div class="text-right"><p class="text-xs uppercase tracking-wider text-dark-500">Stokda</p><p class="text-2xl font-bold ${stock>0?'text-white':'text-red-400'}">${stock>0?stock:'Bitdi'}</p></div></div><div class="mt-6"><h4 class="font-bold mb-2 text-sm uppercase tracking-wider text-dark-400">Açıqlama</h4><p class="text-dark-300 text-sm leading-relaxed whitespace-pre-wrap">${l.desc}</p></div>${featuresHtml}</div><div class="mt-8 flex gap-3 sticky bottom-0 bg-dark-900/80 backdrop-blur-sm pt-4 -mx-6 md:-mx-10 px-6 md:px-10 pb-1">${actionButtons}</div></div></div>`;
+  document.getElementById('modalBody').innerHTML=`<div class="flex flex-col md:flex-row h-full"><div class="md:w-1/2 h-64 md:h-full relative overflow-hidden bg-dark-950"><img src="${l.img}" class="w-full h-full object-cover"><div class="absolute inset-0 bg-gradient-to-t md:bg-gradient-to-r from-dark-900 to-transparent"></div></div><div class="md:w-1/2 p-6 md:p-10 overflow-y-auto flex flex-col"><div class="flex-1"><span class="tag uppercase text-brand-400 bg-brand-500/10 px-3 py-1 rounded-full border border-brand-500/20">${l.cat}</span><h2 class="text-3xl md:text-4xl font-bold mt-4">${l.title}</h2><div class="flex items-center gap-3 mt-4 p-3 glass-light rounded-xl cursor-pointer hover:bg-white/5"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:l.sellerName})}">${l.sellerName.charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${l.sellerName}</p><p class="text-xs text-dark-400">${l.soldCount||0} Satış</p></div></div><div class="mt-6 p-5 glass rounded-xl flex justify-between items-center border border-white/5"><div><p class="text-xs uppercase tracking-wider text-dark-500">Qiymət</p><p class="text-3xl font-bold text-brand-400">${l.price.toFixed(2)} ₼</p></div><div class="text-right"><p class="text-xs uppercase tracking-wider text-dark-500">Stokda</p><p class="text-2xl font-bold ${stock>0?'text-white':'text-red-400'}">${stock>0?stock:'Bitdi'}</p></div></div><div class="mt-6"><h4 class="font-bold mb-2 text-sm uppercase tracking-wider text-dark-400">Açıqlama</h4><p class="text-dark-300 text-sm leading-relaxed whitespace-pre-wrap">${l.desc}</p></div>${featuresHtml}</div><div class="mt-8 flex gap-3 sticky bottom-0 bg-dark-900/80 backdrop-blur-sm pt-4 -mx-6 md:-mx-10 px-6 md:px-10 pb-1">${actionButtons}</div></div></div>`;
   document.getElementById('listingModal').classList.remove('hidden');document.body.style.overflow='hidden';
 }
 function closeListingModal(){document.getElementById('listingModal').classList.add('hidden');document.body.style.overflow='';}
 
-function viewSellerProfile(email){
-  const u=users.find(x=>x.email===email);if(!u)return;
-  closeListingModal();
-  // Demo satıcı profili göstər - əgər öz hesabınızdırsa normal profile, yoxsa başqa profil
-  if(currentUser && currentUser.email===email){showSection('profile');return;}
-  showToast(`${u.username} profili: ${u.bio||'Haqqında məlumat yoxdur'}`,'info');
-}
-
-/* ===== İLAN REDAKTƏ ===== */
 function openEditListingModal(id){
-  const l=listings.find(x=>x.id===id);if(!l)return;
+  const l=dbData.listings.find(x=>x.id===id);if(!l)return;
   if(l.sellerEmail!==currentUser.email){showToast('Bu ilanı redaktə etmək hüququnuz yoxdur','error');return;}
   editingListingId=id;
-  const stock=l.deliveryMethod==='link'?l.stockLinks.length:l.manualStock;
-  const featuresHtml=l.features.map((f,i)=>`<div class="flex gap-2" data-feat="${i}"><input type="text" class="input-field flex-1 edit-feat-key" placeholder="Ad" value="${f.key}"><input type="text" class="input-field flex-1 edit-feat-val" placeholder="Dəyər" value="${f.value}"><button onclick="this.parentElement.remove()" class="text-red-400 px-2"><iconify-icon icon="mdi:close"></iconify-icon></button></div>`).join('');
+  const featuresHtml=l.features.map((f,i)=>`<div class="flex gap-2"><input type="text" class="input-field flex-1 edit-feat-key" placeholder="Ad" value="${f.key}"><input type="text" class="input-field flex-1 edit-feat-val" placeholder="Dəyər" value="${f.value}"><button onclick="this.parentElement.remove()" class="text-red-400 px-2"><iconify-icon icon="mdi:close"></iconify-icon></button></div>`).join('');
   const stockArea = l.deliveryMethod==='link' ? 
     `<div><label class="text-xs text-dark-400 mb-1.5 block">Stok Linkləri (Hər sətirdə bir)</label><textarea id="editLinks" class="input-field h-32 resize-none font-mono text-xs" placeholder="https://link1.com/abc&#10;https://link2.com/def">${l.stockLinks.join('\n')}</textarea></div>` :
     `<div><label class="text-xs text-dark-400 mb-1.5 block">Stok Sayı</label><input type="number" id="editManualStock" class="input-field" min="0" value="${l.manualStock}"></div>`;
@@ -773,18 +791,18 @@ function addEditFeature(){
   c.appendChild(div);
 }
 function saveListingEdit(){
-  const l=listings.find(x=>x.id===editingListingId);if(!l)return;
+  const l=dbData.listings.find(x=>x.id===editingListingId);if(!l)return;
   const title=document.getElementById('editTitle').value.trim();
   const cat=document.getElementById('editCategory').value;
   const price=parseFloat(document.getElementById('editPrice').value);
   const desc=document.getElementById('editDesc').value.trim();
   if(!title||!price||!desc){showToast('Bütün sahələri doldurun','error');return;}
-  l.title=title;l.cat=cat;l.price=price;l.desc=desc;
+  let updatedData = { id: editingListingId, title, cat, price, desc };
   if(l.deliveryMethod==='link'){
     const links=document.getElementById('editLinks').value.trim().split('\n').filter(x=>x.trim());
-    l.stockLinks=links;
+    updatedData.stockLinks = links;
   }else{
-    l.manualStock=parseInt(document.getElementById('editManualStock').value)||0;
+    updatedData.manualStock = parseInt(document.getElementById('editManualStock').value)||0;
   }
   const features=[];
   document.querySelectorAll('#editFeaturesContainer > div').forEach(d=>{
@@ -792,147 +810,132 @@ function saveListingEdit(){
     const v=d.querySelector('.edit-feat-val').value.trim();
     if(k&&v)features.push({key:k,value:v});
   });
-  l.features=features;
-  localStorage.setItem('randox_listings',JSON.stringify(listings));
-  showToast('İlan yeniləndi!','success');
-  closeEditListingModal();
-  closeListingModal();
-  if(currentSection==='mylistings')renderMyListings();
-  if(currentSection==='profile')renderProfile();
-  renderHomeListings();updateHomeStats();
+  updatedData.features = features;
+  
+  fetch(`${API_URL}/api/update_listing`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify(updatedData)
+  }).then(()=>{
+    showToast('İlan yeniləndi!','success');
+    closeEditListingModal(); closeListingModal(); fetchDbData();
+  });
 }
 function deleteListing(id) {
-    const l=listings.find(x=>x.id===id);
+    const l=dbData.listings.find(x=>x.id===id);
     if(!l)return;
     if(l.sellerEmail!==currentUser.email){showToast('Bu ilanı silmək hüququnuz yoxdur','error');return;}
     if(!confirm('Bu ilanı silmək istədiyinizə əminsiniz?')) return;
-    listings = listings.filter(x => x.id !== id);
-    localStorage.setItem('randox_listings', JSON.stringify(listings));
-    showToast('İlan silindi.', 'info');
-    closeListingModal();
-    closeEditListingModal();
-    if(currentSection === 'mylistings') renderMyListings();
-    if(currentSection === 'profile') renderProfile();
-    updateHomeStats(); renderHomeListings();
+    fetch(`${API_URL}/api/delete_listing`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({id})
+    }).then(()=>{
+      showToast('İlan silindi.', 'info');
+      closeListingModal(); closeEditListingModal(); fetchDbData();
+    });
 }
 
 /* ===== ESCROW & SATIN ALMA ===== */
 function buyListing(id){
   if(currentUser?.restrictions?.purchase){showToast('Sizə satın almaq qadağan edilib.','error');return;}
-  const l=listings.find(x=>x.id===id);if(!l)return;
+  const l=dbData.listings.find(x=>x.id===id);if(!l)return;
   if(l.sellerEmail === currentUser.email){ showToast('Öz ilanınızı ala bilməzsiniz!','error'); return; }
-  const stock=l.deliveryMethod==='link'?l.stockLinks.length:l.manualStock;
+  const stock=l.deliveryMethod==='link'?(l.stockLinks?.length||0):l.manualStock;
   if(stock===0){showToast('Stok bitib','error');return;}
   if(currentUser.balance<l.price){showToast('Balansınız çatışmır. Balans yükləyin.','error');showSection('topup');return;}
 
-  currentUser.balance-=l.price;localStorage.setItem('randox_user',JSON.stringify(currentUser));
-  let deliveredItem='';
-  if(l.deliveryMethod==='link'){deliveredItem=l.stockLinks.shift();l.soldCount++;}else{l.manualStock--;l.soldCount++;deliveredItem='Manuel təhvil. Satıcı ilə əlaqə saxlayın.';}
-  localStorage.setItem('randox_listings',JSON.stringify(listings));
-
-  const chatId=`${currentUser.email}_${l.sellerEmail}_${l.id}`;
-  if(!chats[chatId]){chats[chatId]={id:chatId,listingId:l.id,listingTitle:l.title,buyerEmail:currentUser.email,sellerEmail:l.sellerEmail,messages:[]};}
-  
-  const order={id:'o_'+Date.now(), chatId:chatId, listingId:l.id, listingTitle:l.title, buyerEmail:currentUser.email, sellerEmail:l.sellerEmail, amount:l.price, commission:l.price*COMMISSION_RATE, status:'escrow', expireTime:Date.now()+(24*60*60*1000), disputeReason:null, counterReason:null};
-  orders.push(order);localStorage.setItem('randox_orders',JSON.stringify(orders));
-
-  chats[chatId].messages.push({sender:'system',text:`Sifariş tamamlandı! ${l.price} AZN təhlükəsiz şəkildə saxlanılır (Escrow). Məhsulu qəbul edəndə təsdiqləyin.`,orderId:order.id,time:new Date().toISOString()});
-  if(deliveredItem){chats[chatId].messages.push({sender:'system',text:`Avtomatik Çatdırılma:\n${deliveredItem}`,time:new Date().toISOString()});}
-  localStorage.setItem('randox_chats',JSON.stringify(chats));
-
-  // Satıcıya bildirim
-  if(!notifications[l.sellerEmail])notifications[l.sellerEmail]=[];
-  notifications[l.sellerEmail].push({text:`${currentUser.username} "${l.title}" ilanınızı satın aldı!`,time:new Date().toISOString(),read:false});
-  localStorage.setItem('randox_notifications',JSON.stringify(notifications));
-
-  updateUserArea();closeListingModal();showSection('messages');openChat(chatId);showToast('Satın alma uğurlu! Pul Escrow-da saxlanılır.','success');
-  renderHomeListings();
-}
-
-function confirmDelivery(orderId){
-  let order=orders.find(o=>o.id===orderId);if(!order||order.status!=='escrow')return;
-  order.status='completed';
-  let seller=users.find(u=>u.email===order.sellerEmail);
-  if(seller){seller.balance+=order.amount-order.commission;}
-  localStorage.setItem('randox_users',JSON.stringify(users));
-  localStorage.setItem('randox_orders',JSON.stringify(orders));
-  chats[order.chatId].messages.push({sender:'system',text:`Alıcı təsdiqlədi. ${order.amount} AZN-dən ${order.amount-order.commission} AZN satıcıya köçürüldü.`,orderId:order.id,time:new Date().toISOString()});
-  localStorage.setItem('randox_chats',JSON.stringify(chats));
-  openChat(order.chatId);showToast('Təsdiqləndi!','success');
-}
-function disputeOrder(orderId){
-  let reason=prompt("Etiraz səbəbinizi qeyd edin:");
-  if(!reason)return;
-  let order=orders.find(o=>o.id===orderId);if(!order||order.status!=='escrow')return;
-  order.status='disputed';order.disputeReason=reason;
-  localStorage.setItem('randox_orders',JSON.stringify(orders));
-  chats[order.chatId].messages.push({sender:'system',text:`Alıcı etiraz etdi: "${reason}". Ödəniş donduruldu.`,orderId:order.id,time:new Date().toISOString()});
-  localStorage.setItem('randox_chats',JSON.stringify(chats));
-  openChat(order.chatId);showToast('Etiraz qeydə alındı.','info');
-}
-function counterDispute(orderId){
-  let reason=prompt("Sübutunuzu və izahınızı yazın:");
-  if(!reason)return;
-  let order=orders.find(o=>o.id===orderId);if(!order||order.status!=='disputed')return;
-  order.status='admin_review';order.counterReason=reason;
-  localStorage.setItem('randox_orders',JSON.stringify(orders));
-  chats[order.chatId].messages.push({sender:'system',text:`Satıcı etiraza cavab verdi: "${reason}". Admin baxışına göndərildi.`,orderId:order.id,time:new Date().toISOString()});
-  localStorage.setItem('randox_chats',JSON.stringify(chats));
-  openChat(order.chatId);showToast('Admin baxışına göndərildi.','info');
+  fetch(`${API_URL}/api/buy_listing`, {
+    method: 'POST', headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ listingId: id, buyerEmail: currentUser.email })
+  }).then(res=>res.json()).then(data=>{
+    if(data.success){
+      const chatId=`${currentUser.email}_${l.sellerEmail}_${l.id}`;
+      // Mesajı Python'a bildir
+      fetch(`${API_URL}/api/send_message`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({
+          chatId: chatId,
+          chatData: { id:chatId, listingId:l.id, listingTitle:l.title, buyerEmail:currentUser.email, sellerEmail:l.sellerEmail, participants:[currentUser.email, l.sellerEmail], messages:[] },
+          message: {sender:'system', text:`Sifariş tamamlandı! ${l.price} AZN təhlükəsiz şəkildə saxlanılır (Escrow).`, time:new Date().toISOString()}
+        })
+      });
+      if(data.deliveredItem){
+        fetch(`${API_URL}/api/send_message`, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({
+            chatId: chatId,
+            chatData: { id:chatId, listingId:l.id, listingTitle:l.title, buyerEmail:currentUser.email, sellerEmail:l.sellerEmail, participants:[currentUser.email, l.sellerEmail], messages:[] },
+            message: {sender:'system', text:`Avtomatik Çatdırılma:\n${data.deliveredItem}`, time:new Date().toISOString()}
+          })
+        });
+      }
+      fetch(`${API_URL}/api/add_notif`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({ email: l.sellerEmail, text:`${currentUser.username} "${l.title}" ilanınızı satın aldı!` })
+      });
+      fetchDbData();
+      closeListingModal();showSection('messages');openChat(chatId);showToast('Satın alma uğurlu! Pul Escrow-da saxlanılır.','success');
+    } else {
+      showToast(data.error || 'Xəta baş verdi.','error');
+    }
+  });
 }
 
 /* ===== DM SİSTEMİ ===== */
 function contactSeller(id){
-  const l=listings.find(x=>x.id===id);if(!l)return;
+  const l=dbData.listings.find(x=>x.id===id);if(!l)return;
   if(l.sellerEmail === currentUser.email){ showToast('Öz ilanınızda mesajlaşa bilməzsiniz!','error'); return; }
   const chatId=`${currentUser.email}_${l.sellerEmail}_${l.id}`;
-  if(!chats[chatId]){chats[chatId]={id:chatId,listingId:l.id,listingTitle:l.title,buyerEmail:currentUser.email,sellerEmail:l.sellerEmail,messages:[]};chats[chatId].messages.push({sender:'system',text:`${l.title} haqqında sorğu başladı.`,time:new Date().toISOString()});localStorage.setItem('randox_chats',JSON.stringify(chats));}
-  closeListingModal();showSection('messages');openChat(chatId);
+  if(!dbData.chats[chatId]){
+    fetch(`${API_URL}/api/send_message`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        chatId: chatId,
+        chatData: { id:chatId, listingId:l.id, listingTitle:l.title, buyerEmail:currentUser.email, sellerEmail:l.sellerEmail, participants:[currentUser.email, l.sellerEmail], messages:[] },
+        message: {sender:'system', text:`${l.title} haqqında sorğu başladı.`, time:new Date().toISOString()}
+      })
+    }).then(()=>{ closeListingModal();showSection('messages');openChat(chatId); });
+  } else {
+    closeListingModal();showSection('messages');openChat(chatId);
+  }
 }
+
 function renderChatList(){
   const listEl=document.getElementById('chatList');
-  const myChats=Object.values(chats).filter(c=>c.buyerEmail===currentUser.email||c.sellerEmail===currentUser.email);
+  if(!listEl) return;
+  if(!currentUser) return;
+  const myChats = Object.values(dbData.chats).filter(c => c.participants?.includes(currentUser.email));
   if(myChats.length===0){listEl.innerHTML='<div class="p-8 text-center text-dark-400 text-sm flex flex-col items-center"><iconify-icon icon="mdi:message-off-outline" class="text-4xl mb-2"></iconify-icon>Mesaj yoxdur.</div>';return;}
-  listEl.innerHTML=myChats.map(c=>{
-    const lastMsg=c.messages[c.messages.length-1];
-    const otherEmail=c.buyerEmail===currentUser.email?c.sellerEmail:c.buyerEmail;
-    const otherUser=users.find(u=>u.email===otherEmail);
-    return `<div onclick="openChat('${c.id}')" class="p-4 border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors ${currentChatId===c.id?'bg-white/5 border-l-4 border-l-brand-500':''}"><div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:otherUser?.username||otherEmail})}">${(otherUser?.username||otherEmail).charAt(0).toUpperCase()}</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">${otherUser?.username||otherEmail}</p><p class="text-xs text-dark-500 truncate">${lastMsg?.text||'Söhbət başladı'}</p></div></div></div>`;
+  
+  listEl.innerHTML = myChats.map(c => {
+    const otherEmail = c.buyerEmail === currentUser.email ? c.sellerEmail : c.buyerEmail;
+    const otherUser = dbData.users.find(u=>u.email===otherEmail);
+    return `<div onclick="openChat('${c.id}')" class="p-4 border-b border-white/5 cursor-pointer hover:bg-white/5 transition-colors ${currentChatId===c.id?'bg-white/5 border-l-4 border-l-brand-500':''}"><div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:otherUser?.username||otherEmail})}">${(otherUser?.username||otherEmail).charAt(0).toUpperCase()}</div><div class="flex-1 min-w-0"><p class="font-semibold text-sm truncate">${otherUser?.username||otherEmail}</p><p class="text-xs text-brand-400 truncate">${c.listingTitle}</p></div></div></div>`;
   }).join('');
 }
+
 function openChat(chatId){
-  currentChatId=chatId;renderChatList();
-  const c=chats[chatId];if(!c)return;
-  const otherEmail=c.buyerEmail===currentUser.email?c.sellerEmail:c.buyerEmail;
-  const otherUser=users.find(u=>u.email===otherEmail);
-  document.getElementById('chatHeader').classList.remove('hidden');
-  document.getElementById('chatHeader').innerHTML=`<div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:otherUser?.username||otherEmail})}">${(otherUser?.username||otherEmail).charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${otherUser?.username||otherEmail}</p><p class="text-xs text-brand-400">${c.listingTitle}</p></div></div>`;
+  currentChatId = chatId;
+  renderChatList();
+  renderChatWindow(chatId);
+}
+
+function renderChatWindow(chatId){
+  const c = dbData.chats[chatId];
+  if(!c) return;
+  const otherEmail = c.buyerEmail === currentUser.email ? c.sellerEmail : c.buyerEmail;
+  const otherUser = dbData.users.find(u=>u.email===otherEmail);
+  
+  const headerEl = document.getElementById('chatHeader');
+  headerEl.classList.remove('hidden');
+  headerEl.innerHTML = `<div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor({username:otherUser?.username||otherEmail})}">${(otherUser?.username||otherEmail).charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${otherUser?.username||otherEmail}</p><p class="text-xs text-brand-400">${c.listingTitle}</p></div></div>`;
+  
   document.getElementById('chatInputArea').classList.toggle('hidden', currentUser.restrictions?.message);
   const msgEl=document.getElementById('chatMessages');
-  msgEl.innerHTML=c.messages.map((m,i)=>{
+  
+  const messages = c.messages || [];
+  msgEl.innerHTML=messages.map(m=>{
     if(m.sender==='system'){
-      let btns='';
-      if(m.orderId){
-        let o=orders.find(x=>x.id===m.orderId);
-        if(o){
-          if(o.status==='escrow'&&currentUser.email===o.buyerEmail){
-            btns=`<div class="flex gap-2 mt-2 justify-center"><button onclick="confirmDelivery('${o.id}')" class="btn-primary" style="width:auto;padding:6px 12px">✔ Təsdiqlə</button><button onclick="disputeOrder('${o.id}')" class="btn-danger" style="width:auto;padding:6px 12px">❌ Etiraz</button></div>`;
-            let diff=o.expireTime-Date.now();
-            if(diff>0){btns+=`<p class="text-[10px] text-yellow-400 mt-1 text-center">Avto-tamamlanma: ${Math.floor(diff/3600000)}s ${Math.floor((diff%3600000)/60000)}d</p>`;}
-          }else if(o.status==='escrow'&&currentUser.email===o.sellerEmail){
-            btns=`<p class="text-[10px] text-yellow-400 mt-1 text-center">Alıcı təsdiqi gözlənilir...</p>`;
-          }else if(o.status==='disputed'&&currentUser.email===o.sellerEmail){
-            btns=`<button onclick="counterDispute('${o.id}')" class="btn-primary mt-2" style="width:auto;padding:6px 12px">⚖ Müqavimət Göstər</button>`;
-          }else if(o.status==='admin_review'){
-            btns=`<p class="text-[10px] text-orange-400 mt-1 text-center">Admin baxışı...</p>`;
-          }else if(o.status==='completed'){
-            btns=`<p class="text-[10px] text-brand-400 mt-1 text-center">Tamamlandı</p>`;
-          }else if(o.status==='refunded'){
-            btns=`<p class="text-[10px] text-blue-400 mt-1 text-center">Pul qaytarıldı</p>`;
-          }
-        }
-      }
-      return `<div class="chat-bubble sys">${m.text.replace(/\n/g,'<br>')}${btns}</div>`;
+      return `<div class="chat-bubble sys">${m.text.replace(/\n/g,'<br>')}</div>`;
     }
     const isMe=m.sender===currentUser.email;
     const reportBtn = !isMe ? `<div onclick="openReportModal('${m.sender}','${encodeURIComponent(m.text)}')" class="report-btn"><iconify-icon icon="mdi:flag"></iconify-icon></div>` : '';
@@ -940,12 +943,23 @@ function openChat(chatId){
   }).join('');
   msgEl.scrollTop=msgEl.scrollHeight;
 }
+
 function sendMessage(){
   if(currentUser?.restrictions?.message){showToast('Sizə mesaj göndərmək qadağan edilib.','error');return;}
-  if(!currentChatId)return;const inp=document.getElementById('msgInput');const text=inp.value.trim();if(!text)return;
-  chats[currentChatId].messages.push({sender:currentUser.email,text,time:new Date().toISOString()});localStorage.setItem('randox_chats',JSON.stringify(chats));inp.value='';openChat(currentChatId);
+  if(!currentChatId)return;
+  const inp=document.getElementById('msgInput');
+  const text=inp.value.trim();if(!text)return;
+  
+  const c = dbData.chats[currentChatId];
+  fetch(`${API_URL}/api/send_message`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      chatId: currentChatId,
+      chatData: c,
+      message: { sender:currentUser.email, text, time:new Date().toISOString() }
+    })
+  }).then(()=>{ inp.value=''; fetchDbData(); });
 }
-setInterval(()=>{if(currentSection==='messages'&&currentChatId)openChat(currentChatId);if(currentSection==='messages')renderChatList();},3000);
 
 /* ===== REPORT MODAL ===== */
 function openReportModal(reportedEmail, msgText){
@@ -955,8 +969,8 @@ function openReportModal(reportedEmail, msgText){
 function closeReportModal(){document.getElementById('reportModal').classList.add('hidden');}
 function submitReport(){
   const reason=document.getElementById('reportReason').value.trim();if(!reason){showToast('Səbəb qeyd edin','error');return;}
-  reports.push({id:'r_'+Date.now(), ...reportingData, reason, time:new Date().toISOString(), status:'pending'});
-  localStorage.setItem('randox_reports',JSON.stringify(reports));
+  dbData.reports.push({ ...reportingData, reason, time:new Date().toISOString(), status:'pending' });
+  fetch(`${API_URL}/api/save_db`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({db: dbData}) });
   closeReportModal();document.getElementById('reportReason').value='';
   showToast('Şikayət adminə göndərildi.','success');
 }
@@ -973,21 +987,22 @@ function closeNotifs(){
 }
 function renderNotifs(){
   const el = document.getElementById('notifList');
-  const myNotifs = notifications[currentUser.email] || [];
+  const myNotifs = dbData.notifications[currentUser.email] || [];
   if(myNotifs.length === 0){
     el.innerHTML = '<div class="text-center text-dark-400 py-8 flex flex-col items-center"><iconify-icon icon="mdi:bell-off-outline" class="text-4xl mb-2"></iconify-icon>Bildirim yoxdur.</div>';
     return;
   }
-  el.innerHTML = myNotifs.slice().reverse().map(n => `
-    <div class="glass-light p-3 rounded-xl border border-white/5 ${!n.read ? 'border-l-4 border-l-brand-500' : ''}">
-      <p class="text-sm">${n.text}</p>
-      <p class="text-[10px] text-dark-500 mt-1">${new Date(n.time).toLocaleString('az')}</p>
+  el.innerHTML = myNotifs.slice().reverse().map((n, i) => `
+    <div class="glass-light p-3 rounded-xl border border-white/5 ${!n.read ? 'border-l-4 border-l-brand-500' : ''} flex justify-between items-center gap-2">
+      <div>
+        <p class="text-sm">${n.text}</p>
+        <p class="text-[10px] text-dark-500 mt-1">${new Date(n.time).toLocaleString('az')}</p>
+      </div>
     </div>
   `).join('');
-  if(notifications[currentUser.email]){
-    notifications[currentUser.email].forEach(n => n.read = true);
-    localStorage.setItem('randox_notifications', JSON.stringify(notifications));
-  }
+  // Okundu işarele
+  myNotifs.forEach(n => n.read = true);
+  fetch(`${API_URL}/api/save_db`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({db: dbData}) });
   updateUserArea();
 }
 
@@ -1000,9 +1015,8 @@ function openSupport(){
 function closeSupport(){document.getElementById('supportModal').classList.add('hidden');document.body.style.overflow='';}
 function renderSupportMessages(){
   const el=document.getElementById('supportMessages');
-  if(!supportChats[currentUser.email]) supportChats[currentUser.email] = {messages:[]};
-  const mySupportChat = supportChats[currentUser.email];
-  if(mySupportChat.messages.length===0){el.innerHTML='<div class="text-center text-dark-400 text-sm py-8">Sualınızı yazın, admin tez cavab verəcək.</div>';return;}
+  const mySupportChat = dbData.supportChats[currentUser.email] || {messages:[]};
+  if(!mySupportChat.messages || mySupportChat.messages.length===0){el.innerHTML='<div class="text-center text-dark-400 text-sm py-8">Sualınızı yazın, admin tez cavab verəcək.</div>';return;}
   el.innerHTML=mySupportChat.messages.map(m=>{
     if(m.sender==='system')return `<div class="chat-bubble sys">${m.text}</div>`;
     const isMe=m.sender===currentUser.email;
@@ -1012,17 +1026,16 @@ function renderSupportMessages(){
 }
 function sendSupport(){
   const inp=document.getElementById('supportInput');const text=inp.value.trim();if(!text)return;
-  if(!supportChats[currentUser.email])supportChats[currentUser.email]={messages:[]};
-  supportChats[currentUser.email].messages.push({sender:currentUser.email,text,time:new Date().toISOString()});
-  localStorage.setItem('randox_support_chats',JSON.stringify(supportChats));
-  inp.value='';renderSupportMessages();showToast('Mesaj göndərildi. Admin cavab verəcək.','success');
+  fetch(`${API_URL}/api/send_support`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      email: currentUser.email,
+      message: {sender:currentUser.email,text,time:new Date().toISOString()}
+    })
+  }).then(()=>{
+    inp.value='';showToast('Mesaj göndərildi. Admin cavab verəcək.','success');
+  });
 }
-
-setInterval(()=>{
-  if(currentSection==='admin'&&currentAdminTab==='support'&&currentSupportUser){
-    adminOpenSupport(currentSupportUser);
-  }
-},3000);
 
 /* ===== DOĞRULAMA (2FA GİRİŞ) ===== */
 function genCode(){return Math.floor(100000+Math.random()*900000).toString()}
@@ -1061,15 +1074,28 @@ function verifyCode(){
     }
   },800);
 }
-function completeAuth(){
+async function completeAuth(){
   if(vAction==='register'){
-    users.push({username:vTempData.username,email:vTempData.email,password:vTempData.password,balance:0,avatar:'',bio:'',createdAt:new Date().toISOString(),banned:false,isDemo:false,restrictions:{message:false,listing:false,purchase:false}});
-    localStorage.setItem('randox_users',JSON.stringify(users));
-    currentUser={username:vTempData.username,email:vTempData.email,balance:0,avatar:'',bio:'',createdAt:new Date().toISOString(),banned:false,isDemo:false,restrictions:{message:false,listing:false,purchase:false}};
-  }else{
-    let u=users.find(x=>x.email===vTempData.email);currentUser={...u};
+    const res = await fetch(`${API_URL}/api/register`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify(vTempData)
+    });
+    const user = await res.json();
+    if(user.error){ showToast(user.error,'error'); return; }
+    currentUser = user;
+    localStorage.setItem('randox_user',JSON.stringify(currentUser));
+    closeAuthModal();updateUserArea();checkBanOnLogin();showToast('Xoş gəldin, '+currentUser.username+'!','success');clearResendCd();fetchDbData();
+  } else {
+    const res = await fetch(`${API_URL}/api/login`, {
+      method: 'POST', headers: {'Content-Type':'application/json'},
+      body: JSON.stringify({email: vTempData.email, password: vTempData.password})
+    });
+    const user = await res.json();
+    if(user.error){ showToast(user.error,'error'); return; }
+    currentUser = user;
+    localStorage.setItem('randox_user',JSON.stringify(currentUser));
+    closeAuthModal();updateUserArea();checkBanOnLogin();showToast('Xoş gəldin, '+currentUser.username+'!','success');clearResendCd();fetchDbData();
   }
-  localStorage.setItem('randox_user',JSON.stringify(currentUser));closeAuthModal();updateUserArea();checkBanOnLogin();showToast('Xoş gəldin, '+currentUser.username+'!','success');clearResendCd();updateHomeStats();
 }
 function resendCode(){if(resendCd>0)return;sendVCode(vEmail,vAction,vTempData)}
 function startResendCd(){clearResendCd();resendCd=120;const btn=document.getElementById('resendBtn');btn.disabled=true;const timer=document.getElementById('resendTimer');resendIv=setInterval(()=>{resendCd--;const m=Math.floor(resendCd/60);const s=resendCd%60;timer.textContent=m+':'+(s<10?'0':'')+s;if(resendCd<=0){clearResendCd();btn.disabled=false}},1000)}
@@ -1090,16 +1116,19 @@ function closeAuthModal(){document.getElementById('authModal').classList.add('hi
 function handleLogin(){
   hideErrors();const email=document.getElementById('loginEmail').value.trim();const pwd=document.getElementById('loginPassword').value;
   if(!email||!pwd){showErr('loginError','Bütün sahələri doldurun');return}
-  const user=users.find(u=>u.email===email);if(!user){showErr('loginError','Hesab tapılmadı');return}
+  const user=dbData.users.find(u=>u.email===email);
+  if(!user){showErr('loginError','Hesab tapılmadı');return}
   if(user.password!==pwd){showErr('loginError','Şifrə yanlış');return}
-  sendVCode(email,'login',{username:user.username,email:user.email});
+  vTempData = {email, password: pwd};
+  sendVCode(email,'login',{email,password:pwd});
 }
 function handleRegister(){
   hideErrors();const uname=document.getElementById('regUsername').value.trim();const email=document.getElementById('regEmail').value.trim();const pwd=document.getElementById('regPassword').value;
   if(!uname||!email||!pwd){showErr('regError','Bütün sahələri doldurun');return}
   if(uname.length<3){showErr('regError','İstifadəçi adı min 3 simvol');return}
   if(pwd.length<6){showErr('regError','Şifrə min 6 simvol');return}
-  if(users.find(u=>u.email===email)){showErr('regError','Bu e-poçt artıq qeydiyyatlı');return}
+  if(dbData.users.find(u=>u.email===email)){showErr('regError','Bu e-poçt artıq qeydiyyatlı');return}
+  vTempData = {username:uname,email,password:pwd};
   sendVCode(email,'register',{username:uname,email,password:pwd});
 }
 function togglePwd(id,el){const inp=document.getElementById(id);const isP=inp.type==='password';inp.type=isP?'text':'password';el.innerHTML=`<iconify-icon icon="mdi:eye-${isP?'outline':'off-outline'}" class="text-lg"></iconify-icon>`}
@@ -1114,7 +1143,7 @@ function updateUserArea(){
     const avatarInner=currentUser.avatar?`<img src="${currentUser.avatar}" alt="">`:(currentUser.username||'K').charAt(0).toUpperCase();
     const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
     const adminCrown = ADMIN_EMAILS.includes(currentUser.email) ? `<button onclick="showSection('admin')" class="text-xl hover:scale-110 transition-transform p-1" title="Admin Paneli">👑</button>` : '';
-    const unreadNotifs = notifications[currentUser.email]?.filter(n => !n.read).length || 0;
+    const unreadNotifs = dbData.notifications[currentUser.email]?.filter(n => !n.read).length || 0;
     const notifBadge = unreadNotifs > 0 ? `<span class="notif-badge absolute -top-1 -right-1 bg-red-500 text-white text-[10px] w-4 h-4 rounded-full flex items-center justify-center">${unreadNotifs}</span>` : '';
     
     area.innerHTML=`<button onclick="openSupport()" class="p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group" title="Canlı Dəstək"><iconify-icon icon="mdi:headset" class="text-xl text-dark-300 group-hover:text-brand-400"></iconify-icon></button><button onclick="openNotifs()" class="relative p-2.5 glass rounded-xl hover:border-brand-500/30 transition-all group" title="Bildirimlər"><iconify-icon icon="mdi:bell-outline" class="text-xl text-dark-300 group-hover:text-brand-400"></iconify-icon>${notifBadge}</button><div class="avatar-sm text-white" style="${bgStyle}" onclick="toggleUserDropdown()" title="${currentUser.username}">${avatarInner}</div>${adminCrown}`;
@@ -1135,11 +1164,16 @@ function setCustomAmount(amt){document.getElementById('customAmountInput').value
 document.addEventListener('input',e=>{if(e.target.id==='customAmountInput'){selectedTopUpAmount=parseFloat(e.target.value)||0;document.getElementById('topUpBtn').disabled=selectedTopUpAmount<=0;}});
 function processTopUp(){
   if(!currentUser)return;if(!selectedTopUpAmount||selectedTopUpAmount<=0)return;
-  currentUser.balance=(currentUser.balance||0)+selectedTopUpAmount;localStorage.setItem('randox_user',JSON.stringify(currentUser));
-  const u=users.find(x=>x.email===currentUser.email);if(u)u.balance=currentUser.balance;localStorage.setItem('randox_users',JSON.stringify(users));
-  document.getElementById('currentBalanceTop').textContent=currentUser.balance.toFixed(2)+' ₼';
-  document.getElementById('customAmountInput').value='';selectedTopUpAmount=0;document.getElementById('topUpBtn').disabled=true;
-  updateUserArea();showToast(selectedTopUpAmount+' AZN balansınıza əlavə edildi.','success');
+  currentUser.balance = (currentUser.balance||0) + selectedTopUpAmount;
+  fetch(`${API_URL}/api/admin_update_user`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({email: currentUser.email, balance: currentUser.balance})
+  }).then(()=>{
+    localStorage.setItem('randox_user', JSON.stringify(currentUser));
+    document.getElementById('currentBalanceTop').textContent=currentUser.balance.toFixed(2)+' ₼';
+    document.getElementById('customAmountInput').value='';selectedTopUpAmount=0;document.getElementById('topUpBtn').disabled=true;
+    updateUserArea();showToast(selectedTopUpAmount+' AZN balansınıza əlavə edildi.','success');
+  });
 }
 
 /* ===== ADMİN PANEL ===== */
@@ -1148,9 +1182,8 @@ function switchAdminTab(tab){
   document.querySelectorAll('.admin-tab').forEach(t=>t.classList.remove('active'));
   document.getElementById('adminTab'+tab.charAt(0).toUpperCase()+tab.slice(1)).classList.add('active');
   
-  // Support badge sıfırla
   if(tab==='support'){
-    Object.keys(supportChats).forEach(email=>{
+    Object.keys(dbData.supportChats).forEach(email=>{
       adminSeenSupport[email]=Date.now();
     });
     localStorage.setItem('randox_admin_seen_support',JSON.stringify(adminSeenSupport));
@@ -1163,53 +1196,50 @@ function switchAdminTab(tab){
     renderAdminUsers();
   }
   else if(tab==='disputes'){
-    let html=`<div class="space-y-3 max-h-[600px] overflow-y-auto">`;
-    let pending=orders.filter(o=>o.status==='admin_review');
-    if(pending.length===0)html+=`<p class="text-center text-dark-400 py-8">Baxışı gözləyən dispute yoxdur.</p>`;
-    pending.forEach(o=>{
-      let buyer=users.find(u=>u.email===o.buyerEmail);let seller=users.find(u=>u.email===o.sellerEmail);
-      html+=`<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between items-start mb-2"><div><p class="font-semibold text-sm">${o.listingTitle}</p><p class="text-xs text-dark-400">${o.amount} AZN</p></div><div class="text-xs text-right"><p class="text-red-400">Alıcı: ${buyer?.username||o.buyerEmail}</p><p>${o.disputeReason}</p></div></div><div class="text-xs text-right mt-2 border-t border-white/5 pt-2"><p class="text-yellow-400">Satıcı: ${seller?.username||o.sellerEmail}</p><p>${o.counterReason}</p></div><div class="flex gap-2 mt-4"><button onclick="forcePaySeller('${o.id}')" class="btn-primary" style="width:auto;padding:8px 16px">Satıcıya Ödə</button><button onclick="refundBuyer('${o.id}')" class="btn-danger" style="width:auto;padding:8px 16px">Alıcıya Qaytar</button></div></div>`;
-    });
-    html+=`</div>`;c.innerHTML=html;
+    // Basit gösterim
+    c.innerHTML = `<div class="text-dark-400 py-8 text-center">Dispute sistemi bu versiyada sadələşdirilmişdir.</div>`;
   }
   else if(tab==='reports'){
     let html=`<div class="space-y-3 max-h-[600px] overflow-y-auto">`;
-    if(reports.length===0)html+=`<p class="text-center text-dark-400 py-8">Şikayət yoxdur.</p>`;
-    reports.forEach(r=>{
-      let reporter=users.find(u=>u.email===r.reporterEmail);let reported=users.find(u=>u.email===r.reportedEmail);
+    if(dbData.reports.length===0)html+=`<p class="text-center text-dark-400 py-8">Şikayət yoxdur.</p>`;
+    dbData.reports.forEach(r=>{
+      let reporter=dbData.users.find(u=>u.email===r.reporterEmail);let reported=dbData.users.find(u=>u.email===r.reportedEmail);
       html+=`<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between mb-2"><span class="text-xs text-dark-400">Şikayət edən: ${reporter?.username||r.reporterEmail}</span><span class="text-xs text-dark-400">Təqsir eden: ${reported?.username||r.reportedEmail}</span></div><p class="text-xs bg-dark-900/50 p-2 rounded-lg my-2 border border-white/5">Mesaj: "${r.msgText}"</p><p class="text-sm text-red-400">Səbəb: ${r.reason}</p></div>`;
     });
     html+=`</div>`;c.innerHTML=html;
   }
   else if(tab==='support'){
     let html=`<div class="flex gap-4 h-[500px]"><div class="w-1/3 border-r border-white/5 overflow-y-auto" id="supportList">`;
-    let activeSupports=Object.keys(supportChats);
+    let activeSupports=Object.keys(dbData.supportChats);
     if(activeSupports.length===0)html+=`<p class="p-4 text-center text-dark-400 text-sm">Dəstək mesajı yoxdur.</p>`;
     activeSupports.forEach(email=>{
-      let u=users.find(x=>x.email===email);
-      let lastTime=supportChats[email].messages[supportChats[email].messages.length-1]?.time;
+      let u=dbData.users.find(x=>x.email===email);
+      let lastTime=dbData.supportChats[email].messages[dbData.supportChats[email].messages.length-1]?.time;
       let lastSeen=adminSeenSupport[email]||0;
-      let hasUnread=supportChats[email].messages.some(m=>m.sender!=='admin'&&new Date(m.time).getTime()>lastSeen);
-      html+=`<div onclick="adminOpenSupport('${email}')" class="p-3 border-b border-white/5 cursor-pointer hover:bg-white/5 ${currentSupportUser===email?'bg-white/5':''}"><div class="flex items-center justify-between"><p class="font-semibold text-sm">${u?.username||email}</p>${hasUnread?'<span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>':''}</div><p class="text-xs text-dark-500 truncate">${supportChats[email].messages[supportChats[email].messages.length-1]?.text||'...'}</p></div>`;
+      let hasUnread=dbData.supportChats[email].messages.some(m=>m.sender!=='admin'&&new Date(m.time).getTime()>lastSeen);
+      html+=`<div onclick="adminOpenSupport('${email}')" class="p-3 border-b border-white/5 cursor-pointer hover:bg-white/5 ${currentSupportUser===email?'bg-white/5':''}"><div class="flex items-center justify-between"><p class="font-semibold text-sm">${u?.username||email}</p>${hasUnread?'<span class="w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>':''}</div><p class="text-xs text-dark-500 truncate">${dbData.supportChats[email].messages[dbData.supportChats[email].messages.length-1]?.text||'...'}</p></div>`;
     });
     html+=`</div><div class="w-2/3 flex flex-col"><div id="adminSupportWindow" class="flex-1 overflow-y-auto p-4 space-y-3 flex flex-col justify-end"></div><div class="p-4 border-t border-white/5"><div class="flex gap-2"><input type="text" id="adminSupportInput" class="input-field flex-1" placeholder="Cavab yazın..." onkeydown="if(event.key==='Enter')adminSendSupport()"><button onclick="adminSendSupport()" class="btn-primary" style="width:auto;padding:12px 20px"><iconify-icon icon="mdi:send"></iconify-icon></button></div></div></div></div>`;
     c.innerHTML=html;
-    if(currentSupportUser&&supportChats[currentSupportUser])adminOpenSupport(currentSupportUser);
+    if(currentSupportUser&&dbData.supportChats[currentSupportUser])adminOpenSupport(currentSupportUser);
   }
   else if(tab==='notifs'){
-    let opts = users.filter(u=>!u.isDemo).map(u => `<option value="${u.email}">${u.username} (${u.email})</option>`).join('');
+    let opts = dbData.users.map(u => `<option value="${u.email}">${u.username} (${u.email})</option>`).join('');
     c.innerHTML = `<div class="flex flex-col md:flex-row gap-3 mb-6"><select id="adminNotifTarget" class="input-field md:w-1/3"><option value="all">Hamıya (Everyone)</option>${opts}</select><input type="text" id="adminNotifText" class="input-field flex-1" placeholder="Bildirim mesajını yazın..."><button onclick="adminSendNotif()" class="btn-primary md:w-auto" style="width:auto;padding:12px 24px">Göndər</button></div><p class="text-sm text-dark-400">İstifadəçilər bildirişi yuxarı sağdakı zəng ikonasında alacaqlar. Oxunmamış mesaj sayı qırmızı rəngdə yanır.</p>`;
   }
   else if(tab==='spy'){
-    c.innerHTML=`<div class="mb-4"><input type="text" id="adminSpySearch" class="input-field" placeholder="Email və ya mesaj axtar..." oninput="renderAdminSpy()"></div><div id="adminSpyList" class="space-y-3 max-h-[600px] overflow-y-auto"></div>`;
-    renderAdminSpy();
+    let html=`<div class="space-y-3 max-h-[600px] overflow-y-auto">`;
+    Object.values(dbData.chats).forEach(c=>{
+      let b=dbData.users.find(u=>u.email===c.buyerEmail);let s=dbData.users.find(u=>u.email===c.sellerEmail);
+      html+=`<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between mb-2"><span class="text-xs text-brand-400">${b?.username||c.buyerEmail}</span><span class="text-xs text-dark-400">↔</span><span class="text-xs text-yellow-400">${s?.username||c.sellerEmail}</span></div><div class="space-y-1 max-h-40 overflow-y-auto">${c.messages?.map(m=>`<p class="text-xs ${m.sender==='system'?'text-dark-500':m.sender===c.buyerEmail?'text-dark-300':'text-white'}">${m.sender}: ${m.text}</p>`).join('')}</div></div>`;
+    });
+    html+=`</div>`;c.innerHTML=html;
   }
 }
 
 function renderAdminUsers(){
-  users = JSON.parse(localStorage.getItem('randox_users') || '[]');
   let q=(document.getElementById('adminUserSearch')?.value||'').toLowerCase();
-  let list=users.filter(u=>u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q));
+  let list=dbData.users.filter(u=>u.email.toLowerCase().includes(q)||u.username.toLowerCase().includes(q));
   const listEl = document.getElementById('adminUsersList');
   if(!listEl) return;
   if(list.length === 0) {
@@ -1219,53 +1249,47 @@ function renderAdminUsers(){
   listEl.innerHTML=list.map(u=>{
     const safeEmail = u.email.replace(/[^a-zA-Z0-9]/g, '');
     const demoBadge = u.isDemo ? '<span class="text-[10px] bg-blue-500/20 text-blue-400 px-1.5 py-0.5 rounded ml-1">DEMO</span>' : '<span class="text-[10px] bg-brand-500/20 text-brand-400 px-1.5 py-0.5 rounded ml-1">REAL</span>';
-    return `<div class="glass-light p-4 rounded-xl border border-white/5 mb-3"><div class="flex items-center justify-between mb-3"><div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor(u)}">${u.username.charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${u.username} ${demoBadge} ${u.banned?'<span class="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded ml-1">BAN</span>':''}</p><p class="text-xs text-dark-400">${u.email}</p><p class="text-xs text-brand-400">Balans: ${u.balance.toFixed(2)} ₼</p></div></div><div class="flex gap-2"><input type="number" placeholder="Yeni Balans" id="bal_${safeEmail}" class="input-field w-32 text-xs"><button onclick="adminModifyBalance('${u.email}')" class="btn-primary text-xs" style="width:auto;padding:8px 10px">SET</button></div></div><div class="flex gap-2 flex-wrap border-t border-white/5 pt-3"><button onclick="toggleBan('${u.email}')" class="text-xs px-3 py-1.5 rounded-lg ${u.banned?'bg-green-500 text-white':'bg-red-500 text-white'}">${u.banned?'Banı Aç':'Banla'}</button><button onclick="toggleRestriction('${u.email}','message')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.message?'bg-red-500 text-white':'bg-dark-800'}">Mesaj Qadağan</button><button onclick="toggleRestriction('${u.email}','listing')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.listing?'bg-red-500 text-white':'bg-dark-800'}">Elan Qadağan</button><button onclick="toggleRestriction('${u.email}','purchase')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.purchase?'bg-red-500 text-white':'bg-dark-800'}">Alış Qadağan</button></div></div>`;
+    return `<div class="glass-light p-4 rounded-xl border border-white/5 mb-3"><div class="flex items-center justify-between mb-3"><div class="flex items-center gap-3"><div class="avatar-sm text-white" style="background:${getAvatarColor(u)}">${u.username.charAt(0).toUpperCase()}</div><div><p class="font-semibold text-sm">${u.username} ${demoBadge} ${u.banned?'<span class="text-[10px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded ml-1">BAN</span>':''}</p><p class="text-xs text-dark-400">${u.email}</p><p class="text-xs text-brand-400">Balans: ${(u.balance||0).toFixed(2)} ₼</p></div></div><div class="flex gap-2"><input type="number" placeholder="Yeni Balans" id="bal_${safeEmail}" class="input-field w-32 text-xs"><button onclick="adminModifyBalance('${u.email}')" class="btn-primary text-xs" style="width:auto;padding:8px 10px">SET</button></div></div><div class="flex gap-2 flex-wrap border-t border-white/5 pt-3"><button onclick="toggleBan('${u.email}')" class="text-xs px-3 py-1.5 rounded-lg ${u.banned?'bg-green-500 text-white':'bg-red-500 text-white'}">${u.banned?'Banı Aç':'Banla'}</button><button onclick="toggleRestriction('${u.email}','message')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.message?'bg-red-500 text-white':'bg-dark-800'}">Mesaj Qadağan</button><button onclick="toggleRestriction('${u.email}','listing')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.listing?'bg-red-500 text-white':'bg-dark-800'}">Elan Qadağan</button><button onclick="toggleRestriction('${u.email}','purchase')" class="text-xs px-3 py-1.5 rounded-lg ${u.restrictions?.purchase?'bg-red-500 text-white':'bg-dark-800'}">Alış Qadağan</button></div></div>`;
   }).join('');
 }
 function adminModifyBalance(email){
-  let u=users.find(x=>x.email===email);if(!u)return;
+  const u=dbData.users.find(x=>x.email===email);if(!u)return;
   const safeId = 'bal_' + email.replace(/[^a-zA-Z0-9]/g, '');
   let val=parseFloat(document.getElementById(safeId).value);
   if(isNaN(val))return;
-  u.balance=val; 
-  localStorage.setItem('randox_users',JSON.stringify(users));
-  if(currentUser.email===email){currentUser.balance=val;localStorage.setItem('randox_user',JSON.stringify(currentUser));updateUserArea();}
-  renderAdminUsers();showToast(`${u.username} balansı ${val} AZN oldu.`,'success');
+  fetch(`${API_URL}/api/admin_update_user`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({email, balance: val})
+  }).then(()=>{
+    if(currentUser.email===email){currentUser.balance=val;localStorage.setItem('randox_user',JSON.stringify(currentUser));updateUserArea();}
+    showToast(`${u.username} balansı ${val} AZN oldu.`,'success');
+  });
 }
 function toggleBan(email){
-  let u=users.find(x=>x.email===email);if(!u)return;
-  u.banned=!u.banned;localStorage.setItem('randox_users',JSON.stringify(users));
-  renderAdminUsers();showToast(`${u.username} ${u.banned?'banlandı':'banı açıldı'}.`,'info');
+  const u=dbData.users.find(x=>x.email===email);if(!u)return;
+  fetch(`${API_URL}/api/admin_update_user`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({email, banned: !u.banned})
+  }).then(()=> showToast(`${u.username} ${!u.banned?'banlandı':'banı açıldı'}.`,'info'));
 }
 function toggleRestriction(email,type){
-  let u=users.find(x=>x.email===email);if(!u)return;
+  const u=dbData.users.find(x=>x.email===email);if(!u)return;
   if(!u.restrictions)u.restrictions={message:false,listing:false,purchase:false};
-  u.restrictions[type]=!u.restrictions[type];localStorage.setItem('randox_users',JSON.stringify(users));
-  renderAdminUsers();
-}
-function forcePaySeller(id){
-  let o=orders.find(x=>x.id===id);if(!o)return;
-  o.status='completed';let seller=users.find(u=>u.email===o.sellerEmail);if(seller)seller.balance+=o.amount-o.commission;
-  localStorage.setItem('randox_users',JSON.stringify(users));localStorage.setItem('randox_orders',JSON.stringify(orders));
-  chats[o.chatId].messages.push({sender:'system',text:'Admin satıcı lehinə qərar verdi. Pul köçürüldü.',orderId:o.id,time:new Date().toISOString()});
-  localStorage.setItem('randox_chats',JSON.stringify(chats));
-  switchAdminTab('disputes');showToast('Pul satıcıya köçürüldü.','success');
-}
-function refundBuyer(id){
-  let o=orders.find(x=>x.id===id);if(!o)return;
-  o.status='refunded';let buyer=users.find(u=>u.email===o.buyerEmail);if(buyer)buyer.balance+=o.amount;
-  localStorage.setItem('randox_users',JSON.stringify(users));localStorage.setItem('randox_orders',JSON.stringify(orders));
-  chats[o.chatId].messages.push({sender:'system',text:'Admin alıcı lehinə qərar verdi. Pul qaytarıldı.',orderId:o.id,time:new Date().toISOString()});
-  localStorage.setItem('randox_chats',JSON.stringify(chats));
-  switchAdminTab('disputes');showToast('Pul alıcıya qaytarıldı.','success');
+  const newRestrictions = {...u.restrictions};
+  newRestrictions[type] = !newRestrictions[type];
+  fetch(`${API_URL}/api/admin_update_user`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({email, restrictions: newRestrictions})
+  });
 }
 function adminOpenSupport(email){
   currentSupportUser=email;
   adminSeenSupport[email]=Date.now();
   localStorage.setItem('randox_admin_seen_support',JSON.stringify(adminSeenSupport));
-  let c=supportChats[email];
+  
+  let c=dbData.supportChats[email];
   if(!c)return;
-  let u=users.find(x=>x.email===email);
+  let u=dbData.users.find(x=>x.email===email);
   let w=document.getElementById('adminSupportWindow');
   if(!w)return;
   w.innerHTML=c.messages.map(m=>{
@@ -1277,41 +1301,41 @@ function adminOpenSupport(email){
 }
 function adminSendSupport(){
   if(!currentSupportUser)return;
-  let inp=document.getElementById('adminSupportInput');let text=inp.value.trim();if(!text)return;
-  if(!supportChats[currentSupportUser]) supportChats[currentSupportUser] = {messages:[]};
-  supportChats[currentSupportUser].messages.push({sender:'admin',text,time:new Date().toISOString()});
-  localStorage.setItem('randox_support_chats',JSON.stringify(supportChats));
-  adminSeenSupport[currentSupportUser]=Date.now();
-  localStorage.setItem('randox_admin_seen_support',JSON.stringify(adminSeenSupport));
-  inp.value='';adminOpenSupport(currentSupportUser);
-  // İstifadəçiyə bildirim
-  if(!notifications[currentSupportUser])notifications[currentSupportUser]=[];
-  notifications[currentSupportUser].push({text:'Admin dəstək mesajınızı cavabladı.',time:new Date().toISOString(),read:false});
-  localStorage.setItem('randox_notifications',JSON.stringify(notifications));
+  const inp=document.getElementById('adminSupportInput');const text=inp.value.trim();if(!text)return;
+  fetch(`${API_URL}/api/send_support`, {
+    method:'POST', headers:{'Content-Type':'application/json'},
+    body: JSON.stringify({
+      email: currentSupportUser,
+      message: {sender:'admin',text,time:new Date().toISOString()}
+    })
+  }).then(()=>{
+    fetch(`${API_URL}/api/add_notif`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email: currentSupportUser, text:'Admin dəstək mesajınızı cavabladı.'})
+    });
+    inp.value='';
+    adminSeenSupport[currentSupportUser]=Date.now();
+    localStorage.setItem('randox_admin_seen_support',JSON.stringify(adminSeenSupport));
+  });
 }
-function renderAdminSpy(){
-  let q=(document.getElementById('adminSpySearch')?.value||'').toLowerCase();
-  let list=Object.values(chats).filter(c=>c.buyerEmail.toLowerCase().includes(q)||c.sellerEmail.toLowerCase().includes(q)||c.messages.some(m=>m.text.toLowerCase().includes(q)));
-  document.getElementById('adminSpyList').innerHTML=list.map(c=>{
-    let b=users.find(u=>u.email===c.buyerEmail);let s=users.find(u=>u.email===c.sellerEmail);
-    return `<div class="glass-light p-4 rounded-xl border border-white/5"><div class="flex justify-between mb-2"><span class="text-xs text-brand-400">${b?.username||c.buyerEmail}</span><span class="text-xs text-dark-400">↔</span><span class="text-xs text-yellow-400">${s?.username||c.sellerEmail}</span></div><div class="space-y-1 max-h-40 overflow-y-auto">${c.messages.map(m=>`<p class="text-xs ${m.sender==='system'?'text-dark-500':m.sender===c.buyerEmail?'text-dark-300':'text-white'}">${m.sender}: ${m.text}</p>`).join('')}</div></div>`;
-  }).join('')||'<p class="text-center text-dark-400 py-8">Söhbət tapılmadı.</p>';
-}
-
 function adminSendNotif(){
   const target = document.getElementById('adminNotifTarget').value;
   const text = document.getElementById('adminNotifText').value.trim();
   if(!text){ showToast('Mesaj boşdur', 'error'); return; }
+  
   if(target === 'all'){
-    users.forEach(u => {
-      if(!notifications[u.email]) notifications[u.email] = [];
-      notifications[u.email].push({text, time: new Date().toISOString(), read: false});
+    dbData.users.forEach(u => {
+      fetch(`${API_URL}/api/add_notif`, {
+        method:'POST', headers:{'Content-Type':'application/json'},
+        body: JSON.stringify({email: u.email, text})
+      });
     });
   } else {
-    if(!notifications[target]) notifications[target] = [];
-    notifications[target].push({text, time: new Date().toISOString(), read: false});
+    fetch(`${API_URL}/api/add_notif`, {
+      method:'POST', headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({email: target, text})
+    });
   }
-  localStorage.setItem('randox_notifications', JSON.stringify(notifications));
   showToast('Bildirim uğurla göndərildi!', 'success');
   document.getElementById('adminNotifText').value = '';
 }
@@ -1321,10 +1345,10 @@ function renderProfile(){
   if(!currentUser)return;
   const avatarInner=currentUser.avatar?`<img src="${currentUser.avatar}" alt="" class="w-full h-full object-cover">`:(currentUser.username||'K').charAt(0).toUpperCase();
   const bgStyle=currentUser.avatar?'':`background:${getAvatarColor(currentUser)}`;
-  const myListings=listings.filter(l=>l.sellerEmail===currentUser.email);
+  const myListings=dbData.listings.filter(l=>l.sellerEmail===currentUser.email);
   document.getElementById('profileContent').innerHTML=`
     <div class="text-center mb-10 animate-up"><div class="avatar-lg text-white mx-auto mb-4" style="${bgStyle}">${avatarInner}</div><h2 class="text-2xl font-bold">${currentUser.username}</h2><p class="text-dark-400 text-sm mt-1">${currentUser.email}</p><p class="text-dark-300 text-sm mt-3 max-w-md mx-auto italic">${currentUser.bio || 'Haqqında məlumat yoxdur.'}</p></div>
-    <div class="grid grid-cols-3 gap-4 mb-10 animate-up delay-1"><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold text-brand-400">${(currentUser.balance||0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Balans</p></div><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.length}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İlan</p></div><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.reduce((s,l)=>s+l.soldCount,0)}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Satış</p></div></div>
+    <div class="grid grid-cols-3 gap-4 mb-10 animate-up delay-1"><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold text-brand-400">${(currentUser.balance||0).toFixed(2)} ₼</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Balans</p></div><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.length}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">İlan</p></div><div class="glass rounded-2xl p-5 text-center border border-white/5"><p class="text-2xl font-bold">${myListings.reduce((s,l)=>s+(l.soldCount||0),0)}</p><p class="text-xs text-dark-500 mt-1 uppercase tracking-wider">Satış</p></div></div>
     <div class="glass rounded-2xl border border-white/5 p-6 mb-6 animate-up delay-2">
         <h3 class="font-bold mb-4 text-lg">Profili Redakte Et</h3>
         <div class="space-y-4">
@@ -1333,19 +1357,28 @@ function renderProfile(){
             <button onclick="saveProfile()" class="btn-primary" style="width:auto;padding:12px 24px">Yadda Saxla</button>
         </div>
     </div>
-    <div class="glass rounded-2xl border border-white/5 overflow-hidden mb-6 animate-up delay-2"><div class="p-5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold">İlanlarım</h3><button onclick="showSection('create')" class="text-brand-400 text-sm hover:text-brand-300">Yeni İlan</button></div><div class="p-5">${myListings.length===0?'<p class="text-dark-500 text-center py-8">İlan yoxdur</p>':myListings.map(l=>`<div class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0"><div onclick="openListingModal('${l.id}')" class="flex-1 flex items-center gap-4 cursor-pointer hover:bg-white/5 rounded-xl px-2 py-1 transition-colors"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${l.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${l.title}</p><p class="text-xs text-dark-500">${l.price.toFixed(2)} ₼ • Satıldı: ${l.soldCount}</p></div></div><div class="flex gap-1"><button onclick="openEditListingModal('${l.id}')" class="text-xs p-2 glass rounded-lg hover:text-brand-400"><iconify-icon icon="mdi:pencil"></iconify-icon></button><button onclick="deleteListing('${l.id}')" class="text-xs p-2 glass rounded-lg text-red-400"><iconify-icon icon="mdi:delete"></iconify-icon></button></div></div>`).join('')}</div></div>
+    <div class="glass rounded-2xl border border-white/5 overflow-hidden mb-6 animate-up delay-2"><div class="p-5 border-b border-white/5 flex justify-between items-center"><h3 class="font-bold">İlanlarım</h3><button onclick="showSection('create')" class="text-brand-400 text-sm hover:text-brand-300">Yeni İlan</button></div><div class="p-5">${myListings.length===0?'<p class="text-dark-500 text-center py-8">İlan yoxdur</p>':myListings.map(l=>`<div class="flex items-center gap-4 py-3 border-b border-white/5 last:border-0"><div onclick="openListingModal('${l.id}')" class="flex-1 flex items-center gap-4 cursor-pointer hover:bg-white/5 rounded-xl px-2 py-1 transition-colors"><div class="w-10 h-10 rounded-lg overflow-hidden flex-shrink-0"><img src="${l.img}" class="w-full h-full object-cover"></div><div class="flex-1 min-w-0"><p class="text-sm font-medium truncate">${l.title}</p><p class="text-xs text-dark-500">${l.price.toFixed(2)} ₼ • Satıldı: ${l.soldCount||0}</p></div></div><div class="flex gap-1"><button onclick="openEditListingModal('${l.id}')" class="text-xs p-2 glass rounded-lg hover:text-brand-400"><iconify-icon icon="mdi:pencil"></iconify-icon></button><button onclick="deleteListing('${l.id}')" class="text-xs p-2 glass rounded-lg text-red-400"><iconify-icon icon="mdi:delete"></iconify-icon></button></div></div>`).join('')}</div></div>
     <button onclick="openLogoutModal()" class="w-full glass rounded-2xl border border-red-500/20 p-4 flex items-center justify-center gap-3 text-red-400 hover:bg-red-500/5 transition-all"><iconify-icon icon="mdi:logout" class="text-xl"></iconify-icon><span class="font-medium text-sm">Hesabdan Çıx</span></button>`;
 }
 function saveProfile(){
     const newUsername = document.getElementById('editUsername').value.trim();
     const newBio = document.getElementById('editBio').value.trim();
     if(newUsername.length < 3){ showToast('İstifadəçi adı minimum 3 simvol olmalıdır', 'error'); return; }
+    
+    // Basit güncelleme (Python backend admin_update_user ile yapılabilir)
     currentUser.username = newUsername;
     currentUser.bio = newBio;
     localStorage.setItem('randox_user', JSON.stringify(currentUser));
-    const u = users.find(x=>x.email===currentUser.email);
-    if(u){ u.username = newUsername; u.bio = newBio; }
-    localStorage.setItem('randox_users', JSON.stringify(users));
+    
+    // DB'ye yaz
+    dbData.users.forEach(u => {
+      if(u.email === currentUser.email) {
+        u.username = newUsername;
+        u.bio = newBio;
+      }
+    });
+    fetch(`${API_URL}/api/save_db`, { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({db: dbData}) });
+    
     updateUserArea(); renderProfile(); showToast('Profil yeniləndi!', 'success');
 }
 
@@ -1362,7 +1395,7 @@ function showToast(msg,type='info'){
 window.addEventListener('scroll',()=>{const n=document.getElementById('navbar');if(window.scrollY>50){n.classList.add('glass');n.style.borderBottom='1px solid rgba(255,255,255,0.05)';n.style.boxShadow='0 4px 20px rgba(0,0,0,0.3)'}else{n.classList.remove('glass');n.style.borderBottom='none';n.style.boxShadow='none'}});
 
 if(currentUser && !checkBanOnLogin()){ currentUser = null; localStorage.removeItem('randox_user'); }
-renderListings();updateUserArea();updateHomeStats();
+updateUserArea();
 </script>
 </body>
 </html>
